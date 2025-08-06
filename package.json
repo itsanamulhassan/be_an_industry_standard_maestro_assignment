@@ -27,7 +27,8 @@
     "express-mongoose",
     "node-backend",
     "crud-api",
-    "fullstack"
+    "fullstack",
+    "jest"
   ],
   "author": "Md Anamul Hassan",
   "license": "ISC",
