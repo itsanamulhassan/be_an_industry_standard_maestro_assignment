@@ -1,7 +1,11 @@
-import AppError from "app/helpers/error.helper";
-import { CreateUserProps } from "./user.type";
-import message from "app/utils/message";
 import { StatusCodes } from "http-status-codes";
+import message from "../../utils/message";
+import bcryptjs from "bcryptjs";
+import { Request } from "express";
+import { AuthProviderProps, CreateUserProps } from "./user.type";
+import AppError from "app/helpers/error.helper";
+import { Users } from "./user.model";
+import environments from "app/configurations/environments";
 
 const createUser = async (payload: Partial<CreateUserProps>) => {
   const { email, password, ...rest } = payload as CreateUserProps;
@@ -23,7 +27,7 @@ const createUser = async (payload: Partial<CreateUserProps>) => {
 
   const hashPassword = await bcryptjs.hash(
     password as string,
-    env.bcrypt_salt_round
+    environments.bcrypt_salt_round
   );
 
   const authProvider: AuthProviderProps = {
@@ -77,7 +81,10 @@ const updateUser = async (req: Request) => {
     );
   }
   if (body.password) {
-    body.password = await bcryptjs.hash(body.password, env.bcrypt_salt_round);
+    body.password = await bcryptjs.hash(
+      body.password,
+      environments.bcrypt_salt_round
+    );
   }
   const updateUser = await Users.findByIdAndUpdate(userId, body, {
     new: true,
