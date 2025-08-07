@@ -1,17 +1,17 @@
-// import { Types } from "mongoose";
-// import { UserRoleStatusEnumProps } from "../modules/user/user.types";
+import { UserRoleStatusEnumProps } from "app/modules/user/user.type";
+import { Types } from "mongoose";
 
-// export interface SetCookiesProps {
-//   accessToken?: string;
-//   refreshToken?: string;
-// }
-// export interface RemoveCookiesProps {
-//   accessToken?: boolean;
-//   refreshToken?: boolean;
-// }
+export interface SetCookiesProps {
+  accessToken?: string;
+  refreshToken?: string;
+}
+export interface RemoveCookiesProps {
+  accessToken?: boolean;
+  refreshToken?: boolean;
+}
 
-// export interface CreateAccessRefreshTokenProps {
-//   credentialId: Types.ObjectId;
-//   email: string;
-//   role: UserRoleStatusEnumProps;
-// }
+export interface CreateAccessRefreshTokenProps {
+  credentialId: Types.ObjectId;
+  email: string;
+  role: UserRoleStatusEnumProps;
+}

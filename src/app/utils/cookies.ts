@@ -1,6 +1,6 @@
+import environments from "app/configurations/environments";
+import { RemoveCookiesProps, SetCookiesProps } from "app/types/utils.types";
 import { Response } from "express";
-import { RemoveCookiesProps, SetCookiesProps } from "../types/utils.types";
-import env from "../configurations/env";
 
 const defaultCookieOptions = {
   httpOnly: true,
@@ -8,7 +8,7 @@ const defaultCookieOptions = {
   sameSite: "lax" as const,
 };
 
-const { access_cookie_name, refresh_cookie_name } = env;
+const { access_cookie_name, refresh_cookie_name } = environments;
 
 export const setCookies = (res: Response, payload: SetCookiesProps): void => {
   if (payload?.accessToken) {
