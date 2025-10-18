@@ -4,13 +4,15 @@ import message, { MessageType } from "./message";
 import { jwt } from "./jwt";
 import { StatusCodes } from "http-status-codes";
 import {
-  UserActivityStatusEnumProps,
-  UserRoleStatusEnumProps,
-} from "app/modules/user/user.type";
+  UserActivityStatusEnumDto,
+  UserRoleStatusEnumDto,
+} from "app/modules/user/user.types";
 import AppError from "app/helpers/error.helper";
-import { Users } from "app/modules/user/user.model";
+import { User, Users } from "app/modules/user/user.models";
+import { JWTCredentialProps } from "app/types/express";
+import { validateUser } from "app/modules/user/user.helpers/validateUser";
 
-const authorizeRole = (...roles: UserRoleStatusEnumProps[]) =>
+const authorizeRole = (...roles: UserRoleStatusEnumDto[]) =>
   safeAsync(async (req: Request, _res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
 
@@ -22,7 +24,7 @@ const authorizeRole = (...roles: UserRoleStatusEnumProps[]) =>
       );
     }
 
-    const verify = jwt.verifyAccessToken(token);
+    const verify = jwt.verifyAccessToken(token) as JWTCredentialProps;
 
     // 401 Unauthorized → Invalid or expired token
     if (!verify) {
@@ -37,32 +39,9 @@ const authorizeRole = (...roles: UserRoleStatusEnumProps[]) =>
       );
     }
 
-    const user = await Users.findOne({ email: verify?.email });
+    const user = (await Users.findOne({ email: verify?.email })) as User;
 
-    // 404 Not Found → User doesn't exist
-    if (!user) {
-      throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
-    }
-
-    // 403 Forbidden → User is blocked or inactive
-    if (
-      ["BLOCKED", "INACTIVE"].includes(
-        user.activityStatus as UserActivityStatusEnumProps
-      )
-    ) {
-      throw new AppError(
-        message(
-          user.activityStatus?.toLowerCase() as MessageType,
-          "access token"
-        ),
-        StatusCodes.FORBIDDEN
-      );
-    }
-
-    // 410 Gone → User is deleted
-    if (user.isDeleted) {
-      throw new AppError(message("delete", "user"), StatusCodes.GONE);
-    }
+    validateUser(user);
 
     // Attach user payload to request
     req.user = verify;

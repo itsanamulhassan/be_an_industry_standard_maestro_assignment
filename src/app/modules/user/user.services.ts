@@ -2,13 +2,13 @@ import { StatusCodes } from "http-status-codes";
 import message from "../../utils/message";
 import bcryptjs from "bcryptjs";
 import { Request } from "express";
-import { AuthProviderProps, CreateUserProps } from "./user.type";
+import { AuthProviderDto, CreateUserDto } from "./user.types";
 import AppError from "app/helpers/error.helper";
-import { Users } from "./user.model";
+import { Users } from "./user.models";
 import environments from "app/configurations/environments";
 
-const createUser = async (payload: Partial<CreateUserProps>) => {
-  const { email, password, ...rest } = payload as CreateUserProps;
+const createUser = async (payload: Partial<CreateUserDto>) => {
+  const { email, password, ...rest } = payload as CreateUserDto;
 
   if (["ADMIN", "SUPERADMIN"].includes(rest.role)) {
     throw new AppError(
@@ -30,7 +30,7 @@ const createUser = async (payload: Partial<CreateUserProps>) => {
     environments.bcrypt_salt_round
   );
 
-  const authProvider: AuthProviderProps = {
+  const authProvider: AuthProviderDto = {
     provider: "CREDENTIAL",
     providerId: email,
   };
@@ -93,10 +93,15 @@ const updateUser = async (req: Request) => {
   return updateUser;
 };
 
+const retrieveMe = async (req: Request) => {
+  const id = req.user;
+};
+
 const userServices = {
   createUser,
   retrieveUsers,
   updateUser,
+  retrieveMe,
 };
 
 export default userServices;

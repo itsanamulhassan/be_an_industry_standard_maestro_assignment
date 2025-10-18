@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { userRoleStatusEnum, userSchemas } from "./user.schema";
+import { userRoleStatusEnum, userSchemas } from "./user.schemas";
 import { auth } from "app/utils/auth";
-import userControllers from "./user.controller";
+import userControllers from "./user.controllers";
 import { validator } from "app/middlewares/validator.middleware";
 
 const userRouter = Router();
@@ -29,6 +29,12 @@ userRouter.patch(
 userRouter.delete(
   "/delete/:id",
   auth.authorizeRole("ADMIN", "SUPERADMIN"),
+  userControllers.updateUser
+);
+// ✅  User information by Access Token
+userRouter.get(
+  "/me",
+  auth.authorizeRole(...userRoleStatusEnum),
   userControllers.updateUser
 );
 

@@ -1,4 +1,4 @@
-import { UserRoleStatusEnumProps } from "app/modules/user/user.type";
+import { UserRoleStatusEnumDto } from "app/modules/user/user.types";
 import { Types } from "mongoose";
 
 export interface SetCookiesProps {
@@ -13,5 +13,5 @@ export interface RemoveCookiesProps {
 export interface CreateAccessRefreshTokenProps {
   credentialId: Types.ObjectId;
   email: string;
-  role: UserRoleStatusEnumProps;
+  role: UserRoleStatusEnumDto;
 }

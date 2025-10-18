@@ -1,16 +1,23 @@
-import { model, Schema } from "mongoose";
-import {
-  AddressProps,
-  AuthProviderProps,
-  CreateUserProps,
-  VehicleProps,
-} from "./user.type";
+import { HydratedDocument, InferSchemaType, model, Schema } from "mongoose";
 import {
   authProviderEnum,
   userActivityStatusEnum,
   userRoleStatusEnum,
-} from "./user.schema";
-const addressSchema = new Schema<AddressProps>(
+} from "./user.schemas";
+import { FileProps } from "app/types/global.types";
+
+export const fileSchema = new Schema<FileProps>(
+  {
+    public_id: {
+      type: String,
+      unique: [true, "File ID must be unique."],
+    },
+    url: String,
+  },
+  { _id: false }
+);
+
+const addressSchema = new Schema(
   {
     street: { type: String },
     city: {
@@ -32,7 +39,7 @@ const addressSchema = new Schema<AddressProps>(
   { versionKey: false, _id: false }
 );
 
-const authProviderSchema = new Schema<AuthProviderProps>(
+const authProviderSchema = new Schema(
   {
     provider: {
       type: String,
@@ -50,7 +57,7 @@ const authProviderSchema = new Schema<AuthProviderProps>(
   }
 );
 
-const vehicleInfoSchema = new Schema<VehicleProps>(
+const vehicleInfoSchema = new Schema(
   {
     capacity: {
       type: Number,
@@ -71,7 +78,7 @@ const vehicleInfoSchema = new Schema<VehicleProps>(
   }
 );
 
-const userSchema = new Schema<CreateUserProps>(
+const userSchema = new Schema(
   {
     name: {
       type: String,
@@ -85,10 +92,9 @@ const userSchema = new Schema<CreateUserProps>(
       lowercase: true,
       trim: true,
     },
-    avatar: {
-      type: String,
-    },
+    avatar: fileSchema,
     activityStatus: {
+      type: String,
       enum: userActivityStatusEnum,
       default: "ACTIVE",
       uppercase: true,
@@ -98,12 +104,17 @@ const userSchema = new Schema<CreateUserProps>(
       type: Boolean,
       default: false,
     },
-    isApproved: {
+    isDriverApproved: {
+      type: Boolean,
+      default: false,
+    },
+    isVerified: {
       type: Boolean,
       default: false,
     },
     auths: [authProviderSchema],
     role: {
+      type: String,
       enum: userRoleStatusEnum,
       default: "RIDER",
     },
@@ -119,11 +130,10 @@ const userSchema = new Schema<CreateUserProps>(
   { timestamps: true, versionKey: false }
 );
 
-userSchema.pre("validate", async function (next) {
-  if (this.role === "RIDER") {
-    this.isApproved = true;
-  }
-  next();
-});
+export type User = InferSchemaType<typeof userSchema>;
+export type UserDocument = HydratedDocument<User>;
+export type Address = InferSchemaType<typeof addressSchema>;
+export type Vehicle = InferSchemaType<typeof vehicleInfoSchema>;
+export type AuthProvider = InferSchemaType<typeof authProviderSchema>;
 
-export const Users = model<CreateUserProps>("Users", userSchema);
+export const Users = model<User>("Users", userSchema);

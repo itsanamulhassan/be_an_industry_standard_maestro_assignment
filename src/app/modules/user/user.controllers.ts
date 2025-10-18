@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import safeAsync from "../../utils/safeAsync";
 import resHandler from "../../utils/resHandler";
 import message from "../../utils/message";
-import userServices from "./user.service";
+import userServices from "./user.services";
 
 // ✅ Create a new user
 const createUser = safeAsync(async (req: Request, res: Response) => {
@@ -36,6 +36,15 @@ const updateUser = safeAsync(async (req: Request, res: Response) => {
     data: users,
   });
 });
+const retrieveMe = safeAsync(async (req: Request, res: Response) => {
+  const users = await userServices.updateUser(req);
+  resHandler(res, {
+    status: StatusCodes.OK,
+    success: true,
+    message: message("update", "user"),
+    data: users,
+  });
+});
 const deleteUser = safeAsync(async (req: Request, res: Response) => {
   const users = await userServices.updateUser(req);
   resHandler(res, {
@@ -51,6 +60,7 @@ const userControllers = {
   retrieveUsers,
   updateUser,
   deleteUser,
+  retrieveMe,
 };
 
 export default userControllers;

@@ -3,24 +3,24 @@ import { jwt } from "./jwt";
 import { StatusCodes } from "http-status-codes";
 import message, { MessageType } from "./message";
 import { CreateAccessRefreshTokenProps } from "../types/utils.types";
-import { Users } from "app/modules/user/user.model";
+import { Users } from "app/modules/user/user.models";
 import {
-  CreateUserProps,
-  UserActivityStatusEnumProps,
-} from "app/modules/user/user.type";
+  CreateUserDto,
+  UserActivityStatusEnumDto,
+} from "app/modules/user/user.types";
 import AppError from "app/helpers/error.helper";
 
 const createAccessTokenWithRefreshToken = async (refreshToken: string) => {
   const { email } = jwt.verifyRefreshToken(refreshToken);
   const user = (await Users.findOne({ email })) as Partial<
-    CreateUserProps & { _id: Types.ObjectId }
+    CreateUserDto & { _id: Types.ObjectId }
   >;
   if (!user) {
     throw new AppError(message("notFound", "user"), StatusCodes.BAD_REQUEST);
   }
   if (
     ["BLOCKED", "INACTIVE"].includes(
-      user.activityStatus as UserActivityStatusEnumProps
+      user.activityStatus as UserActivityStatusEnumDto
     )
   ) {
     throw new AppError(
