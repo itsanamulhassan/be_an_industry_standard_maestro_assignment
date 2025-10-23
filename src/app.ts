@@ -7,6 +7,7 @@ import environments from "./app/configurations/environments";
 import invalidRoute from "./app/middlewares/route.middleware";
 import globalErrorHandler from "./app/middlewares/error.middleware";
 import appRouter from "./app/routes";
+import "./app/modules/authentication/authentication.strategies";
 
 const app = express();
 
@@ -23,9 +24,16 @@ app.use(cookieParser());
 
 // Parse incoming JSON requests
 app.use(express.json());
+app.set("trust proxy", 1);
+app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS
-app.use(cors());
+app.use(
+  cors({
+    origin: [environments.frontend_base_url],
+    credentials: true,
+  })
+);
 
 // Root route
 app.get("/", (_req: Request, res: Response) => {

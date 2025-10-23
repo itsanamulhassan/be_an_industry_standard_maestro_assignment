@@ -1,25 +1,17 @@
 import passport from "passport";
+import { Users } from "../modules/user/user.models";
 
-import { Strategy as LocalStrategy } from "passport-local";
-import { User, Users } from "../modules/user/user.models";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+passport.serializeUser((user: any, done: (err: any, id?: unknown) => void) => {
+  done(null, user._id);
+});
 
-passport.use(
-  new LocalStrategy(
-    {
-      usernameField: "email",
-      passwordField: "password",
-    },
-    async (email: string, password: string, done) => {
-      try {
-        const user = (await Users.findOne({ email }).select(
-          "+passport"
-        )) as User;
-        if (!user) {
-          return done(null);
-        }
-      } catch (error) {
-        done(error);
-      }
-    }
-  )
-);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+passport.deserializeUser(async (id: string, done: any) => {
+  try {
+    const user = await Users.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
+});

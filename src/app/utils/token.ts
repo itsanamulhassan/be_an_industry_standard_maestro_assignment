@@ -1,14 +1,14 @@
 import { Types } from "mongoose";
-import { jwt } from "./jwt";
+import { jwt } from "../modules/authentication/authentication.helpers/jwt";
 import { StatusCodes } from "http-status-codes";
 import message, { MessageType } from "./message";
 import { CreateAccessRefreshTokenProps } from "../types/utils.types";
-import { Users } from "app/modules/user/user.models";
+import { Users } from "../modules/user/user.models";
 import {
   CreateUserDto,
   UserActivityStatusEnumDto,
-} from "app/modules/user/user.types";
-import AppError from "app/helpers/error.helper";
+} from "../modules/user/user.types";
+import AppError from "../helpers/error.helper";
 
 const createAccessTokenWithRefreshToken = async (refreshToken: string) => {
   const { email } = jwt.verifyRefreshToken(refreshToken);

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { userRoleStatusEnum, userSchemas } from "./user.schemas";
 import userControllers from "./user.controllers";
 import { validator } from "../../middlewares/validator.middleware";
-import { auth } from "../../utils/auth";
+import { auth } from "../authentication/authentication.helpers/auth";
 
 const userRouter = Router();
 

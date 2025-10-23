@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import safeAsync from "./safeAsync";
+import safeAsync from "../../../utils/safeAsync";
 import { jwt } from "./jwt";
 import { StatusCodes } from "http-status-codes";
-import { UserRoleStatusEnumDto } from "../modules/user/user.types";
-import AppError from "../helpers/error.helper";
-import { User, Users } from "../modules/user/user.models";
-import { validateUser } from "../modules/user/user.helpers/validateUser";
-import message from "./message";
-import { JWTCredentialProps } from "../types/express";
+import { UserRoleStatusEnumDto } from "../../user/user.types";
+import AppError from "../../../helpers/error.helper";
+import { User, Users } from "../../user/user.models";
+import { validateUser } from "../../user/user.helpers/validateUser";
+import message from "../../../utils/message";
+import { JWTCredentialProps } from "../../../types/express";
 
 const authorizeRole = (...roles: UserRoleStatusEnumDto[]) =>
   safeAsync(async (req: Request, _res: Response, next: NextFunction) => {

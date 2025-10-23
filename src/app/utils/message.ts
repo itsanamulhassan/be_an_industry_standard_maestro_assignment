@@ -14,7 +14,10 @@ export type MessageType =
   | "expired"
   | "inactive"
   | "blocked"
-  | "validation";
+  | "validation"
+  | "success"
+  | "fail"
+  | "cancel";
 
 const message = (
   type: MessageType,
@@ -33,14 +36,17 @@ const message = (
     signUp: `${entityCapitalized} was successfully registered. Welcome aboard!`,
     signOut: `${entityCapitalized} was successfully signed out of the system.`,
     notFound: `${entityCapitalized} was not found. It may not exist or has been removed.`,
-    alreadyExists: `${entityCapitalized} already exists. Please use a different one or log in.`,
+    alreadyExists: `${entityCapitalized} already exists. Please use a different one.`,
     unauthorized: `${entityCapitalized} access denied. You do not have the required permissions to perform this action.`,
     forbidden: `${entityCapitalized} access is forbidden. You are not allowed to view or modify this resource.`,
     badRequest: `${entityCapitalized} request is invalid. Please check your input and try again.`,
     expired: `${entityCapitalized} has expired. Please request a new one or try again later.`,
     blocked: `${entityCapitalized} has blocked. Please request a new one or try again later.`,
     inactive: `${entityCapitalized} has deactivated. Please request a new one or try again later.`,
-    validation: `${entityCapitalized} validation failed. Please check the provided information.`, // ✅ New message
+    validation: `${entityCapitalized} validation failed. Please check the provided information.`,
+    success: `${entityCapitalized} operation was successful. Everything is working as expected.`,
+    fail: `${entityCapitalized} operation failed. Please try again or contact support if the issue persists.`,
+    cancel: `${entityCapitalized} operation was canceled. No changes have been made.`,
   };
 
   return `${messages[type]} ${note}`.trim();
