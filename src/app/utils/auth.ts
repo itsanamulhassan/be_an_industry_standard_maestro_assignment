@@ -1,16 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import safeAsync from "./safeAsync";
-import message, { MessageType } from "./message";
 import { jwt } from "./jwt";
 import { StatusCodes } from "http-status-codes";
-import {
-  UserActivityStatusEnumDto,
-  UserRoleStatusEnumDto,
-} from "app/modules/user/user.types";
-import AppError from "app/helpers/error.helper";
-import { User, Users } from "app/modules/user/user.models";
-import { JWTCredentialProps } from "app/types/express";
-import { validateUser } from "app/modules/user/user.helpers/validateUser";
+import { UserRoleStatusEnumDto } from "../modules/user/user.types";
+import AppError from "../helpers/error.helper";
+import { User, Users } from "../modules/user/user.models";
+import { validateUser } from "../modules/user/user.helpers/validateUser";
+import message from "./message";
+import { JWTCredentialProps } from "../types/express";
 
 const authorizeRole = (...roles: UserRoleStatusEnumDto[]) =>
   safeAsync(async (req: Request, _res: Response, next: NextFunction) => {
@@ -45,6 +42,7 @@ const authorizeRole = (...roles: UserRoleStatusEnumDto[]) =>
 
     // Attach user payload to request
     req.user = verify;
+
     next();
   });
 

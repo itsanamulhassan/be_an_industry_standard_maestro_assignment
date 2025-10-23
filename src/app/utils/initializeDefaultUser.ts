@@ -1,10 +1,9 @@
 import bcrypt from "bcryptjs";
 import message from "./message";
 import { StatusCodes } from "http-status-codes";
-import environments from "app/configurations/environments";
-import { Users } from "app/modules/user/user.models";
-import AppError from "app/helpers/error.helper";
-
+import environments from "../configurations/environments";
+import { Users } from "../modules/user/user.models";
+import AppError from "../helpers/error.helper";
 const initializeDefaultUser = async () => {
   try {
     const {

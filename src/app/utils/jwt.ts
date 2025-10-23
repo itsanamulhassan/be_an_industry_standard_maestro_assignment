@@ -1,5 +1,5 @@
-import environments from "app/configurations/environments";
 import JWT, { JwtPayload, SignOptions } from "jsonwebtoken";
+import environments from "../configurations/environments";
 
 const signAccessToken = (payload: JwtPayload): string => {
   return JWT.sign(payload, environments.jwt_access_secret, {

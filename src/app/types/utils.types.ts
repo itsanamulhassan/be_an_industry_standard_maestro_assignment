@@ -1,5 +1,5 @@
-import { UserRoleStatusEnumDto } from "app/modules/user/user.types";
 import { Types } from "mongoose";
+import { UserRoleStatusEnumDto } from "../modules/user/user.types";
 
 export interface SetCookiesProps {
   accessToken?: string;

@@ -1,8 +1,8 @@
 import { ErrorRequestHandler } from "express";
 import { errorFormatter } from "../utils/errorFormatter";
-import environments from "app/configurations/environments";
-import { ErrorSourceProps } from "app/types/middleware.types";
-import AppError from "app/helpers/error.helper";
+import environments from "../configurations/environments";
+import { ErrorSourceProps } from "../types/middleware.types";
+import AppError from "../helpers/error.helper";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
   const isDev = environments.node_env === "development";

@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { User } from "../user.models";
 import message, { MessageType } from "../../../utils/message";
 import { UserActivityStatusEnumDto } from "../user.types";
-import AppError from "app/helpers/error.helper";
+import AppError from "../../../helpers/error.helper";
 export const validateUser = (user: User) => {
   // 404 Not Found → User doesn't exist
   if (!user) {

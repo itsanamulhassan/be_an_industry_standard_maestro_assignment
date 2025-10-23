@@ -1,5 +1,5 @@
-import { UserRoleStatusEnumDto } from "app/modules/user/user.types";
-import { JwtPayload } from "jsonwebtoken";
+import { UserRoleStatusEnumDto } from "../../modules/user/user.types";
+
 export interface JWTCredentialProps {
   credentialId: string;
   email: string;

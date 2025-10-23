@@ -1,9 +1,9 @@
 import { Users } from "../user.models";
-import env from "../../../configurations/env";
 import bcrypt from "bcryptjs";
-import AppError from "../../../utils/helpers/error/appError";
 import message from "../../../utils/message";
 import { StatusCodes } from "http-status-codes";
+import environments from "../../../configurations/environments";
+import AppError from "../../../helpers/error.helper";
 
 const initializeDefaultUser = async () => {
   try {
@@ -11,7 +11,7 @@ const initializeDefaultUser = async () => {
       super_admin_email: email,
       super_admin_password: password,
       bcrypt_salt_round,
-    } = env;
+    } = environments;
     const defaultUser = await Users.findOne({ email });
 
     if (!defaultUser) {

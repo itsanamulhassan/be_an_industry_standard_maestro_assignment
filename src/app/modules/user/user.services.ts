@@ -1,13 +1,15 @@
 import { StatusCodes } from "http-status-codes";
 import message from "../../utils/message";
 import bcryptjs from "bcryptjs";
-import { Request } from "express";
 import { AuthProviderDto, CreateUserDto } from "./user.types";
-import AppError from "app/helpers/error.helper";
-import { Users } from "./user.models";
-import environments from "app/configurations/environments";
+import AppError from "../../helpers/error.helper";
+import { User, Users } from "./user.models";
+import environments from "../../configurations/environments";
+import { validateUser } from "./user.helpers/validateUser";
+import { Request } from "express";
+import { JWTCredentialProps } from "../../types/express";
 
-const createUser = async (payload: Partial<CreateUserDto>) => {
+const createUser = async (payload: CreateUserDto) => {
   const { email, password, ...rest } = payload as CreateUserDto;
 
   if (["ADMIN", "SUPERADMIN"].includes(rest.role)) {
@@ -17,8 +19,8 @@ const createUser = async (payload: Partial<CreateUserDto>) => {
     );
   }
 
-  const isUserExist = await Users.findOne({ email });
-  if (isUserExist) {
+  const user = await Users.findOne({ email });
+  if (user) {
     throw new AppError(
       message("alreadyExists", "user"),
       StatusCodes.BAD_REQUEST
@@ -51,28 +53,33 @@ const retrieveUsers = async () => {
 const updateUser = async (req: Request) => {
   const {
     params: { id: userId },
-    user: { role },
+    user: { role, credentialId },
     body,
-  } = req as Request & { user: { role: string } };
+  } = req as Request & { user: JWTCredentialProps };
 
-  const isUserExist = await Users.findById(userId);
-  if (!isUserExist) {
-    throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
+  const user = (await Users.findById(userId)) as User;
+  validateUser(user);
+
+  //   ADMIN restrictions
+  if (role === "ADMIN" && user.role === "SUPERADMIN") {
+    throw new AppError(
+      message("unauthorized", "user"),
+      StatusCodes.BAD_REQUEST
+    );
   }
 
   // USER or GUIDE restrictions
   if (["USER", "GUIDE"].includes(role)) {
-    const forbidden =
-      (body.role && body.role !== role) ||
-      ["INACTIVE", "BLOCKED"].includes(body.activityStatus) ||
-      body.isDeleted === true ||
-      body.isVerified === false;
-
-    if (forbidden) {
+    if (userId !== credentialId) {
+      throw new AppError(
+        message("unauthorized", "user"),
+        StatusCodes.BAD_REQUEST
+      );
+    }
+    if (body.role && body.role !== role) {
       throw new AppError(message("forbidden", role), StatusCodes.FORBIDDEN);
     }
   }
-
   // ADMIN restrictions
   if (role === "ADMIN" && body.role === "SUPERADMIN") {
     throw new AppError(
@@ -80,6 +87,7 @@ const updateUser = async (req: Request) => {
       StatusCodes.FORBIDDEN
     );
   }
+
   if (body.password) {
     body.password = await bcryptjs.hash(
       body.password,

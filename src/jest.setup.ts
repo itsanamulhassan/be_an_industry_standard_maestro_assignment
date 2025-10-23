@@ -1,7 +1,7 @@
-import app from "app";
-import environments from "app/configurations/environments";
 import mongoose from "mongoose";
 import request from "supertest";
+import environments from "./app/configurations/environments";
+import app from "./app";
 // ✅ Run before all tests: Connect to MongoDB
 beforeAll(async () => {
   await mongoose.connect(environments.db_url);

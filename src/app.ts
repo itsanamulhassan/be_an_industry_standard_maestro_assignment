@@ -3,10 +3,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import expressSession from "express-session";
-import "./app/configurations/passport";
-import environments from "app/configurations/environments";
-import invalidRoute from "app/middlewares/route.middleware";
-import globalErrorHandler from "app/middlewares/error.middleware";
+import environments from "./app/configurations/environments";
+import invalidRoute from "./app/middlewares/route.middleware";
+import globalErrorHandler from "./app/middlewares/error.middleware";
+import appRouter from "./app/routes";
 
 const app = express();
 
@@ -36,7 +36,7 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 // API routes
-// app.use("/api/v1", appRouter);
+app.use("/api/v1", appRouter);
 
 // Invalid route handler (404)
 app.use(invalidRoute);

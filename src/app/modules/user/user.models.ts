@@ -4,18 +4,23 @@ import {
   userActivityStatusEnum,
   userRoleStatusEnum,
 } from "./user.schemas";
-import { FileProps } from "app/types/global.types";
+import { FileProps } from "../../types/global.types";
+import AppError from "../../helpers/error.helper";
+import { StatusCodes } from "http-status-codes";
 
-export const fileSchema = new Schema<FileProps>(
-  {
-    public_id: {
-      type: String,
-      unique: [true, "File ID must be unique."],
+export const fileSchema = (required = false) =>
+  new Schema<FileProps>(
+    {
+      public_id: {
+        type: String,
+        unique: [true, "File ID must be unique."],
+        required,
+        sparse: true,
+      },
+      url: String,
     },
-    url: String,
-  },
-  { _id: false }
-);
+    { _id: false }
+  );
 
 const addressSchema = new Schema(
   {
@@ -92,7 +97,10 @@ const userSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    avatar: fileSchema,
+    avatar: {
+      type: fileSchema(),
+      required: false,
+    },
     activityStatus: {
       type: String,
       enum: userActivityStatusEnum,
@@ -120,6 +128,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
+      required: false,
       select: false,
     },
     phone: {
@@ -129,6 +138,15 @@ const userSchema = new Schema(
   },
   { timestamps: true, versionKey: false }
 );
+
+userSchema.pre("save", function (next) {
+  if (this.role === "DRIVER" && !this.avatar?.public_id) {
+    next(
+      new AppError("Avatar is required for DRIVER.", StatusCodes.BAD_REQUEST)
+    );
+  }
+  next();
+});
 
 export type User = InferSchemaType<typeof userSchema>;
 export type UserDocument = HydratedDocument<User>;

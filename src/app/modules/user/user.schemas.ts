@@ -1,5 +1,4 @@
 import * as z from "zod";
-import is from "zod/v4/locales/is.cjs";
 
 // ✅ Password regex: At least 1 uppercase, 1 special char, 6–32 characters
 export const passwordRegex =
@@ -75,28 +74,9 @@ const createUser = z
       .optional(),
 
     phone: z.string({ error: "Phone must be a string." }).optional(),
-    avatar: z.url({ error: "Avatar must be a valid URL." }).optional(),
 
     // Embedded address object
     address: addressSchema.optional(),
-
-    // Status flags
-    isDeleted: z
-      .boolean({ error: "Verify status must be a boolean." })
-      .default(false)
-      .optional(),
-    activityStatus: z.enum(userActivityStatusEnum).default("ACTIVE"),
-    isApproved: z
-      .boolean({ error: "Approve status must be a boolean." })
-      .default(false)
-      .optional(),
-
-    // Linked authentication providers
-    auths: z
-      .array(authProviderSchema)
-      .min(1, { error: "At least one auth provider is required." })
-      .default([]),
-
     // User role
     role: z.enum(userRoleStatusEnum).default("RIDER"),
     // vehicleInfo optional here
@@ -105,15 +85,28 @@ const createUser = z
   .refine((data) => data.role !== "DRIVER" || !!data.vehicleInfo, {
     message: "Vehicle information is required for DRIVER role",
     path: ["vehicleInfo"],
-  })
-  .refine((data) => data.role !== "RIDER" || data.isApproved === true, {
-    message: "Riders must always be approved",
-    path: ["isApproved"],
   });
 
-const updateUser = createUser.omit({
-  email: true,
-});
+const updateUser = createUser
+  .omit({
+    email: true,
+    password: true,
+  })
+  .extend({
+    // Status flags
+    isDeleted: z
+      .boolean({ error: "Verify status must be a boolean." })
+      .default(false)
+      .optional(),
+    activityStatus: z.enum(userActivityStatusEnum).default("ACTIVE"),
+    isDriverApproved: z
+      .boolean({ error: "Driver approve status must be a boolean." })
+      .default(false)
+      .optional(),
+    isVerified: z
+      .boolean({ error: "Verify status must be a boolean." })
+      .default(false),
+  });
 
 export const userSchemas = {
   createUser,
