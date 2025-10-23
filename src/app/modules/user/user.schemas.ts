@@ -54,40 +54,28 @@ export const vehicleInfo = z.object({
 });
 
 // ✅ Main user creation schema
-const createUser = z
-  .object({
-    name: z
-      .string({ error: "Name must be a string." })
-      .min(1, { error: "Name is required." }),
-    email: z
-      .email({ error: "Invalid email address." })
-      .min(1, { error: "Email is required." })
-      .lowercase(),
+const create = z.object({
+  name: z
+    .string({ error: "Name must be a string." })
+    .min(1, { error: "Name is required." }),
+  email: z
+    .email({ error: "Invalid email address." })
+    .min(1, { error: "Email is required." })
+    .lowercase(),
 
-    // Password is optional (e.g. social login), but if provided, must match regex
-    password: z
-      .string()
-      .regex(passwordRegex, {
-        error:
-          "Password must be 6 - 32 characters long, include at least 1 uppercase letter and 1 special character.",
-      })
-      .optional(),
+  // Password is optional (e.g. social login), but if provided, must match regex
+  password: z
+    .string()
+    .regex(passwordRegex, {
+      error:
+        "Password must be 6 - 32 characters long, include at least 1 uppercase letter and 1 special character.",
+    })
+    .optional(),
 
-    phone: z.string({ error: "Phone must be a string." }).optional(),
+  phone: z.string({ error: "Phone must be a string." }).optional(),
+});
 
-    // Embedded address object
-    address: addressSchema.optional(),
-    // User role
-    role: z.enum(userRoleStatusEnum).default("RIDER"),
-    // vehicleInfo optional here
-    vehicleInfo: vehicleInfo.optional(),
-  })
-  .refine((data) => data.role !== "DRIVER" || !!data.vehicleInfo, {
-    message: "Vehicle information is required for DRIVER role",
-    path: ["vehicleInfo"],
-  });
-
-const updateUser = createUser
+const update = create
   .omit({
     email: true,
     password: true,
@@ -106,9 +94,22 @@ const updateUser = createUser
     isVerified: z
       .boolean({ error: "Verify status must be a boolean." })
       .default(false),
+    // Embedded address object
+    address: addressSchema.optional(),
+    // User role
+    role: z.enum(userRoleStatusEnum).default("RIDER"),
+    // vehicleInfo optional here
+    vehicleInfo: vehicleInfo.optional(),
+  })
+  .refine((data) => data.role !== "DRIVER" || !!data.vehicleInfo, {
+    error: "Vehicle information is required for DRIVER.",
+    path: ["vehicleInfo"],
+  })
+  .refine((data) => data.role !== "DRIVER" || !!data.address, {
+    error: "Address is required for DRIVER.",
+    path: ["address"],
   });
-
 export const userSchemas = {
-  createUser,
-  updateUser,
+  create,
+  update,
 };

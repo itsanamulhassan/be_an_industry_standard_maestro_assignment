@@ -12,13 +12,6 @@ import { JWTCredentialProps } from "../../types/express";
 const createUser = async (payload: CreateUserDto) => {
   const { email, password, ...rest } = payload as CreateUserDto;
 
-  if (["ADMIN", "SUPERADMIN"].includes(rest.role)) {
-    throw new AppError(
-      message("unauthorized", rest.role),
-      StatusCodes.FORBIDDEN
-    );
-  }
-
   const user = await Users.findOne({ email });
   if (user) {
     throw new AppError(
@@ -69,7 +62,7 @@ const updateUser = async (req: Request) => {
   }
 
   // USER or GUIDE restrictions
-  if (["USER", "GUIDE"].includes(role)) {
+  if (["RIDER", "DRIVER"].includes(role)) {
     if (userId !== credentialId) {
       throw new AppError(
         message("unauthorized", "user"),
