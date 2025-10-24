@@ -28,14 +28,14 @@ userRouter.patch(
 // ✅ Delete user by ID
 userRouter.delete(
   "/delete/:id",
-  auth.authorizeRole("ADMIN", "SUPERADMIN"),
-  userControllers.updateUser
+  auth.authorizeRole(...userRoleStatusEnum),
+  userControllers.deleteUser
 );
 // ✅  User information by Access Token
 userRouter.get(
   "/me",
   auth.authorizeRole(...userRoleStatusEnum),
-  userControllers.updateUser
+  userControllers.retrieveMe
 );
 
 export default userRouter;

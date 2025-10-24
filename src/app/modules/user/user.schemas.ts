@@ -84,20 +84,18 @@ const update = create
     // Status flags
     isDeleted: z
       .boolean({ error: "Verify status must be a boolean." })
-      .default(false)
       .optional(),
-    activityStatus: z.enum(userActivityStatusEnum).default("ACTIVE"),
+    activityStatus: z.enum(userActivityStatusEnum).optional(),
     isDriverApproved: z
       .boolean({ error: "Driver approve status must be a boolean." })
-      .default(false)
       .optional(),
     isVerified: z
       .boolean({ error: "Verify status must be a boolean." })
-      .default(false),
+      .optional(),
     // Embedded address object
     address: addressSchema.optional(),
     // User role
-    role: z.enum(userRoleStatusEnum).default("RIDER"),
+    role: z.enum(userRoleStatusEnum).optional(),
     // vehicleInfo optional here
     vehicleInfo: vehicleInfo.optional(),
   })

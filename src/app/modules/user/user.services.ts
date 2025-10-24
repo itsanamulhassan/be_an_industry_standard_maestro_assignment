@@ -9,6 +9,7 @@ import { validateUser } from "./user.helpers/validateUser";
 import { Request } from "express";
 import { JWTCredentialProps } from "../../types/express";
 
+// ✅ Create new user
 const createUser = async (payload: CreateUserDto) => {
   const { email, password, ...rest } = payload as CreateUserDto;
 
@@ -37,12 +38,28 @@ const createUser = async (payload: CreateUserDto) => {
   });
 };
 
+// ✅ Retrieve users
 const retrieveUsers = async () => {
   const users = await Users.find();
 
+  if (!users.length) {
+    throw new AppError(message("notFound", "users"), StatusCodes.NOT_FOUND);
+  }
+
   return users;
 };
+// ✅ Retrieve user
+const retrieveUser = async (req: Request) => {
+  const user = await Users.findById(req.params.id);
 
+  if (!user) {
+    throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
+  }
+
+  return user;
+};
+
+// ✅ Update user
 const updateUser = async (req: Request) => {
   const {
     params: { id: userId },
@@ -67,6 +84,21 @@ const updateUser = async (req: Request) => {
       throw new AppError(
         message("unauthorized", "user"),
         StatusCodes.BAD_REQUEST
+      );
+    }
+    if (body.activityStatus && body.activityStatus !== user.activityStatus) {
+      throw new AppError(
+        message("forbidden", "update status"),
+        StatusCodes.FORBIDDEN
+      );
+    }
+    if (
+      body.isDriverApproved &&
+      body.isDriverApproved !== user.isDriverApproved
+    ) {
+      throw new AppError(
+        message("forbidden", "approved"),
+        StatusCodes.FORBIDDEN
       );
     }
     if (body.role && body.role !== role) {
@@ -94,8 +126,57 @@ const updateUser = async (req: Request) => {
   return updateUser;
 };
 
+// ✅ Retrieve user by Credential
 const retrieveMe = async (req: Request) => {
-  const id = req.user;
+  const credential = req.user as JWTCredentialProps;
+  const user = await Users.findById(credential.credentialId);
+
+  if (!user) {
+    throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
+  }
+  return user;
+};
+// ✅ Delete user
+const deleteUser = async (req: Request) => {
+  const id = req.params.id;
+  const credential = req.user as JWTCredentialProps;
+
+  const user = await Users.findById(id);
+  if (!user) {
+    throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
+  }
+
+  // ADMIN restrictions
+  if (credential.role === "ADMIN" && user.role === "SUPERADMIN") {
+    throw new AppError(
+      message("forbidden", "delete", "ADMIN (cannot delete SUPERADMIN)"),
+      StatusCodes.FORBIDDEN
+    );
+  }
+  if (
+    ["RIDER", "DRIVER"].includes(credential.role) &&
+    credential.credentialId !== user._id.toString()
+  ) {
+    throw new AppError(
+      message(
+        "forbidden",
+        "delete",
+        `${credential.role} cannot delete other user`
+      ),
+      StatusCodes.FORBIDDEN
+    );
+  }
+
+  await Users.findByIdAndUpdate(
+    id,
+    {
+      isDeleted: true,
+    },
+    {
+      runValidators: true,
+      new: true,
+    }
+  );
 };
 
 const userServices = {
@@ -103,6 +184,8 @@ const userServices = {
   retrieveUsers,
   updateUser,
   retrieveMe,
+  deleteUser,
+  retrieveUser,
 };
 
 export default userServices;

@@ -24,7 +24,17 @@ const retrieveUsers = safeAsync(async (_req: Request, res: Response) => {
   resHandler(res, {
     status: StatusCodes.OK,
     success: true,
-    message: message("get", "user"),
+    message: message("get", "users"),
+    data: users,
+  });
+});
+// ✅ Retrieve User by ID
+const retrieveUser = safeAsync(async (_req: Request, res: Response) => {
+  const users = await userServices.retrieveUsers();
+  resHandler(res, {
+    status: StatusCodes.OK,
+    success: true,
+    message: message("get", "users"),
     data: users,
   });
 });
@@ -40,22 +50,21 @@ const updateUser = safeAsync(async (req: Request, res: Response) => {
 });
 // ✅ Retrieve user information by token
 const retrieveMe = safeAsync(async (req: Request, res: Response) => {
-  const users = await userServices.updateUser(req);
+  const user = await userServices.retrieveMe(req);
   resHandler(res, {
     status: StatusCodes.OK,
     success: true,
-    message: message("update", "user"),
-    data: users,
+    message: message("get", "user"),
+    data: user,
   });
 });
 // ✅ Delete user by ID
 const deleteUser = safeAsync(async (req: Request, res: Response) => {
-  const users = await userServices.updateUser(req);
+  await userServices.deleteUser(req);
   resHandler(res, {
     status: StatusCodes.OK,
     success: true,
     message: message("delete", "user"),
-    data: users,
   });
 });
 
@@ -65,6 +74,7 @@ const userControllers = {
   updateUser,
   deleteUser,
   retrieveMe,
+  retrieveUser,
 };
 
 export default userControllers;
