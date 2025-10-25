@@ -1,13 +1,15 @@
+import { Users } from "../user.models";
 import bcrypt from "bcryptjs";
-import message from "./message";
+import message from "../../../utils/message";
 import { StatusCodes } from "http-status-codes";
-import environments from "../configurations/environments";
-import { Users } from "../modules/user/user.models";
-import AppError from "../helpers/error.helper";
+import environments from "../../../configurations/environments";
+import AppError from "../../../helpers/error.helper";
+
 const initializeDefaultUser = async () => {
   try {
     const {
-      super_admin: { email, password },
+      super_admin_email: email,
+      super_admin_password: password,
       bcrypt_salt_round,
     } = environments;
     const defaultUser = await Users.findOne({ email });
@@ -20,8 +22,6 @@ const initializeDefaultUser = async () => {
         email,
         role: "SUPERADMIN",
         password: hashPassword,
-        isDriverApproved: true,
-        isVerified: true,
         auths: [{ provider: "CREDENTIAL", providerId: email }],
       });
     }

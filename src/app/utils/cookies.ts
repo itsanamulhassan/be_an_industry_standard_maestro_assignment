@@ -1,6 +1,6 @@
 import { Response } from "express";
+import environments from "../configurations/environments";
 import { RemoveCookiesProps, SetCookiesProps } from "../types/utils.types";
-import env from "../configurations/env";
 
 const defaultCookieOptions = {
   httpOnly: true,
@@ -8,18 +8,20 @@ const defaultCookieOptions = {
   sameSite: "lax" as const,
 };
 
-const { access_cookie_name, refresh_cookie_name } = env;
+const {
+  cookie: { access, refresh },
+} = environments;
 
 export const setCookies = (res: Response, payload: SetCookiesProps): void => {
   if (payload?.accessToken) {
-    res.cookie(access_cookie_name, payload.accessToken, {
+    res.cookie(access, payload.accessToken, {
       ...defaultCookieOptions,
       maxAge: 24 * 60 * 60 * 1000, // 1 day for access token
     });
   }
 
   if (payload?.refreshToken) {
-    res.cookie(refresh_cookie_name, payload.refreshToken, {
+    res.cookie(refresh, payload.refreshToken, {
       ...defaultCookieOptions,
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days for refresh token
     });
@@ -31,11 +33,11 @@ export const removeCookies = (
   payload: RemoveCookiesProps
 ): void => {
   if (payload?.accessToken) {
-    res.clearCookie(access_cookie_name, defaultCookieOptions);
+    res.clearCookie(access, defaultCookieOptions);
   }
 
   if (payload?.refreshToken) {
-    res.clearCookie(refresh_cookie_name, defaultCookieOptions);
+    res.clearCookie(refresh, defaultCookieOptions);
   }
 };
 
