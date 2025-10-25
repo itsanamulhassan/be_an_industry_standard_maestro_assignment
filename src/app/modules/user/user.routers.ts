@@ -18,6 +18,12 @@ userRouter.get(
   auth.authorizeRole("ADMIN", "SUPERADMIN"),
   userControllers.retrieveUsers
 );
+// ✅ Get all the users
+userRouter.get(
+  "/single/:id",
+  auth.authorizeRole("ADMIN", "SUPERADMIN"),
+  userControllers.retrieveUser
+);
 // ✅ Update user by ID
 userRouter.patch(
   "/update/:id",

@@ -29,12 +29,12 @@ const retrieveUsers = safeAsync(async (_req: Request, res: Response) => {
   });
 });
 // ✅ Retrieve User by ID
-const retrieveUser = safeAsync(async (_req: Request, res: Response) => {
-  const users = await userServices.retrieveUsers();
+const retrieveUser = safeAsync(async (req: Request, res: Response) => {
+  const users = await userServices.retrieveUser(req);
   resHandler(res, {
     status: StatusCodes.OK,
     success: true,
-    message: message("get", "users"),
+    message: message("get", "user"),
     data: users,
   });
 });
