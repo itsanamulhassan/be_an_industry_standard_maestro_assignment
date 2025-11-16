@@ -92,15 +92,7 @@ const updateUser = async (req: Request) => {
         StatusCodes.FORBIDDEN
       );
     }
-    if (
-      body.isDriverApproved &&
-      body.isDriverApproved !== user.isDriverApproved
-    ) {
-      throw new AppError(
-        message("forbidden", "approved"),
-        StatusCodes.FORBIDDEN
-      );
-    }
+
     if (body.role && body.role !== role) {
       throw new AppError(message("forbidden", role), StatusCodes.FORBIDDEN);
     }

@@ -5,8 +5,8 @@ export const passwordRegex =
   /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\\{};':"|,.<>/?]).{6,32}$/;
 // ✅ User activity status enum
 export const userActivityStatusEnum = [
-  "ACTIVE",
-  "INACTIVE",
+  "ACTIVATED",
+  "INACTIVATED",
   "BLOCKED",
 ] as const;
 // ✅ User role status enum
@@ -73,6 +73,8 @@ const create = z.object({
     .optional(),
 
   phone: z.string({ error: "Phone must be a string." }).optional(),
+  // User role
+  role: z.enum(["RIDER", "DRIVER"]).default("RIDER"),
 });
 
 const update = create

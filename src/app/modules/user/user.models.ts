@@ -5,8 +5,6 @@ import {
   userRoleStatusEnum,
 } from "./user.schemas";
 import { FileProps } from "../../types/global.types";
-import AppError from "../../helpers/error.helper";
-import { StatusCodes } from "http-status-codes";
 
 export const fileSchema = (required = false) =>
   new Schema<FileProps>(
@@ -62,27 +60,6 @@ const authProviderSchema = new Schema(
   }
 );
 
-const vehicleInfoSchema = new Schema(
-  {
-    capacity: {
-      type: Number,
-    },
-    model: {
-      type: String,
-    },
-    plateNumber: {
-      type: String,
-    },
-    color: {
-      type: String,
-    },
-  },
-  {
-    versionKey: false,
-    _id: false,
-  }
-);
-
 const userSchema = new Schema(
   {
     name: {
@@ -101,18 +78,14 @@ const userSchema = new Schema(
       type: fileSchema(),
       required: false,
     },
-    activityStatus: {
+    status: {
       type: String,
       enum: userActivityStatusEnum,
-      default: "ACTIVE",
+      default: "ACTIVATED",
       uppercase: true,
     },
     address: addressSchema,
     isDeleted: {
-      type: Boolean,
-      default: false,
-    },
-    isDriverApproved: {
       type: Boolean,
       default: false,
     },
@@ -131,27 +104,27 @@ const userSchema = new Schema(
       required: false,
       select: false,
     },
+    emailVerifiedAt: {
+      type: Date,
+    },
+    phoneVerifiedAt: {
+      type: Date,
+    },
+    twoFactorEnabled: {
+      type: Boolean,
+      default: false,
+    },
     phone: {
       type: String,
     },
-    vehicleInfo: vehicleInfoSchema,
   },
   { timestamps: true, versionKey: false }
 );
 
-userSchema.pre("save", function (next) {
-  if (this.role === "DRIVER" && !this.avatar?.public_id) {
-    next(
-      new AppError("Avatar is required for DRIVER.", StatusCodes.BAD_REQUEST)
-    );
-  }
-  next();
-});
-
 export type User = InferSchemaType<typeof userSchema>;
 export type UserDocument = HydratedDocument<User>;
 export type Address = InferSchemaType<typeof addressSchema>;
-export type Vehicle = InferSchemaType<typeof vehicleInfoSchema>;
+
 export type AuthProvider = InferSchemaType<typeof authProviderSchema>;
 
 export const Users = model<User>("Users", userSchema);
