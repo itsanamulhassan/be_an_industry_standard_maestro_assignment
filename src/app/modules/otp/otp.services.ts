@@ -73,7 +73,7 @@ const verify = async (req: Request) => {
   await Promise.all([
     Users.updateOne(
       { email: payload.email },
-      { isVerified: true },
+      { isVerified: true, emailVerifiedAt: new Date() },
       {
         runValidators: true,
       }

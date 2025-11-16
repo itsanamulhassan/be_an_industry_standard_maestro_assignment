@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userRoleStatusEnum, userSchemas } from "./user.schemas";
+import { userRoleEnum, userSchemas } from "./user.schemas";
 import userControllers from "./user.controllers";
 import { validator } from "../../middlewares/validator.middleware";
 import { auth } from "../authentication/authentication.helpers/auth";
@@ -28,19 +28,19 @@ userRouter.get(
 userRouter.patch(
   "/update/:id",
   validator.schema(userSchemas.update),
-  auth.authorizeRole(...userRoleStatusEnum),
+  auth.authorizeRole(...userRoleEnum),
   userControllers.updateUser
 );
 // ✅ Delete user by ID
 userRouter.delete(
   "/delete/:id",
-  auth.authorizeRole(...userRoleStatusEnum),
+  auth.authorizeRole(...userRoleEnum),
   userControllers.deleteUser
 );
 // ✅  User information by Access Token
 userRouter.get(
   "/me",
-  auth.authorizeRole(...userRoleStatusEnum),
+  auth.authorizeRole(...userRoleEnum),
   userControllers.retrieveMe
 );
 
