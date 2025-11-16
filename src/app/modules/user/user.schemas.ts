@@ -4,18 +4,9 @@ import * as z from "zod";
 export const passwordRegex =
   /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\\{};':"|,.<>/?]).{6,32}$/;
 // ✅ User activity status enum
-export const userActivityStatusEnum = [
-  "ACTIVATED",
-  "INACTIVATED",
-  "BLOCKED",
-] as const;
-// ✅ User role status enum
-export const userRoleStatusEnum = [
-  "SUPERADMIN",
-  "ADMIN",
-  "RIDER",
-  "DRIVER",
-] as const;
+export const userStatusEnum = ["ACTIVATED", "INACTIVATED", "BLOCKED"] as const;
+// ✅ User role enum
+export const userRoleEnum = ["SUPERADMIN", "ADMIN", "RIDER", "DRIVER"] as const;
 // ✅ Auth provider enum
 export const authProviderEnum = ["GOOGLE", "FACEBOOK", "CREDENTIAL"] as const;
 
@@ -83,31 +74,12 @@ const update = create
     password: true,
   })
   .extend({
-    // Status flags
-    isDeleted: z
-      .boolean({ error: "Verify status must be a boolean." })
-      .optional(),
-    activityStatus: z.enum(userActivityStatusEnum).optional(),
-    isDriverApproved: z
-      .boolean({ error: "Driver approve status must be a boolean." })
-      .optional(),
+    status: z.enum(userStatusEnum).optional(),
     isVerified: z
       .boolean({ error: "Verify status must be a boolean." })
       .optional(),
-    // Embedded address object
     address: addressSchema.optional(),
-    // User role
-    role: z.enum(userRoleStatusEnum).optional(),
-    // vehicleInfo optional here
-    vehicleInfo: vehicleInfo.optional(),
-  })
-  .refine((data) => data.role !== "DRIVER" || !!data.vehicleInfo, {
-    error: "Vehicle information is required for DRIVER.",
-    path: ["vehicleInfo"],
-  })
-  .refine((data) => data.role !== "DRIVER" || !!data.address, {
-    error: "Address is required for DRIVER.",
-    path: ["address"],
+    role: z.enum(userRoleEnum).optional(),
   });
 export const userSchemas = {
   create,

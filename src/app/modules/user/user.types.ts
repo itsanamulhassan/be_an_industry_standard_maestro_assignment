@@ -3,8 +3,8 @@ import {
   addressSchema,
   authProviderEnum,
   authProviderSchema,
-  userActivityStatusEnum,
-  userRoleStatusEnum,
+  userStatusEnum,
+  userRoleEnum,
   userSchemas,
   vehicleInfo,
 } from "./user.schemas";
@@ -23,9 +23,9 @@ export type AddressDto = z.infer<typeof addressSchema>;
 export type AuthProviderDto = z.infer<typeof authProviderSchema>;
 
 // ✅ Type representing a user role status enum
-export type UserRoleStatusEnumDto = (typeof userRoleStatusEnum)[number];
+export type UserRoleStatusEnumDto = (typeof userRoleEnum)[number];
 
 // ✅ Type representing a user activity status enum
-export type UserActivityStatusEnumDto = (typeof userActivityStatusEnum)[number];
+export type UserActivityStatusEnumDto = (typeof userStatusEnum)[number];
 // ✅ Type representing a authentication provider enum
 export type authProviderEnumDto = (typeof authProviderEnum)[number];

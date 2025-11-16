@@ -1,9 +1,5 @@
 import { HydratedDocument, InferSchemaType, model, Schema } from "mongoose";
-import {
-  authProviderEnum,
-  userActivityStatusEnum,
-  userRoleStatusEnum,
-} from "./user.schemas";
+import { authProviderEnum, userStatusEnum, userRoleEnum } from "./user.schemas";
 import { FileProps } from "../../types/global.types";
 
 export const fileSchema = (required = false) =>
@@ -80,7 +76,7 @@ const userSchema = new Schema(
     },
     status: {
       type: String,
-      enum: userActivityStatusEnum,
+      enum: userStatusEnum,
       default: "ACTIVATED",
       uppercase: true,
     },
@@ -96,7 +92,7 @@ const userSchema = new Schema(
     auths: [authProviderSchema],
     role: {
       type: String,
-      enum: userRoleStatusEnum,
+      enum: userRoleEnum,
       default: "RIDER",
     },
     password: {

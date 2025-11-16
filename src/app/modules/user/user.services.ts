@@ -86,7 +86,7 @@ const updateUser = async (req: Request) => {
         StatusCodes.BAD_REQUEST
       );
     }
-    if (body.activityStatus && body.activityStatus !== user.activityStatus) {
+    if (body.activityStatus && body.activityStatus !== user.status) {
       throw new AppError(
         message("forbidden", "update status"),
         StatusCodes.FORBIDDEN
