@@ -104,7 +104,7 @@ const forgetPassword = async (req: Request) => {
     "name",
     "role",
     "email",
-    "activityStatus",
+    "status",
     "isDeleted",
     "isVerified",
   ]);

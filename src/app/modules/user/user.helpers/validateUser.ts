@@ -9,15 +9,10 @@ export const validateUser = (user: User) => {
     throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
   }
 
-  // 403 Forbidden → User is blocked or inactive
-  if (
-    ["BLOCKED", "INACTIVE"].includes(user.activityStatus as UserStatusEnumDTO)
-  ) {
+  // 403 Forbidden → User is blocked or inactivated
+  if (["BLOCKED", "INACTIVATED"].includes(user.status as UserStatusEnumDTO)) {
     throw new AppError(
-      message(
-        user.activityStatus?.toLowerCase() as MessageType,
-        "access token"
-      ),
+      message(user.status?.toLowerCase() as MessageType, "access token"),
       StatusCodes.FORBIDDEN
     );
   }
