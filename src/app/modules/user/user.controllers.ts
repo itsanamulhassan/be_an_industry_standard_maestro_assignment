@@ -7,15 +7,12 @@ import userServices from "./user.services";
 
 // ✅ Create a new user
 const createUser = safeAsync(async (req: Request, res: Response) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { password: unusedProperty, ...rest } = (
-    await userServices.createUser(req.body)
-  ).toObject();
+  const user = await userServices.createUser(req.body);
   resHandler(res, {
     status: StatusCodes.CREATED,
     success: true,
     message: message("create", "user"),
-    data: rest,
+    data: user,
   });
 });
 // ✅ Retrieve Users

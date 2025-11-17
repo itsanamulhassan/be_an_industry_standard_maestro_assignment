@@ -18,7 +18,7 @@ const favoriteLocationSchema = z.object({
 });
 
 const update = z.object({
-  favoriteLocation: z.array(favoriteLocationSchema),
+  favoriteLocation: z.array(favoriteLocationSchema).optional(),
 });
 
 export const riderSchemas = {

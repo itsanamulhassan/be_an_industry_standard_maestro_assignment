@@ -2,6 +2,7 @@ import { Router } from "express";
 import userRouter from "../modules/user/user.routers";
 import authenticationRouter from "../modules/authentication/authentication.routers";
 import otpRouter from "../modules/otp/otp.routers";
+import riderRouter from "../modules/rider/rider.routers";
 
 const appRouter = Router();
 
@@ -21,6 +22,10 @@ const routes: RouteProps[] = [
   {
     path: "/otp",
     router: otpRouter,
+  },
+  {
+    path: "/riders",
+    router: riderRouter,
   },
 ];
 
