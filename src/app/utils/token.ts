@@ -1,33 +1,20 @@
-import { Types } from "mongoose";
 import { jwt } from "../modules/authentication/authentication.helpers/jwt";
 import { StatusCodes } from "http-status-codes";
 import message, { MessageType } from "./message";
-import { CreateAccessRefreshTokenProps } from "../types/utils.types";
-import { Users } from "../modules/user/user.models";
-import {
-  CreateUserDto,
-  UserActivityStatusEnumDto,
-} from "../modules/user/user.types";
+import { UserDocument, Users } from "../modules/user/user.models";
+import { UserStatusEnumDTO } from "../modules/user/user.types";
 import AppError from "../helpers/error.helper";
+import { JWTCredentialProps } from "../types/utils.types";
 
 const createAccessTokenWithRefreshToken = async (refreshToken: string) => {
   const { email } = jwt.verifyRefreshToken(refreshToken);
-  const user = (await Users.findOne({ email })) as Partial<
-    CreateUserDto & { _id: Types.ObjectId }
-  >;
+  const user = (await Users.findOne({ email })) as UserDocument;
   if (!user) {
     throw new AppError(message("notFound", "user"), StatusCodes.BAD_REQUEST);
   }
-  if (
-    ["BLOCKED", "INACTIVE"].includes(
-      user.activityStatus as UserActivityStatusEnumDto
-    )
-  ) {
+  if (["BLOCKED", "INACTIVATED"].includes(user.status as UserStatusEnumDTO)) {
     throw new AppError(
-      message(
-        user.activityStatus?.toLowerCase() as MessageType,
-        "access token"
-      ),
+      message(user.status?.toLowerCase() as MessageType, "access token"),
       StatusCodes.BAD_REQUEST
     );
   }
@@ -45,7 +32,7 @@ const createAccessTokenWithRefreshToken = async (refreshToken: string) => {
   return accessToken;
 };
 const createAccessRefreshToken = (
-  payload: CreateAccessRefreshTokenProps
+  payload: JWTCredentialProps
 ): { accessToken: string; refreshToken: string } => {
   const accessToken = jwt.signAccessToken(payload);
   const refreshToken = jwt.signRefreshToken(payload);

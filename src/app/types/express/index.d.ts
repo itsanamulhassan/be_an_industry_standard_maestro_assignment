@@ -1,10 +1,5 @@
-import { UserRoleStatusEnumDto } from "../../modules/user/user.types";
+import { JWTCredentialProps } from "../utils.types";
 
-export interface JWTCredentialProps {
-  credentialId: string;
-  email: string;
-  role: UserRoleStatusEnumDto;
-}
 declare global {
   namespace Express {
     interface Request {

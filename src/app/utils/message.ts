@@ -12,7 +12,7 @@ export type MessageType =
   | "forbidden"
   | "badRequest"
   | "expired"
-  | "inactive"
+  | "inactivated"
   | "blocked"
   | "validation"
   | "success"
@@ -42,7 +42,7 @@ const message = (
     badRequest: `${entityCapitalized} request is invalid. Please check your input and try again.`,
     expired: `${entityCapitalized} has expired. Please request a new one or try again later.`,
     blocked: `${entityCapitalized} has blocked. Please request a new one or try again later.`,
-    inactive: `${entityCapitalized} has deactivated. Please request a new one or try again later.`,
+    inactivated: `${entityCapitalized} has deactivated. Please request a new one or try again later.`,
     validation: `${entityCapitalized} validation failed. Please check the provided information.`,
     success: `${entityCapitalized} operation was successful. Everything is working as expected.`,
     fail: `${entityCapitalized} operation failed. Please try again or contact support if the issue persists.`,

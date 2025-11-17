@@ -42,7 +42,7 @@ const authProviderSchema = new Schema(
   {
     provider: {
       type: String,
-      value: authProviderEnum,
+      enum: authProviderEnum,
       default: "CREDENTIAL",
     },
     providerId: {
@@ -89,7 +89,10 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    auths: [authProviderSchema],
+    auths: {
+      type: [authProviderSchema],
+      default: [],
+    },
     role: {
       type: String,
       enum: userRoleEnum,

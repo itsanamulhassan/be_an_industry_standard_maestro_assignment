@@ -1,17 +1,17 @@
 import { StatusCodes } from "http-status-codes";
 import message from "../../utils/message";
 import bcryptjs from "bcryptjs";
-import { AuthProviderDto, CreateUserDto } from "./user.types";
+import { AuthProviderDTO, CreateUserDTO } from "./user.types";
 import AppError from "../../helpers/error.helper";
 import { User, Users } from "./user.models";
 import environments from "../../configurations/environments";
 import { validateUser } from "./user.helpers/validateUser";
 import { Request } from "express";
-import { JWTCredentialProps } from "../../types/express";
+import { JWTCredentialProps } from "../../types/utils.types";
 
 // ✅ Create new user
-const createUser = async (payload: CreateUserDto) => {
-  const { email, password, ...rest } = payload as CreateUserDto;
+const createUser = async (payload: CreateUserDTO) => {
+  const { email, password, ...rest } = payload as CreateUserDTO;
 
   const user = await Users.findOne({ email });
   if (user) {
@@ -26,7 +26,7 @@ const createUser = async (payload: CreateUserDto) => {
     environments.bcrypt_salt_round
   );
 
-  const authProvider: AuthProviderDto = {
+  const authProvider: AuthProviderDTO = {
     provider: "CREDENTIAL",
     providerId: email,
   };
@@ -86,7 +86,7 @@ const updateUser = async (req: Request) => {
         StatusCodes.BAD_REQUEST
       );
     }
-    if (body.activityStatus && body.activityStatus !== user.status) {
+    if (body.status && body.status !== user.status) {
       throw new AppError(
         message("forbidden", "update status"),
         StatusCodes.FORBIDDEN

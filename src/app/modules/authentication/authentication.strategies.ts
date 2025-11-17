@@ -19,12 +19,9 @@ passport.use(
           return done(null, false, { message: message("notFound", "user") });
         }
 
-        if (["BLOCKED", "INACTIVE"].includes(user.activityStatus)) {
+        if (["BLOCKED", "INACTIVATED"].includes(user.status)) {
           return done(null, false, {
-            message: message(
-              user.activityStatus.toLowerCase() as MessageType,
-              email
-            ),
+            message: message(user.status.toLowerCase() as MessageType, email),
           });
         }
         if (user.isDeleted) {

@@ -10,22 +10,22 @@ import {
 } from "./user.schemas";
 
 // ✅ Type representing a user creation payload
-export type CreateUserDto = z.infer<typeof userSchemas.createUser>;
+export type CreateUserDTO = z.infer<typeof userSchemas.create>;
 // ✅ Type representing a user updating payload
-export type UpdateUserDto = z.infer<typeof userSchemas.updateUser>;
+export type UpdateUserDTO = z.infer<typeof userSchemas.update>;
 // ✅ Type representing a vehicle
-export type VehicleDto = z.infer<typeof vehicleInfo>;
+export type VehicleDTO = z.infer<typeof vehicleInfo>;
 
 // ✅ Type representing an address sub-document
-export type AddressDto = z.infer<typeof addressSchema>;
+export type AddressDTO = z.infer<typeof addressSchema>;
 
 // ✅ Type representing an authentication provider entry
-export type AuthProviderDto = z.infer<typeof authProviderSchema>;
+export type AuthProviderDTO = z.infer<typeof authProviderSchema>;
 
 // ✅ Type representing a user role status enum
-export type UserRoleStatusEnumDto = (typeof userRoleEnum)[number];
+export type UserRoleEnumDTO = (typeof userRoleEnum)[number];
 
 // ✅ Type representing a user activity status enum
-export type UserActivityStatusEnumDto = (typeof userStatusEnum)[number];
+export type UserStatusEnumDTO = (typeof userStatusEnum)[number];
 // ✅ Type representing a authentication provider enum
-export type authProviderEnumDto = (typeof authProviderEnum)[number];
+export type authProviderEnumDTO = (typeof authProviderEnum)[number];
