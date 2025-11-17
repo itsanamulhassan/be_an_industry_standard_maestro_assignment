@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { User } from "../user.models";
 import message, { MessageType } from "../../../utils/message";
-import { UserActivityStatusEnumDto } from "../user.types";
+import { UserStatusEnumDTO } from "../user.types";
 import AppError from "../../../helpers/error.helper";
 export const validateUser = (user: User) => {
   // 404 Not Found → User doesn't exist
@@ -11,9 +11,7 @@ export const validateUser = (user: User) => {
 
   // 403 Forbidden → User is blocked or inactive
   if (
-    ["BLOCKED", "INACTIVE"].includes(
-      user.activityStatus as UserActivityStatusEnumDto
-    )
+    ["BLOCKED", "INACTIVE"].includes(user.activityStatus as UserStatusEnumDTO)
   ) {
     throw new AppError(
       message(

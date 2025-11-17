@@ -1,4 +1,4 @@
-import { UserRoleStatusEnumDto } from "../modules/user/user.types";
+import { UserRoleEnumDTO } from "../modules/user/user.types";
 
 export interface SetCookiesProps {
   accessToken?: string;
@@ -12,7 +12,7 @@ export interface RemoveCookiesProps {
 export interface CreateAccessRefreshTokenProps {
   credentialId: string;
   email: string;
-  role: UserRoleStatusEnumDto;
+  role: UserRoleEnumDTO;
 }
 
 export interface MailSenderProps<T> {
