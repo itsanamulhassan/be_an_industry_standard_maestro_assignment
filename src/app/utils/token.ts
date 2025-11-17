@@ -1,10 +1,10 @@
 import { jwt } from "../modules/authentication/authentication.helpers/jwt";
 import { StatusCodes } from "http-status-codes";
 import message, { MessageType } from "./message";
-import { CreateAccessRefreshTokenProps } from "../types/utils.types";
 import { UserDocument, Users } from "../modules/user/user.models";
 import { UserStatusEnumDTO } from "../modules/user/user.types";
 import AppError from "../helpers/error.helper";
+import { JWTCredentialProps } from "../types/utils.types";
 
 const createAccessTokenWithRefreshToken = async (refreshToken: string) => {
   const { email } = jwt.verifyRefreshToken(refreshToken);
@@ -32,7 +32,7 @@ const createAccessTokenWithRefreshToken = async (refreshToken: string) => {
   return accessToken;
 };
 const createAccessRefreshToken = (
-  payload: CreateAccessRefreshTokenProps
+  payload: JWTCredentialProps
 ): { accessToken: string; refreshToken: string } => {
   const accessToken = jwt.signAccessToken(payload);
   const refreshToken = jwt.signRefreshToken(payload);

@@ -16,6 +16,7 @@ import environments from "../../configurations/environments";
 import bcrypt from "bcryptjs";
 import mailSender from "../../utils/mailSender";
 import JWT from "jsonwebtoken";
+import { JWTCredentialProps } from "../../types/utils.types";
 
 const signIn = async (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
@@ -113,13 +114,15 @@ const forgetPassword = async (req: Request) => {
   }
   validateUser(user);
 
-  const token = JWT.sign(
-    req.user as JwtPayload,
-    environments.jwt.access_secret,
-    {
-      expiresIn: "10m",
-    }
-  );
+  const payload = {
+    credentialId: user._id.toString(),
+    email: user.email,
+    role: user.role,
+  } as JWTCredentialProps;
+
+  const token = JWT.sign(payload, environments.jwt.access_secret, {
+    expiresIn: "10m",
+  });
   const link = `${environments.frontend_base_url}/forget_password?id=${user._id}&token=${token}`;
 
   mailSender({

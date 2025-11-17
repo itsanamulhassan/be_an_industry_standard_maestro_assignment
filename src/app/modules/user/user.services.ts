@@ -7,7 +7,7 @@ import { User, Users } from "./user.models";
 import environments from "../../configurations/environments";
 import { validateUser } from "./user.helpers/validateUser";
 import { Request } from "express";
-import { JWTCredentialProps } from "../../types/express";
+import { JWTCredentialProps } from "../../types/utils.types";
 
 // ✅ Create new user
 const createUser = async (payload: CreateUserDTO) => {

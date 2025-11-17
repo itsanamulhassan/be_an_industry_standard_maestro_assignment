@@ -1,7 +1,6 @@
 import { HydratedDocument, InferSchemaType, model, Schema } from "mongoose";
 import { authProviderEnum, userStatusEnum, userRoleEnum } from "./user.schemas";
 import { FileProps } from "../../types/global.types";
-import { AuthProviderDTO } from "./user.types";
 
 export const fileSchema = (required = false) =>
   new Schema<FileProps>(

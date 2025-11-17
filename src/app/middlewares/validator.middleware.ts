@@ -5,10 +5,10 @@ import { UserRoleEnumDTO } from "../modules/user/user.types";
 import AppError from "../helpers/error.helper";
 import message from "../utils/message";
 import { StatusCodes } from "http-status-codes";
-import { JWTCredentialProps } from "../types/express";
 import { jwt } from "../modules/authentication/authentication.helpers/jwt";
 import { User, Users } from "../modules/user/user.models";
 import { validateUser } from "../modules/user/user.helpers/validateUser";
+import { JWTCredentialProps } from "../types/utils.types";
 
 const schema = <T>(schema: ZodType<T>) =>
   safeAsync(async (req: Request, _res: Response, next: NextFunction) => {

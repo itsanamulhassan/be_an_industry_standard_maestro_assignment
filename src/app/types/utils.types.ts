@@ -9,7 +9,7 @@ export interface RemoveCookiesProps {
   refreshToken?: boolean;
 }
 
-export interface CreateAccessRefreshTokenProps {
+export interface JWTCredentialProps {
   credentialId: string;
   email: string;
   role: UserRoleEnumDTO;
