@@ -39,4 +39,9 @@ authenticationRouter.post(
   authenticationControllers.forgetPassword
 );
 
+authenticationRouter.post(
+  "/refresh_access_token",
+  authenticationControllers.retrieveLatestAccessToken
+);
+
 export default authenticationRouter;

@@ -54,6 +54,22 @@ const forgetPassword = safeAsync(async (req: Request, res: Response) => {
     status: StatusCodes.OK,
   });
 });
+const retrieveLatestAccessToken = safeAsync(
+  async (req: Request, res: Response) => {
+    const accessToken = await authenticationServices.retrieveLatestAccessToken(
+      req
+    );
+    cookies.setCookies(res, { accessToken });
+    resHandler(res, {
+      success: true,
+      message: message("create", "access token"),
+      status: StatusCodes.CREATED,
+      data: {
+        accessToken,
+      },
+    });
+  }
+);
 export const authenticationControllers = {
   signIn,
   signOut,
@@ -61,4 +77,5 @@ export const authenticationControllers = {
   forgetPassword,
   setPassword,
   changePassword,
+  retrieveLatestAccessToken,
 };

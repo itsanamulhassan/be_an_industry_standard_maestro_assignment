@@ -175,10 +175,24 @@ const changePassword = async (req: Request) => {
   );
   user.save();
 };
+const retrieveLatestAccessToken = async (req: Request) => {
+  const refreshToken = req.cookies[environments.cookie.refresh];
+  if (!refreshToken) {
+    throw new AppError(
+      message("notFound", "refresh token"),
+      StatusCodes.NOT_FOUND
+    );
+  }
+  const accessToken = await token.createAccessTokenWithRefreshToken(
+    refreshToken
+  );
+  return accessToken;
+};
 export const authenticationServices = {
   signIn,
   resetPassword,
   forgetPassword,
   setPassword,
   changePassword,
+  retrieveLatestAccessToken,
 };
