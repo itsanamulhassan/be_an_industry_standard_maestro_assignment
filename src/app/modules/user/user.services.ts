@@ -8,33 +8,51 @@ import environments from "../../configurations/environments";
 import { validateUser } from "./user.helpers/validateUser";
 import { Request } from "express";
 import { JWTCredentialProps } from "../../types/utils.types";
+import { withTransaction } from "../../database/transaction";
+import { Riders } from "../rider/rider.models";
 
 // ✅ Create new user
 const createUser = async (payload: CreateUserDTO) => {
-  const { email, password, ...rest } = payload as CreateUserDTO;
+  return withTransaction(async (session) => {
+    const { email, password, ...rest } = payload as CreateUserDTO;
 
-  const user = await Users.findOne({ email });
-  if (user) {
-    throw new AppError(
-      message("alreadyExists", "user"),
-      StatusCodes.BAD_REQUEST
+    const user = await Users.findOne({ email });
+    if (user) {
+      throw new AppError(
+        message("alreadyExists", "user"),
+        StatusCodes.BAD_REQUEST
+      );
+    }
+
+    const hashPassword = await bcryptjs.hash(
+      password as string,
+      environments.bcrypt_salt_round
     );
-  }
 
-  const hashPassword = await bcryptjs.hash(
-    password as string,
-    environments.bcrypt_salt_round
-  );
-
-  const authProvider: AuthProviderDTO = {
-    provider: "CREDENTIAL",
-    providerId: email,
-  };
-  return await Users.create({
-    email,
-    ...rest,
-    auths: [authProvider],
-    password: hashPassword,
+    const authProvider: AuthProviderDTO = {
+      provider: "CREDENTIAL",
+      providerId: email,
+    };
+    const latestUser = await Users.create(
+      [
+        {
+          email,
+          ...rest,
+          auths: [authProvider],
+          password: hashPassword,
+        },
+      ],
+      { session }
+    );
+    await Riders.create(
+      [
+        {
+          user: latestUser[0]._id,
+        },
+      ],
+      { session }
+    );
+    return latestUser;
   });
 };
 
