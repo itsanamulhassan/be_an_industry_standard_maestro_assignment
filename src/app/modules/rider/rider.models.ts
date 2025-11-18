@@ -1,5 +1,5 @@
 import { HydratedDocument, InferSchemaType, model, Schema } from "mongoose";
-import { paymentEnum } from "./rider.schemas";
+import { cardBrandEnum, walletTypeEnum } from "./rider.schemas";
 
 const locationSchema = new Schema(
   {
@@ -27,14 +27,52 @@ const paymentMethodSchema = new Schema(
   {
     type: {
       type: String,
-      enum: paymentEnum,
-      default: "CASH",
+      enum: ["CASH", "CARD", "WALLET"],
+      required: [true, "Payment method's type is required."],
     },
-    details: {
-      type: Object,
+    brand: {
+      type: String,
+      enum: cardBrandEnum,
     },
+    last4: {
+      type: String,
+      validate: {
+        validator: function (v: string) {
+          return /^[0-9]{4}$/.test(v);
+        },
+        message: "Last four digits must be exactly 4 numeric.",
+      },
+    },
+    expiryMonth: {
+      type: Number,
+      min: [1, "Expiry month must be between 1-12."],
+      max: [12, "Expiry month must be between 1-12."],
+      validate: {
+        validator: Number.isInteger,
+        message: "Expiry month must be an integer.",
+      },
+    },
+    expiryYear: {
+      type: Number,
+      validate: {
+        validator: function (value: number) {
+          const currentYear = new Date().getFullYear();
+          return value >= currentYear && value <= currentYear + 10;
+        },
+        message: "Expiry year must be valid and not expired.",
+      },
+    },
+
+    walletType: {
+      type: String,
+      enum: walletTypeEnum,
+    },
+
+    paymentMethodId: String,
+
+    isDefault: { type: Boolean, default: false },
   },
-  { versionKey: false, _id: false }
+  { _id: false }
 );
 
 const riderSchema = new Schema(

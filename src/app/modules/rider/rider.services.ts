@@ -16,7 +16,8 @@ const updateRider = async (req: Request) => {
   return await Riders.findOneAndUpdate(
     { user: id },
     {
-      favoriteLocations: payload.favoriteLocation,
+      favoriteLocations: payload.favoriteLocations,
+      paymentMethods: payload.paymentMethods,
     },
     {
       runValidators: true,
