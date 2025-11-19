@@ -38,6 +38,7 @@ const driverSchema = new Schema(
       required: [true, "License number is require."],
     },
     isOnline: { type: Boolean, default: false },
+    isActivated: { type: Boolean, default: false },
     isApproved: {
       type: Boolean,
       default: false,
