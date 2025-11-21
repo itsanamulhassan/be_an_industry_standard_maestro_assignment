@@ -3,6 +3,7 @@ import userRouter from "../modules/user/user.routers";
 import authenticationRouter from "../modules/authentication/authentication.routers";
 import otpRouter from "../modules/otp/otp.routers";
 import riderRouter from "../modules/rider/rider.routers";
+import driverRouter from "../modules/driver/driver.routers";
 
 const appRouter = Router();
 
@@ -26,6 +27,10 @@ const routes: RouteProps[] = [
   {
     path: "/riders",
     router: riderRouter,
+  },
+  {
+    path: "/drivers",
+    router: driverRouter,
   },
 ];
 

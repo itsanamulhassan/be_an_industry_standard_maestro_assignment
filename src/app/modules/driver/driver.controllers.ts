@@ -17,7 +17,7 @@ const createDriver = safeAsync(async (req: Request, res: Response) => {
 const updateDriver = safeAsync(async (req: Request, res: Response) => {
   const driver = await driverServices.updateDriver(req);
   resHandler(res, {
-    status: StatusCodes.CREATED,
+    status: StatusCodes.OK,
     success: true,
     message: message("update", "driver"),
     data: driver,
@@ -26,7 +26,7 @@ const updateDriver = safeAsync(async (req: Request, res: Response) => {
 const updateOnline = safeAsync(async (req: Request, res: Response) => {
   const driver = await driverServices.updateOnline(req);
   resHandler(res, {
-    status: StatusCodes.CREATED,
+    status: StatusCodes.OK,
     success: true,
     message: message("update", "driver online status"),
     data: driver,
@@ -35,7 +35,7 @@ const updateOnline = safeAsync(async (req: Request, res: Response) => {
 const updateActivation = safeAsync(async (req: Request, res: Response) => {
   const driver = await driverServices.updateActivation(req);
   resHandler(res, {
-    status: StatusCodes.CREATED,
+    status: StatusCodes.OK,
     success: true,
     message: message("update", "driver activation status"),
     data: driver,
@@ -44,7 +44,7 @@ const updateActivation = safeAsync(async (req: Request, res: Response) => {
 const updateApproval = safeAsync(async (req: Request, res: Response) => {
   const driver = await driverServices.updateApproval(req);
   resHandler(res, {
-    status: StatusCodes.CREATED,
+    status: StatusCodes.OK,
     success: true,
     message: message("update", "driver approval status"),
     data: driver,

@@ -43,8 +43,16 @@ const driverSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    pendingReview: {
+      type: Boolean,
+      default: true,
+    },
+    pendingChanges: {
+      type: Object,
+      default: null,
+    },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 export type Driver = InferSchemaType<typeof driverSchema>;
