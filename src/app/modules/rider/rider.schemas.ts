@@ -92,7 +92,7 @@ export const paymentMethodSchema = z
     }
   });
 
-const favoriteLocationSchema = z.object({
+export const favoriteLocationSchema = z.object({
   name: z
     .string({ error: "Location name must be string." })
     .min(1, { error: "Location name is required." }),
