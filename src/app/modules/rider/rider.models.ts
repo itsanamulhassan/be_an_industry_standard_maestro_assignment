@@ -1,7 +1,7 @@
 import { HydratedDocument, InferSchemaType, model, Schema } from "mongoose";
 import { cardBrandEnum, walletTypeEnum } from "./rider.schemas";
 
-const locationSchema = new Schema(
+export const locationSchema = new Schema(
   {
     name: {
       type: String,
