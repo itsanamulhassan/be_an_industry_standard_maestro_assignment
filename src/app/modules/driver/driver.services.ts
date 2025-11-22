@@ -146,6 +146,7 @@ const updateOnline = async (req: Request) => {
     { user: id },
     {
       isOnline: payload.isOnline,
+      isAvailable: payload.isOnline,
     },
     { runValidators: true, new: true }
   );

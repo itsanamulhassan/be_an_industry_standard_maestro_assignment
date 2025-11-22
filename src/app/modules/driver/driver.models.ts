@@ -51,6 +51,10 @@ const driverSchema = new Schema(
       type: Object,
       default: null,
     },
+    isAvailable: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true, versionKey: false }
 );
