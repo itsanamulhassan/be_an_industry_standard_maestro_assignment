@@ -21,24 +21,39 @@ const vehicleInfoSchema = new Schema(
   }
 );
 
-const driverSchema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "Users",
-    required: [true, "User ID is required."],
-    unique: [true, "User ID must be unique."],
+const driverSchema = new Schema(
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: [true, "User ID is required."],
+      unique: [true, "User ID must be unique."],
+    },
+    vehicleInfo: {
+      type: [vehicleInfoSchema],
+      default: [],
+    },
+    licenseNumber: {
+      type: String,
+      required: [true, "License number is require."],
+    },
+    isOnline: { type: Boolean, default: false },
+    isActivated: { type: Boolean, default: false },
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
+    pendingReview: {
+      type: Boolean,
+      default: true,
+    },
+    pendingChanges: {
+      type: Object,
+      default: null,
+    },
   },
-  vehicleInfo: vehicleInfoSchema,
-  licenseNumber: {
-    type: String,
-    required: true,
-  },
-  isOnline: { type: Boolean, default: false },
-  isApproved: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { timestamps: true, versionKey: false }
+);
 
 export type Driver = InferSchemaType<typeof driverSchema>;
 export type DriverDocument = HydratedDocument<Driver>;
