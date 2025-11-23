@@ -17,7 +17,8 @@ export type MessageType =
   | "validation"
   | "success"
   | "fail"
-  | "cancel";
+  | "cancel"
+  | "accept";
 
 const message = (
   type: MessageType,
@@ -45,6 +46,7 @@ const message = (
     inactivated: `${entityCapitalized} has deactivated. Please request a new one or try again later.`,
     validation: `${entityCapitalized} validation failed. Please check the provided information.`,
     success: `${entityCapitalized} operation was successful. Everything is working as expected.`,
+    accept: `${entityCapitalized} operation was accepted. Everything is working as expected.`,
     fail: `${entityCapitalized} operation failed. Please try again or contact support if the issue persists.`,
     cancel: `${entityCapitalized} operation was canceled. No changes have been made.`,
   };

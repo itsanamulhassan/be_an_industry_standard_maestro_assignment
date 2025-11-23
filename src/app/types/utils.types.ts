@@ -26,3 +26,19 @@ export interface MailSenderProps<T> {
     contentType: string;
   }[];
 }
+
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+export interface CalculateDistanceKmProps {
+  pickup: Coordinates;
+  destination: Coordinates;
+}
+
+export interface CalculateEtaMinutesProps {
+  driver: Coordinates;
+  pickup: Coordinates;
+  speed?: number;
+}
