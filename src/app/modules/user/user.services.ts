@@ -1,7 +1,12 @@
 import { StatusCodes } from "http-status-codes";
 import message from "../../utils/message";
 import bcryptjs from "bcryptjs";
-import { AuthProviderDTO, CreateUserDTO } from "./user.types";
+import {
+  AuthProviderDTO,
+  CreateUserDTO,
+  DeleteUserDTO,
+  UpdateUserDTO,
+} from "./user.types";
 import AppError from "../../helpers/error.helper";
 import { User, Users } from "./user.models";
 import environments from "../../configurations/environments";
@@ -10,12 +15,14 @@ import { Request } from "express";
 import { JWTCredentialProps } from "../../types/utils.types";
 import { withTransaction } from "../../database/transaction";
 import { Riders } from "../rider/rider.models";
+import { Drivers } from "../driver/driver.models";
 
 // ✅ Create new user
 const createUser = async (payload: CreateUserDTO) => {
   return withTransaction(async (session) => {
     const { email, password, ...rest } = payload as CreateUserDTO;
 
+    // Find user profile
     const user = await Users.findOne({ email });
     if (user) {
       throw new AppError(
@@ -29,10 +36,12 @@ const createUser = async (payload: CreateUserDTO) => {
       environments.bcrypt_salt_round
     );
 
-    const authProvider: AuthProviderDTO = {
+    const authProvider = {
       provider: "CREDENTIAL",
       providerId: email,
-    };
+    } as AuthProviderDTO;
+
+    // Roll-back for creating user and rider simultaneously.
     const latestUser = await Users.create(
       [
         {
@@ -68,7 +77,8 @@ const retrieveUsers = async () => {
 };
 // ✅ Retrieve user
 const retrieveUser = async (req: Request) => {
-  const user = await Users.findById(req.params.id);
+  const userId = req.params.userId;
+  const user = await Users.findById(userId);
 
   if (!user) {
     throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
@@ -79,11 +89,9 @@ const retrieveUser = async (req: Request) => {
 
 // ✅ Update user
 const updateUser = async (req: Request) => {
-  const {
-    params: { id: userId },
-    user: { role, credentialId },
-    body,
-  } = req as Request & { user: JWTCredentialProps };
+  const userId = req.params.userId;
+  const { role, credentialId } = req.user as JWTCredentialProps;
+  const payload = req.body as UpdateUserDTO;
 
   const user = (await Users.findById(userId)) as User;
   validateUser(user);
@@ -104,32 +112,26 @@ const updateUser = async (req: Request) => {
         StatusCodes.BAD_REQUEST
       );
     }
-    if (body.status && body.status !== user.status) {
+    if (payload.status && payload.status !== user.status) {
       throw new AppError(
         message("forbidden", "update status"),
         StatusCodes.FORBIDDEN
       );
     }
 
-    if (body.role && body.role !== role) {
+    if (payload.role && payload.role !== role) {
       throw new AppError(message("forbidden", role), StatusCodes.FORBIDDEN);
     }
   }
   // ADMIN restrictions
-  if (role === "ADMIN" && body.role === "SUPERADMIN") {
+  if (role === "ADMIN" && payload.role === "SUPERADMIN") {
     throw new AppError(
       message("forbidden", "ADMIN (cannot assign SUPERADMIN)"),
       StatusCodes.FORBIDDEN
     );
   }
 
-  if (body.password) {
-    body.password = await bcryptjs.hash(
-      body.password,
-      environments.bcrypt_salt_round
-    );
-  }
-  const updateUser = await Users.findByIdAndUpdate(userId, body, {
+  const updateUser = await Users.findByIdAndUpdate(userId, payload, {
     new: true,
     runValidators: true,
   });
@@ -148,45 +150,91 @@ const retrieveMe = async (req: Request) => {
 };
 // ✅ Delete user
 const deleteUser = async (req: Request) => {
-  const id = req.params.id;
-  const credential = req.user as JWTCredentialProps;
+  return withTransaction(async (session) => {
+    const userId = req.params.userId;
+    const { role, credentialId } = req.user as JWTCredentialProps;
+    const payload = req.body as DeleteUserDTO;
 
-  const user = await Users.findById(id);
-  if (!user) {
-    throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
-  }
+    const user = await Users.findById(userId);
 
-  // ADMIN restrictions
-  if (credential.role === "ADMIN" && user.role === "SUPERADMIN") {
-    throw new AppError(
-      message("forbidden", "delete", "ADMIN (cannot delete SUPERADMIN)"),
-      StatusCodes.FORBIDDEN
-    );
-  }
-  if (
-    ["RIDER", "DRIVER"].includes(credential.role) &&
-    credential.credentialId !== user._id.toString()
-  ) {
-    throw new AppError(
-      message(
-        "forbidden",
-        "delete",
-        `${credential.role} cannot delete other user`
-      ),
-      StatusCodes.FORBIDDEN
-    );
-  }
-
-  await Users.findByIdAndUpdate(
-    id,
-    {
-      isDeleted: true,
-    },
-    {
-      runValidators: true,
-      new: true,
+    if (!user) {
+      throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
     }
-  );
+
+    // Only require password if deleting own account
+    if (credentialId === userId) {
+      const credential = await Users.findById(credentialId).select("+password");
+
+      const hasCredentialAuth = credential?.auths.find(
+        (auth: AuthProviderDTO) => auth.provider === "CREDENTIAL"
+      );
+
+      if (hasCredentialAuth) {
+        const verifyPassword = await bcryptjs.compare(
+          payload.confirmPassword as string,
+          credential?.password as string
+        );
+        if (!verifyPassword) {
+          throw new AppError(
+            message("badRequest", "Matching password"),
+            StatusCodes.BAD_REQUEST
+          );
+        }
+      }
+    }
+
+    // Prevent redundant action
+    if (user.isDeleted) {
+      throw new AppError(
+        message("alreadyExists", "deleting status"),
+        StatusCodes.BAD_REQUEST
+      );
+    }
+
+    // ADMIN restrictions
+    if (role === "ADMIN" && user.role === "SUPERADMIN") {
+      throw new AppError(
+        message("forbidden", "delete", "ADMIN (cannot delete SUPERADMIN)"),
+        StatusCodes.FORBIDDEN
+      );
+    }
+    if (["RIDER", "DRIVER"].includes(role) && credentialId !== userId) {
+      throw new AppError(
+        message("forbidden", "delete", `${role} cannot delete other user`),
+        StatusCodes.FORBIDDEN
+      );
+    }
+
+    // If deleting driver, deactivate driver record
+    if (user.role === "DRIVER") {
+      await Drivers.findOneAndUpdate(
+        { user: userId },
+        {
+          isActivated: false,
+          isApproved: false,
+          isAvailable: false,
+          isOnline: false,
+        },
+        { session, runValidators: true }
+      );
+    }
+
+    const deletedUser = await Users.findByIdAndUpdate(
+      userId,
+      {
+        isDeleted: true,
+        deletedAt: new Date(),
+        deletedBy: role,
+        deletedReason: payload.deletedReason,
+      },
+      {
+        runValidators: true,
+        new: true,
+        session,
+      }
+    );
+    return deletedUser;
+  });
 };
 
 const userServices = {

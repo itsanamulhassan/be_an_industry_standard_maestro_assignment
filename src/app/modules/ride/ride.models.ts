@@ -67,20 +67,28 @@ const rideSchema = new Schema(
     },
     acceptedAt: {
       type: Date,
+      default: null,
     },
 
     pickedUpAt: {
       type: Date,
+      default: null,
     },
     completedAt: {
       type: Date,
+      default: null,
     },
     canceledAt: {
       type: Date,
+      default: null,
     },
     canceledBy: {
       type: String,
       enum: rideCancelEnum,
+      default: null,
+    },
+    cancelReason: {
+      type: String,
       default: null,
     },
     driverEta: {

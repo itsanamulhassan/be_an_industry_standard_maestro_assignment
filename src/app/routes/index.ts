@@ -32,6 +32,10 @@ const routes: RouteProps[] = [
     path: "/drivers",
     router: driverRouter,
   },
+  {
+    path: "/rides",
+    router: riderRouter,
+  },
 ];
 
 // Register all routes with the main "appRouter"

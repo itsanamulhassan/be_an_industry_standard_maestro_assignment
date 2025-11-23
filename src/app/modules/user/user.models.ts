@@ -69,6 +69,7 @@ const userSchema = new Schema(
       unique: [true, "Email must be unique."],
       lowercase: true,
       trim: true,
+      index: true,
     },
     avatar: {
       type: fileSchema(),
@@ -84,6 +85,19 @@ const userSchema = new Schema(
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    deletedReason: {
+      type: String,
+      default: null,
+    },
+    deletedBy: {
+      type: String,
+      enum: userRoleEnum,
+      default: null,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
     },
     isVerified: {
       type: Boolean,

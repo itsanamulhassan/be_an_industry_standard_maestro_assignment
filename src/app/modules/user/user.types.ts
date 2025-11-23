@@ -22,10 +22,14 @@ export type AddressDTO = z.infer<typeof addressSchema>;
 // ✅ Type representing an authentication provider entry
 export type AuthProviderDTO = z.infer<typeof authProviderSchema>;
 
+// ✅ Type representing the delete status boolean
+export type DeleteUserDTO = z.infer<typeof userSchemas.deleted>;
+
 // ✅ Type representing a user role status enum
 export type UserRoleEnumDTO = (typeof userRoleEnum)[number];
 
 // ✅ Type representing a user activity status enum
 export type UserStatusEnumDTO = (typeof userStatusEnum)[number];
+
 // ✅ Type representing a authentication provider enum
 export type authProviderEnumDTO = (typeof authProviderEnum)[number];

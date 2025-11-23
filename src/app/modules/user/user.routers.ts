@@ -13,26 +13,27 @@ userRouter.post(
 );
 // ✅ Get all the users
 userRouter.get(
-  "/all",
+  "/",
   validator.role("ADMIN", "SUPERADMIN"),
   userControllers.retrieveUsers
 );
-// ✅ Get all the users
+// ✅ Get single user
 userRouter.get(
-  "/single/:id",
+  "/:userId",
   validator.role("ADMIN", "SUPERADMIN"),
   userControllers.retrieveUser
 );
 // ✅ Update user by ID
 userRouter.patch(
-  "/update/:id",
+  "/update/:userId",
   validator.schema(userSchemas.update),
   validator.role(...userRoleEnum),
   userControllers.updateUser
 );
 // ✅ Delete user by ID
 userRouter.delete(
-  "/delete/:id",
+  "/delete/:userId",
+  validator.schema(userSchemas.deleted),
   validator.role(...userRoleEnum),
   userControllers.deleteUser
 );

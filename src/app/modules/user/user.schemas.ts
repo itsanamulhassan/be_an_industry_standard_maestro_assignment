@@ -79,9 +79,24 @@ const update = create
       .boolean({ error: "Verify status must be a boolean." })
       .optional(),
     address: addressSchema.optional(),
-    role: z.enum(userRoleEnum).optional(),
+    role: z.enum(["ADMIN", "SUPERADMIN"]).optional(),
   });
+
+const deleted = z.object({
+  deletedReason: z
+    .string({ error: "Deleting reason must be a string." })
+    .min(1, { error: "Deleting reason is required." }),
+  confirmPassword: z
+    .string()
+    .regex(passwordRegex, {
+      error:
+        "Password must be 6 - 32 characters long, include at least 1 uppercase letter and 1 special character.",
+    })
+    .optional(),
+});
+
 export const userSchemas = {
   create,
   update,
+  deleted,
 };
