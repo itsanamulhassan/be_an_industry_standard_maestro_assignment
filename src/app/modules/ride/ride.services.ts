@@ -18,6 +18,7 @@ const createRide = async (req: Request) => {
     throw new AppError(message("notFound", "rider"), StatusCodes.NOT_FOUND);
   }
 
+  // Calculate the distance dynamically
   const distanceKm = geo.calculateDistanceKm({
     pickup: {
       lat: payload.pickup.lat,
@@ -28,6 +29,7 @@ const createRide = async (req: Request) => {
       lng: payload.destination.lng,
     },
   });
+  // Calculate the ETA (Estimated time arrival) dynamically
   const driverEta = geo.calculateEtaMinutes({
     driver: {
       lat: 123.1231,
