@@ -1,5 +1,6 @@
 import { HydratedDocument, InferSchemaType, model, Schema } from "mongoose";
-import { rideCancelEnum, rideStatusEnum } from "./ride.schemas";
+import { rideStatusEnum } from "./ride.schemas";
+import { userRoleEnum } from "../user/user.schemas";
 
 export const rideLocationSchema = new Schema(
   {
@@ -30,11 +31,13 @@ const rideSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Riders",
       required: [true, "Rider ID is required."],
+      index: true,
     },
     driver: {
       type: Schema.Types.ObjectId,
       ref: "Drivers",
       default: null,
+      index: true,
     },
     pickup: {
       type: rideLocationSchema,
@@ -52,6 +55,7 @@ const rideSchema = new Schema(
       type: String,
       enum: rideStatusEnum,
       default: "REQUESTED",
+      index: true,
     },
     driverRating: {
       type: Number,
@@ -84,7 +88,7 @@ const rideSchema = new Schema(
     },
     canceledBy: {
       type: String,
-      enum: rideCancelEnum,
+      enum: userRoleEnum,
       default: null,
     },
     cancelReason: {

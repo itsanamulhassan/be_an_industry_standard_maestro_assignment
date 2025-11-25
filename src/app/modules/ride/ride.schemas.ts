@@ -9,7 +9,6 @@ export const rideStatusEnum = [
   "CANCELED",
 ] as const;
 
-export const rideCancelEnum = ["RIDER", "DRIVER", "SYSTEM"] as const;
 export const rideStatusByDriver = [
   "PICKED_UP",
   "IN_TRANSIT",
@@ -22,16 +21,22 @@ const create = z.object({
   destination: rideLocation,
 });
 const cancel = z.object({
-  reason: z
+  cancelReason: z
     .string({ error: "Cancel reason must be a string." })
     .min(1, { error: "Cancel reason is require." }),
 });
 const status = z.object({
   status: z.enum(rideStatusByDriver),
 });
+const report = z.object({
+  cancelReason: z
+    .string({ error: "Report reason must be a string." })
+    .min(1, { error: "Report reason is require." }),
+});
 
 export const rideSchemas = {
   create,
   cancel,
   status,
+  report,
 };

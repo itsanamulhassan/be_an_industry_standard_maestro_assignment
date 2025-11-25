@@ -24,12 +24,12 @@ const updateCancel = safeAsync(async (req: Request, res: Response) => {
   });
 });
 const updateAccept = safeAsync(async (req: Request, res: Response) => {
-  const ride = await rideServices.updateAccept(req);
+  const { ride, driver } = await rideServices.updateAccept(req);
   resHandler(res, {
     message: message("accept", "ride"),
     status: StatusCodes.ACCEPTED,
     success: true,
-    data: ride,
+    data: { ride, driver },
   });
 });
 
@@ -62,6 +62,15 @@ const retrieveRides = safeAsync(async (req: Request, res: Response) => {
     data: rides,
   });
 });
+const updateReport = safeAsync(async (req: Request, res: Response) => {
+  const rides = await rideServices.retrieveHistories(req);
+  resHandler(res, {
+    message: message("get", "rides"),
+    status: StatusCodes.OK,
+    success: true,
+    data: rides,
+  });
+});
 
 export const rideControllers = {
   updateAccept,
@@ -69,5 +78,6 @@ export const rideControllers = {
   createRide,
   updateStatus,
   retrieveHistories,
+  updateReport,
   retrieveRides,
 };
