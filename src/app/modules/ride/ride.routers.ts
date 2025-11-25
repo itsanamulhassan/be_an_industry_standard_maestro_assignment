@@ -29,6 +29,12 @@ rideRouter.patch(
   validator.role("DRIVER"),
   rideControllers.updateStatus
 );
+rideRouter.patch(
+  "/report/:rideId",
+  validator.schema(rideSchemas.report),
+  validator.role("DRIVER", "RIDER"),
+  rideControllers.updateReport
+);
 rideRouter.get(
   "/history",
   validator.role("DRIVER", "RIDER"),
