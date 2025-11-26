@@ -15,6 +15,7 @@ import { Driver, DriverDocument, Drivers } from "../driver/driver.models";
 import { validateDriver } from "../driver/driver.helpers/validateDriver";
 import { withTransaction } from "../../database/transaction";
 import { Types } from "mongoose";
+import { Reports } from "../report/report.models";
 
 const createRide = async (req: Request) => {
   const userId = (req.user as JWTCredentialProps).credentialId;
@@ -145,7 +146,14 @@ const updateCancel = async (req: Request) => {
 
     // Admin must give cancel reason
     if (["ADMIN", "SUPERADMIN"].includes(role) && !report) {
-      throw new AppError(message("notFound", "report"), StatusCodes.NOT_FOUND);
+      throw new AppError(
+        message(
+          "notFound",
+          "report",
+          "You can't cancel the ride without report."
+        ),
+        StatusCodes.NOT_FOUND
+      );
     }
 
     // Proceed with cancellation
@@ -182,7 +190,7 @@ const updateStatus = async (req: Request) => {
 
   return ride;
 };
-const retrieveHistories = async (req: Request) => {
+const getHistories = async (req: Request) => {
   const { role, credentialId } = req.user as JWTCredentialProps;
 
   if (role === "DRIVER") {
@@ -194,9 +202,17 @@ const retrieveHistories = async (req: Request) => {
   }
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const retrieveRides = async (_req: Request) => {
+const listRides = async (_req: Request) => {
   const rides = await Rides.find();
   return rides;
+};
+const getRide = async (req: Request) => {
+  const rideId = req.params.rideId;
+  const ride = await Rides.findById(rideId);
+  if (ride) {
+    throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
+  }
+  return ride;
 };
 
 export const rideServices = {
@@ -204,6 +220,7 @@ export const rideServices = {
   updateCancel,
   createRide,
   updateStatus,
-  retrieveHistories,
-  retrieveRides,
+  getHistories,
+  listRides,
+  getRide,
 };
