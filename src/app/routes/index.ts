@@ -4,6 +4,7 @@ import authenticationRouter from "../modules/authentication/authentication.route
 import otpRouter from "../modules/otp/otp.routers";
 import riderRouter from "../modules/rider/rider.routers";
 import driverRouter from "../modules/driver/driver.routers";
+import reportRouter from "../modules/report/report.routers";
 
 const appRouter = Router();
 
@@ -35,6 +36,10 @@ const routes: RouteProps[] = [
   {
     path: "/rides",
     router: riderRouter,
+  },
+  {
+    path: "/reports",
+    router: reportRouter,
   },
 ];
 
