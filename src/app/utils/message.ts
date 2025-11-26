@@ -19,7 +19,8 @@ export type MessageType =
   | "fail"
   | "cancel"
   | "accept"
-  | "pending";
+  | "pending"
+  | "resolve";
 
 const message = (
   type: MessageType,
@@ -51,6 +52,7 @@ const message = (
     fail: `${entityCapitalized} operation failed. Please try again or contact support if the issue persists.`,
     cancel: `${entityCapitalized} operation was canceled. No changes have been made.`,
     pending: `${entityCapitalized} operation is pending. No changes have been made.`,
+    resolve: `${entityCapitalized} operation is resolved. Everything is working as expected.`,
   };
 
   return `${messages[type]} ${note}`.trim();
