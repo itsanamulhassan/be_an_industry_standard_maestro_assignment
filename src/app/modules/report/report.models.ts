@@ -32,7 +32,7 @@ const reportSchema = new Schema(
       required: [true, "Report details is required."],
       maxLength: [2000, "Details must be 1000 characters."],
     },
-    screenshots: { type: [fileSchema], default: [] },
+    screenshots: { type: [fileSchema()], default: [] },
     status: {
       type: String,
       enum: reportStatusEnum,

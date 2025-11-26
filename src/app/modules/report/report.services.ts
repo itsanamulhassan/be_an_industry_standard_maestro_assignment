@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../helpers/error.helper";
-import { Reports } from "./report.models";
+import { Report, Reports } from "./report.models";
 import message from "../../utils/message";
 import { Request } from "express";
 import {
@@ -9,6 +9,8 @@ import {
   UpdateReportDTO,
 } from "./report.types";
 import { JWTCredentialProps } from "../../types/utils.types";
+import { Users } from "../user/user.models";
+import { Rides } from "../ride/ride.models";
 
 //✅ Create report
 const createReport = async (req: Request) => {
@@ -22,9 +24,22 @@ const createReport = async (req: Request) => {
     );
   }
 
+  if (payload.reportedFor) {
+    const user = await Users.findById(payload.reportedFor);
+    if (!user) {
+      throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
+    }
+  }
+  if (payload.rideId) {
+    const ride = await Rides.findById(payload.rideId);
+    if (!ride) {
+      throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
+    }
+  }
+
   const report = await Reports.create({
     ride: payload.rideId ? payload.rideId : null,
-    reporter: credentialId,
+    reportedBy: credentialId,
     reportedFor: payload.reportedFor ? payload.reportedFor : null,
     reason: payload.reason,
     details: payload.details,
@@ -54,12 +69,45 @@ const updateReport = async (req: Request) => {
   const reportId = req.params.reportId;
   const payload = req.body as UpdateReportDTO;
 
-  const report = await Reports.findById(reportId);
+  const report = (await Reports.findById(reportId)) as Report;
   if (!report) {
     throw new AppError(message("notFound", "report"), StatusCodes.NOT_FOUND);
   }
 
-  const updatedReport = await Reports.findByIdAndUpdate(reportId, payload);
+  if (!payload.reportedFor && !payload.rideId) {
+    throw new AppError(
+      message("notFound", "ride or reported for id"),
+      StatusCodes.NOT_FOUND
+    );
+  }
+
+  if (payload.reportedFor) {
+    const user = await Users.findById(payload.reportedFor);
+    if (!user) {
+      throw new AppError(message("notFound", "user"), StatusCodes.NOT_FOUND);
+    }
+  }
+  if (payload.rideId) {
+    const ride = await Rides.findById(payload.rideId);
+    if (!ride) {
+      throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
+    }
+  }
+
+  if (report.status !== "PENDING") {
+    throw new AppError(
+      message("fail", "report", "You can't update the report in this stage."),
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  const updatedReport = await Reports.findByIdAndUpdate(
+    reportId,
+    {
+      ...payload,
+    },
+    { runValidators: true, new: true }
+  );
 
   return updatedReport;
 };
@@ -69,10 +117,24 @@ const resolveReport = async (req: Request) => {
   const reportId = req.params.reportId;
   const payload = req.body as ResolveReportDTO;
   const report = await Reports.findById(reportId);
-  if (!report)
+  if (!report) {
     throw new AppError(message("notFound", "report"), StatusCodes.NOT_FOUND);
+  }
 
-  const updatedReport = await Reports.findByIdAndUpdate(reportId, payload);
+  if (payload.status === report.status) {
+    throw new AppError(
+      message("alreadyExists", "report status"),
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  const updatedReport = await Reports.findByIdAndUpdate(
+    reportId,
+    {
+      ...payload,
+    },
+    { runValidators: true, new: true }
+  );
   return updatedReport;
 };
 

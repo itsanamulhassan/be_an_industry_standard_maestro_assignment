@@ -29,10 +29,10 @@ reportRouter.get(
   reportControllers.getReport
 );
 
-// ✅ Admin update (status or notes)
+// ✅ Update update (RIDER, DRIVER)
 reportRouter.patch(
   "/:reportId",
-  validator.role("ADMIN", "SUPERADMIN"),
+  validator.role("RIDER", "DRIVER"),
   validator.schema(reportSchemas.update),
   reportControllers.updateReport
 );
