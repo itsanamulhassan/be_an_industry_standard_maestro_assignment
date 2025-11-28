@@ -9,13 +9,15 @@ import {
   UpdateRideCancelDTO,
   UpdateRideStatusDTO,
 } from "./ride.types";
-import { Rides } from "./ride.models";
+import { RideDocument, Rides } from "./ride.models";
 import { geo } from "../../utils/geo";
-import { Driver, DriverDocument, Drivers } from "../driver/driver.models";
+import { DriverDocument, Drivers } from "../driver/driver.models";
 import { validateDriver } from "../driver/driver.helpers/validateDriver";
 import { withTransaction } from "../../database/transaction";
 import { Types } from "mongoose";
+import { Reports } from "../report/report.models";
 
+// ✅ Create ride
 const createRide = async (req: Request) => {
   const userId = (req.user as JWTCredentialProps).credentialId;
   const payload = req.body as CreateRideDTO;
@@ -26,28 +28,40 @@ const createRide = async (req: Request) => {
     throw new AppError(message("notFound", "rider"), StatusCodes.NOT_FOUND);
   }
 
-  // Calculate the distance dynamically
-  const distanceKm = geo.calculateDistanceKm({
-    pickup: {
-      lat: payload.pickup.lat,
-      lng: payload.pickup.lng,
-    },
-    destination: {
-      lat: payload.destination.lat,
-      lng: payload.destination.lng,
-    },
+  // Block if the rider has an active ride
+  const activeRide = await Rides.findOne({
+    rider: userId,
+    status: { $in: ["REQUESTED", "ACCEPTED", "PICKED_UP", "IN_TRANSIT"] },
   });
 
-  const updatedPayload = {
+  if (activeRide) {
+    throw new AppError(
+      "You already have an active ride. Please wait until it is completed.",
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  // Calculate distance dynamically
+  const { distanceKm, durationMin } = await geo.calculateDistanceDuration({
+    pickup: { lat: payload.pickup.lat, lng: payload.pickup.lng },
+    destination: { lat: payload.destination.lat, lng: payload.destination.lng },
+  });
+
+  // Calculate fare with distance and duration
+  const fare = geo.calculateFare({ distanceKm, durationMin });
+
+  const ride = await Rides.create({
     rider: userId,
     status: "REQUESTED",
     distanceKm,
+    fare,
     ...payload,
-  };
+  });
 
-  const ride = await Rides.create(updatedPayload);
   return ride;
 };
+
+// ✅ Update ride
 const updateAccept = async (req: Request) => {
   return withTransaction(async (session) => {
     const rideId = req.params.rideId;
@@ -59,8 +73,31 @@ const updateAccept = async (req: Request) => {
     if (!ride) {
       throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
     }
+    if (ride.status === "ACCEPTED") {
+      throw new AppError(
+        message(
+          "alreadyExists",
+          "ride status",
+          "Ride status already accepted."
+        ),
+        StatusCodes.BAD_REQUEST
+      );
+    }
+    if (ride.status !== "REQUESTED") {
+      throw new AppError(
+        message(
+          "badRequest",
+          "ride status",
+          "You can't accept the ride in this stage."
+        ),
+        StatusCodes.BAD_REQUEST
+      );
+    }
+
     // Find driver profile
-    const driver = (await Drivers.findById(driverId)) as DriverDocument;
+    const driver = (await Drivers.findOne({
+      user: driverId,
+    })) as DriverDocument;
     validateDriver(driver);
 
     if (!driver.isOnline) {
@@ -73,8 +110,8 @@ const updateAccept = async (req: Request) => {
     // Calculate the ETA (Estimated time arrival) dynamically
     const driverEta = geo.calculateEtaMinutes({
       driver: {
-        lat: 123.1231,
-        lng: 134123.0,
+        lat: 51.523774,
+        lng: -0.158538,
       },
       pickup: {
         lat: ride.pickup.lat,
@@ -94,21 +131,36 @@ const updateAccept = async (req: Request) => {
     return { ride, driver };
   });
 };
+
+// ✅ Update cancel
 const updateCancel = async (req: Request) => {
   return withTransaction(async (session) => {
     const rideId = req.params.rideId;
     const payload = req.body as UpdateRideCancelDTO;
     const { role, credentialId } = req.user as JWTCredentialProps;
 
-    const ride = await Rides.findById(rideId);
+    const ride = await Rides.findById(rideId).session(session);
     if (!ride) {
       throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
     }
 
     let driver = null;
     if (ride.driver) {
-      driver = (await Drivers.findById(ride.driver)) as DriverDocument;
+      driver = (await Drivers.findById(ride.driver).session(
+        session
+      )) as DriverDocument;
       validateDriver(driver);
+    }
+
+    if (ride.status === "CANCELED") {
+      throw new AppError(
+        message(
+          "alreadyExists",
+          "ride status",
+          "Ride status already canceled."
+        ),
+        StatusCodes.BAD_REQUEST
+      );
     }
 
     // Rider authorization
@@ -145,7 +197,14 @@ const updateCancel = async (req: Request) => {
 
     // Admin must give cancel reason
     if (["ADMIN", "SUPERADMIN"].includes(role) && !report) {
-      throw new AppError(message("notFound", "report"), StatusCodes.NOT_FOUND);
+      throw new AppError(
+        message(
+          "notFound",
+          "report",
+          "You can't cancel the ride without report."
+        ),
+        StatusCodes.NOT_FOUND
+      );
     }
 
     // Proceed with cancellation
@@ -165,24 +224,90 @@ const updateCancel = async (req: Request) => {
     return { ride };
   });
 };
-
+// ✅ Update status
 const updateStatus = async (req: Request) => {
-  const rideId = req.params.rideId;
-  const payload = req.body as UpdateRideStatusDTO;
+  return withTransaction(async (session) => {
+    const rideId = req.params.rideId;
+    const payload = req.body as UpdateRideStatusDTO;
+    const { credentialId } = req.user as JWTCredentialProps;
 
-  const ride = await Rides.findById(rideId);
-  if (!ride) {
-    throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
-  }
-  const driver = (await Drivers.findById(ride.driver)) as Driver;
-  validateDriver(driver);
+    const ride = (await Rides.findById(rideId).session(
+      session
+    )) as RideDocument;
+    if (!ride) {
+      throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
+    }
 
-  ride.status = payload.status;
-  await ride.save();
+    if (ride.driver && ride.driver.toString() !== credentialId) {
+      throw new AppError(
+        message("badRequest", "ride status", "You can't change the status."),
+        StatusCodes.BAD_REQUEST
+      );
+    }
 
-  return ride;
+    if (payload.status === "PICKED_UP" && ride.status !== "ACCEPTED") {
+      throw new AppError(
+        message(
+          "badRequest",
+          "ride status",
+          "You can't change the status picked up."
+        ),
+        StatusCodes.BAD_REQUEST
+      );
+    }
+
+    if (payload.status === "IN_TRANSIT" && ride.status !== "PICKED_UP") {
+      throw new AppError(
+        message(
+          "badRequest",
+          "ride status",
+          "You can't change the status in transit."
+        ),
+        StatusCodes.BAD_REQUEST
+      );
+    }
+    if (payload.status === "COMPLETED" && ride.status !== "IN_TRANSIT") {
+      throw new AppError(
+        message(
+          "badRequest",
+          "ride status",
+          "You can't change the status completed."
+        ),
+        StatusCodes.BAD_REQUEST
+      );
+    }
+    if (["REQUESTED", "CANCELED"].includes(ride.status)) {
+      throw new AppError(
+        message(
+          "badRequest",
+          "ride status",
+          "You can't update the status in this stage."
+        ),
+        StatusCodes.BAD_REQUEST
+      );
+    }
+
+    const driver = (await Drivers.findOne({
+      user: credentialId,
+    }).session(session)) as DriverDocument;
+    validateDriver(driver);
+
+    ride.status = payload.status;
+    if (payload.status === "COMPLETED") {
+      ride.completedAt = new Date();
+      driver.isAvailable = true;
+    }
+    if (payload.status === "PICKED_UP") ride.pickedUpAt = new Date();
+
+    await ride.save({ session });
+    await driver.save({ session });
+
+    return ride;
+  });
 };
-const retrieveHistories = async (req: Request) => {
+
+// ✅ Get histories (RIDER, DRIVER)
+const getHistories = async (req: Request) => {
   const { role, credentialId } = req.user as JWTCredentialProps;
 
   if (role === "DRIVER") {
@@ -193,10 +318,22 @@ const retrieveHistories = async (req: Request) => {
     return rides;
   }
 };
+
+// ✅ List rides (ADMIN, SUPERADMIN)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const retrieveRides = async (_req: Request) => {
+const listRides = async (_req: Request) => {
   const rides = await Rides.find();
   return rides;
+};
+
+// Get ride by rideId (ADMIN, SUPERADMIN)
+const getRide = async (req: Request) => {
+  const rideId = req.params.rideId;
+  const ride = await Rides.findById(rideId);
+  if (!ride) {
+    throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
+  }
+  return ride;
 };
 
 export const rideServices = {
@@ -204,6 +341,7 @@ export const rideServices = {
   updateCancel,
   createRide,
   updateStatus,
-  retrieveHistories,
-  retrieveRides,
+  getHistories,
+  listRides,
+  getRide,
 };

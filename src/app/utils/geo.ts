@@ -1,7 +1,10 @@
+import environments from "../configurations/environments";
 import {
   CalculateDistanceKmProps,
   CalculateEtaMinutesProps,
+  CalculateFareProps,
 } from "../types/utils.types";
+import axios from "axios";
 
 const calculateDistanceKm = ({
   pickup,
@@ -35,7 +38,55 @@ const calculateEtaMinutes = ({
   return (distanceKm / speed) * 60; // Minutes
 };
 
+const calculateDistanceDuration = async ({
+  pickup,
+  destination,
+}: CalculateDistanceKmProps): Promise<{
+  distanceKm: number;
+  durationMin: number;
+}> => {
+  const url = `${environments.osrm_base_url}${pickup.lng},${pickup.lat};${destination.lng},${destination.lat}?overview=false`;
+
+  try {
+    const { data } = await axios.get(url);
+
+    const route = data.routes?.[0];
+    if (!route) throw new Error("No route found");
+
+    const distanceKm = route.distance / 1000; // meters → km
+    const durationMin = route.duration / 60; // seconds → minutes
+
+    return { distanceKm, durationMin };
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("OSRM route error:", error);
+
+    // fallback to Haversine
+    const distanceKm = geo.calculateDistanceKm({ pickup, destination });
+    const durationMin = (distanceKm / 30) * 60;
+
+    return { distanceKm, durationMin };
+  }
+};
+
+const calculateFare = (options: CalculateFareProps): number => {
+  const {
+    distanceKm,
+    durationMin,
+    baseFare = 2, // £2 base fare
+    perKmRate = 1.5, // £1.5 per km
+    perMinuteRate = 0.25, // £0.25 per min
+    minFare = 5, // minimum fare $5
+    surgeMultiplier = 1,
+  } = options;
+
+  const fare = baseFare + distanceKm * perKmRate + durationMin * perMinuteRate;
+  return Math.max(fare, minFare) * surgeMultiplier;
+};
+
 export const geo = {
   calculateDistanceKm,
   calculateEtaMinutes,
+  calculateDistanceDuration,
+  calculateFare,
 };

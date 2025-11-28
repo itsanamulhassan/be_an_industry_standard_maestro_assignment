@@ -42,3 +42,13 @@ export interface CalculateEtaMinutesProps {
   pickup: Coordinates;
   speed?: number;
 }
+
+export interface CalculateFareProps {
+  distanceKm: number;
+  durationMin: number;
+  baseFare?: number;
+  perKmRate?: number;
+  perMinuteRate?: number;
+  minFare?: number;
+  surgeMultiplier?: number;
+}

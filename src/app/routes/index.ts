@@ -5,6 +5,7 @@ import otpRouter from "../modules/otp/otp.routers";
 import riderRouter from "../modules/rider/rider.routers";
 import driverRouter from "../modules/driver/driver.routers";
 import reportRouter from "../modules/report/report.routers";
+import rideRouter from "../modules/ride/ride.routers";
 
 const appRouter = Router();
 
@@ -35,7 +36,7 @@ const routes: RouteProps[] = [
   },
   {
     path: "/rides",
-    router: riderRouter,
+    router: rideRouter,
   },
   {
     path: "/reports",

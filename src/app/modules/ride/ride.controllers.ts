@@ -43,8 +43,8 @@ const updateStatus = safeAsync(async (req: Request, res: Response) => {
   });
 });
 
-const retrieveHistories = safeAsync(async (req: Request, res: Response) => {
-  const rides = await rideServices.retrieveHistories(req);
+const getHistories = safeAsync(async (req: Request, res: Response) => {
+  const rides = await rideServices.getHistories(req);
   resHandler(res, {
     message: message("get", "ride history"),
     status: StatusCodes.OK,
@@ -53,8 +53,8 @@ const retrieveHistories = safeAsync(async (req: Request, res: Response) => {
   });
 });
 
-const retrieveRides = safeAsync(async (req: Request, res: Response) => {
-  const rides = await rideServices.retrieveHistories(req);
+const listRides = safeAsync(async (req: Request, res: Response) => {
+  const rides = await rideServices.listRides(req);
   resHandler(res, {
     message: message("get", "rides"),
     status: StatusCodes.OK,
@@ -62,13 +62,13 @@ const retrieveRides = safeAsync(async (req: Request, res: Response) => {
     data: rides,
   });
 });
-const updateReport = safeAsync(async (req: Request, res: Response) => {
-  const rides = await rideServices.retrieveHistories(req);
+const getRide = safeAsync(async (req: Request, res: Response) => {
+  const ride = await rideServices.getRide(req);
   resHandler(res, {
-    message: message("get", "rides"),
+    message: message("get", "ride"),
     status: StatusCodes.OK,
     success: true,
-    data: rides,
+    data: ride,
   });
 });
 
@@ -77,7 +77,7 @@ export const rideControllers = {
   updateCancel,
   createRide,
   updateStatus,
-  retrieveHistories,
-  updateReport,
-  retrieveRides,
+  getHistories,
+  listRides,
+  getRide,
 };

@@ -7,40 +7,43 @@ import { userRoleEnum } from "../user/user.schemas";
 const rideRouter = Router();
 
 rideRouter.post(
-  "/create",
+  "/",
   validator.schema(rideSchemas.create),
   validator.role("RIDER"),
   rideControllers.createRide
 );
 rideRouter.patch(
-  "/cancel/:rideId",
+  "/:rideId/cancel",
   validator.schema(rideSchemas.cancel),
   validator.role(...userRoleEnum),
   rideControllers.updateCancel
 );
 rideRouter.patch(
-  "/accept/:rideId",
+  "/:rideId/accept",
   validator.role("DRIVER"),
   rideControllers.updateAccept
 );
 rideRouter.patch(
-  "/status/:rideId",
+  "/:rideId/status",
   validator.schema(rideSchemas.status),
   validator.role("DRIVER"),
   rideControllers.updateStatus
 );
-rideRouter.patch(
-  "/report/:rideId",
-  validator.schema(rideSchemas.report),
-  validator.role("DRIVER", "RIDER"),
-  rideControllers.updateReport
-);
 rideRouter.get(
   "/history",
   validator.role("DRIVER", "RIDER"),
-  rideControllers.retrieveHistories
+  rideControllers.getHistories
 );
 
-rideRouter.get("/", validator.role("ADMIN", "SUPERADMIN"));
+rideRouter.get(
+  "/",
+  validator.role("ADMIN", "SUPERADMIN"),
+  rideControllers.listRides
+);
+rideRouter.get(
+  "/:rideId",
+  validator.role("ADMIN", "SUPERADMIN"),
+  rideControllers.getRide
+);
 
 export default rideRouter;

@@ -100,11 +100,17 @@ export const favoriteLocationSchema = z.object({
     .string({ error: "Address must be string." })
     .min(1, { error: "Address is required." }),
   lat: z
-    .number({ error: "latitude must be number." })
-    .min(1, { error: "Latitude is required." }),
+    .number({
+      error: "Latitude is required.",
+    })
+    .gte(-90, { error: "Latitude must be between -90 and 90." })
+    .lte(90, { error: "Latitude must be between -90 and 90." }),
   lng: z
-    .number({ error: "Longitude  must be number." })
-    .min(1, { error: "Longitude is required." }),
+    .number({
+      error: "Longitude  is required.",
+    })
+    .gte(-180, { error: "Longitude  must be between -180 and 180." })
+    .lte(180, { error: "Latitude must be between -180 and 180." }),
 });
 
 const update = z.object({
