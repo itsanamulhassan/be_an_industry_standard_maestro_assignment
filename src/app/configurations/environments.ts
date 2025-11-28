@@ -9,6 +9,7 @@ interface LoadEnvVariableProps {
   bcrypt_salt_round: number;
   express_session_secret: string;
   frontend_base_url: string;
+  osrm_base_url: string;
   jwt: {
     access_secret: string;
     access_secret_expires_in: string;
@@ -77,6 +78,8 @@ const loadEnvVariables = (): LoadEnvVariableProps => {
     "SMTP_FROM",
     "SMTP_HOST",
     "SMTP_PORT",
+
+    "OSRM_BASE_URL",
   ];
   requiredEnvVariables.forEach((key: string) => {
     if (!process.env[key]) {
@@ -125,6 +128,7 @@ const loadEnvVariables = (): LoadEnvVariableProps => {
       port: Number(process.env.SMTP_PORT) as number,
       user: process.env.SMTP_USER as string,
     },
+    osrm_base_url: process.env.OSRM_BASE_URL as string,
   };
 };
 

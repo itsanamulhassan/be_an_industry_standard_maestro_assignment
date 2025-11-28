@@ -9,7 +9,7 @@ import {
   UpdateRideCancelDTO,
   UpdateRideStatusDTO,
 } from "./ride.types";
-import { Rides } from "./ride.models";
+import { RideDocument, Rides } from "./ride.models";
 import { geo } from "../../utils/geo";
 import { Driver, DriverDocument, Drivers } from "../driver/driver.models";
 import { validateDriver } from "../driver/driver.helpers/validateDriver";
@@ -27,28 +27,39 @@ const createRide = async (req: Request) => {
     throw new AppError(message("notFound", "rider"), StatusCodes.NOT_FOUND);
   }
 
-  // Calculate the distance dynamically
-  const distanceKm = geo.calculateDistanceKm({
-    pickup: {
-      lat: payload.pickup.lat,
-      lng: payload.pickup.lng,
-    },
-    destination: {
-      lat: payload.destination.lat,
-      lng: payload.destination.lng,
-    },
+  // Block if the rider has an active ride
+  const activeRide = await Rides.findOne({
+    rider: userId,
+    status: { $in: ["REQUESTED", "ACCEPTED", "PICKED_UP", "IN_TRANSIT"] },
   });
 
-  const updatedPayload = {
+  if (activeRide) {
+    throw new AppError(
+      "You already have an active ride. Please wait until it is completed.",
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  // Calculate distance dynamically
+  const { distanceKm, durationMin } = await geo.calculateDistanceDuration({
+    pickup: { lat: payload.pickup.lat, lng: payload.pickup.lng },
+    destination: { lat: payload.destination.lat, lng: payload.destination.lng },
+  });
+
+  // Calculate fare with distance and duration
+  const fare = geo.calculateFare({ distanceKm, durationMin });
+
+  const ride = await Rides.create({
     rider: userId,
     status: "REQUESTED",
     distanceKm,
+    fare,
     ...payload,
-  };
+  });
 
-  const ride = await Rides.create(updatedPayload);
   return ride;
 };
+
 const updateAccept = async (req: Request) => {
   return withTransaction(async (session) => {
     const rideId = req.params.rideId;
@@ -60,8 +71,20 @@ const updateAccept = async (req: Request) => {
     if (!ride) {
       throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
     }
+    if (ride.status === "ACCEPTED") {
+      throw new AppError(
+        message(
+          "alreadyExists",
+          "ride status",
+          "Ride status already accepted."
+        ),
+        StatusCodes.BAD_REQUEST
+      );
+    }
     // Find driver profile
-    const driver = (await Drivers.findById(driverId)) as DriverDocument;
+    const driver = (await Drivers.findOne({
+      user: driverId,
+    })) as DriverDocument;
     validateDriver(driver);
 
     if (!driver.isOnline) {
@@ -177,15 +200,69 @@ const updateCancel = async (req: Request) => {
 const updateStatus = async (req: Request) => {
   const rideId = req.params.rideId;
   const payload = req.body as UpdateRideStatusDTO;
+  const { credentialId } = req.user as JWTCredentialProps;
 
-  const ride = await Rides.findById(rideId);
+  const ride = (await Rides.findById(rideId)) as RideDocument;
   if (!ride) {
     throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
   }
-  const driver = (await Drivers.findById(ride.driver)) as Driver;
+
+  if (ride.driver && ride.driver.toString() !== credentialId) {
+    throw new AppError(
+      message("badRequest", "ride status", "You can't change the status."),
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  if (payload.status === "PICKED_UP" && ride.status !== "ACCEPTED") {
+    throw new AppError(
+      message(
+        "badRequest",
+        "ride status",
+        "You can't change the status picked up."
+      ),
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  if (payload.status === "IN_TRANSIT" && ride.status !== "PICKED_UP") {
+    throw new AppError(
+      message(
+        "badRequest",
+        "ride status",
+        "You can't change the status in transit."
+      ),
+      StatusCodes.BAD_REQUEST
+    );
+  }
+  if (payload.status === "COMPLETED" && ride.status !== "IN_TRANSIT") {
+    throw new AppError(
+      message(
+        "badRequest",
+        "ride status",
+        "You can't change the status completed."
+      ),
+      StatusCodes.BAD_REQUEST
+    );
+  }
+  if (["REQUESTED", "CANCELED"].includes(ride.status)) {
+    throw new AppError(
+      message(
+        "badRequest",
+        "ride status",
+        "You can't update the status in this stage."
+      ),
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  const driver = (await Drivers.findOne({ user: credentialId })) as Driver;
   validateDriver(driver);
 
   ride.status = payload.status;
+  if (payload.status === "COMPLETED") ride.completedAt = new Date();
+  if (payload.status === "PICKED_UP") ride.pickedUpAt = new Date();
+
   await ride.save();
 
   return ride;
