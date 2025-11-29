@@ -10,6 +10,13 @@ interface LoadEnvVariableProps {
   express_session_secret: string;
   frontend_base_url: string;
   osrm_base_url: string;
+  stripe: {
+    secret_key: string;
+    publishable_key: string;
+    default_currency: string;
+    webhook_secret: string;
+    api_version: "2025-11-17.clover";
+  };
   jwt: {
     access_secret: string;
     access_secret_expires_in: string;
@@ -80,6 +87,12 @@ const loadEnvVariables = (): LoadEnvVariableProps => {
     "SMTP_PORT",
 
     "OSRM_BASE_URL",
+
+    "STRIPE_SECRET_KEY",
+    "STRIPE_PUBLISHABLE_KEY",
+    "STRIPE_DEFAULT_CURRENCY",
+    "STRIPE_WEBHOOK_SECRET",
+    "STRIPE_API_VERSION",
   ];
   requiredEnvVariables.forEach((key: string) => {
     if (!process.env[key]) {
@@ -128,7 +141,16 @@ const loadEnvVariables = (): LoadEnvVariableProps => {
       port: Number(process.env.SMTP_PORT) as number,
       user: process.env.SMTP_USER as string,
     },
+
     osrm_base_url: process.env.OSRM_BASE_URL as string,
+
+    stripe: {
+      default_currency: process.env.STRIPE_DEFAULT_CURRENCY as string,
+      publishable_key: process.env.STRIPE_PUBLISHABLE_KEY as string,
+      secret_key: process.env.STRIPE_SECRET_KEY as string,
+      webhook_secret: process.env.STRIPE_WEBHOOK_SECRET as string,
+      api_version: process.env.STRIPE_API_VERSION as "2025-11-17.clover",
+    },
   };
 };
 
