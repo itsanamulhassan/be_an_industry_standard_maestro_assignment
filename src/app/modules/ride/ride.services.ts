@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { JWTCredentialProps } from "../../types/utils.types";
-import { Riders } from "../rider/rider.models";
+import { Rider, Riders } from "../rider/rider.models";
 import AppError from "../../helpers/error.helper";
 import message from "../../utils/message";
 import { StatusCodes } from "http-status-codes";
@@ -11,7 +11,7 @@ import {
 } from "./ride.types";
 import { RideDocument, Rides } from "./ride.models";
 import { geo } from "../../utils/geo";
-import { DriverDocument, Drivers } from "../driver/driver.models";
+import { Driver, DriverDocument, Drivers } from "../driver/driver.models";
 import { validateDriver } from "../driver/driver.helpers/validateDriver";
 import { withTransaction } from "../../database/transaction";
 import { Types } from "mongoose";
@@ -51,7 +51,7 @@ const createRide = async (req: Request) => {
   const fare = geo.calculateFare({ distanceKm, durationMin });
 
   const ride = await Rides.create({
-    rider: userId,
+    rider: rider._id.toString(),
     status: "REQUESTED",
     distanceKm,
     fare,
@@ -66,7 +66,7 @@ const updateAccept = async (req: Request) => {
   return withTransaction(async (session) => {
     const rideId = req.params.rideId;
 
-    const { credentialId: driverId } = req.user as JWTCredentialProps;
+    const { credentialId: userId } = req.user as JWTCredentialProps;
 
     // Find the ride info
     const ride = await Rides.findById(rideId);
@@ -96,7 +96,7 @@ const updateAccept = async (req: Request) => {
 
     // Find driver profile
     const driver = (await Drivers.findOne({
-      user: driverId,
+      user: userId,
     })) as DriverDocument;
     validateDriver(driver);
 
@@ -120,7 +120,7 @@ const updateAccept = async (req: Request) => {
     });
 
     ride.status = "ACCEPTED";
-    ride.driver = driverId as unknown as Types.ObjectId;
+    ride.driver = driver._id;
     ride.acceptedAt = new Date();
     ride.driverEta = driverEta;
 
@@ -139,7 +139,9 @@ const updateCancel = async (req: Request) => {
     const payload = req.body as UpdateRideCancelDTO;
     const { role, credentialId } = req.user as JWTCredentialProps;
 
-    const ride = await Rides.findById(rideId).session(session);
+    const ride = await Rides.findById(rideId)
+      .populate("rider")
+      .session(session);
     if (!ride) {
       throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
     }
@@ -164,7 +166,10 @@ const updateCancel = async (req: Request) => {
     }
 
     // Rider authorization
-    if (role === "RIDER" && credentialId !== ride.rider.toString()) {
+    if (
+      role === "RIDER" &&
+      credentialId !== (ride.rider as unknown as Rider).user.toString()
+    ) {
       throw new AppError(
         message("forbidden", "Canceling ride"),
         StatusCodes.FORBIDDEN
@@ -174,7 +179,8 @@ const updateCancel = async (req: Request) => {
     // Driver authorization
     if (
       role === "DRIVER" &&
-      (!ride.driver || credentialId !== ride.driver.toString())
+      (!ride.driver ||
+        credentialId !== (driver as unknown as Driver).user.toString())
     ) {
       throw new AppError(
         message("forbidden", "Canceling ride"),
@@ -229,16 +235,19 @@ const updateStatus = async (req: Request) => {
   return withTransaction(async (session) => {
     const rideId = req.params.rideId;
     const payload = req.body as UpdateRideStatusDTO;
-    const { credentialId } = req.user as JWTCredentialProps;
+    const { credentialId: userId } = req.user as JWTCredentialProps;
 
-    const ride = (await Rides.findById(rideId).session(
-      session
-    )) as RideDocument;
+    const ride = (await Rides.findById(rideId)
+      .populate("driver")
+      .session(session)) as RideDocument;
     if (!ride) {
       throw new AppError(message("notFound", "ride"), StatusCodes.NOT_FOUND);
     }
 
-    if (ride.driver && ride.driver.toString() !== credentialId) {
+    if (
+      ride.driver &&
+      (ride.driver as unknown as Driver).user.toString() !== userId
+    ) {
       throw new AppError(
         message("badRequest", "ride status", "You can't change the status."),
         StatusCodes.BAD_REQUEST
@@ -288,7 +297,7 @@ const updateStatus = async (req: Request) => {
     }
 
     const driver = (await Drivers.findOne({
-      user: credentialId,
+      user: userId,
     }).session(session)) as DriverDocument;
     validateDriver(driver);
 
@@ -308,15 +317,38 @@ const updateStatus = async (req: Request) => {
 
 // ✅ Get histories (RIDER, DRIVER)
 const getHistories = async (req: Request) => {
-  const { role, credentialId } = req.user as JWTCredentialProps;
+  const { role, credentialId: userId } = req.user as JWTCredentialProps;
 
-  if (role === "DRIVER") {
-    const rides = await Rides.find({ driver: credentialId });
-    return rides;
-  } else {
-    const rides = await Rides.find({ rider: credentialId });
-    return rides;
-  }
+  const lookupCollection = role === "DRIVER" ? "drivers" : "riders";
+  const localField = role === "DRIVER" ? "driver" : "rider";
+
+  // 2. Perform a single database aggregation operation
+  const rides = await Rides.aggregate([
+    // STAGE 1: Join 'Rides' with the appropriate 'drivers' or 'riders' collection
+    {
+      $lookup: {
+        from: lookupCollection,
+        localField: localField,
+        foreignField: "_id",
+        as: "driverInfo",
+      },
+    },
+
+    // // STAGE 2: Deconstruct the array created by $lookup
+    { $unwind: "$driverInfo" },
+
+    // // STAGE 3: Filter the rides where the joined Driver/Rider
+    {
+      $match: {
+        "driverInfo.user": new Types.ObjectId(userId),
+      },
+    },
+
+    // // STAGE 4: Clean up the result by removing the joined driverInfo object
+    { $project: { driverInfo: 0 } },
+  ]);
+
+  return rides;
 };
 
 // ✅ List rides (ADMIN, SUPERADMIN)
