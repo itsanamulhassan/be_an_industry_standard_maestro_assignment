@@ -19,6 +19,10 @@ const createPaymentIntent = async ({
     currency: environments.stripe.default_currency,
     metadata,
     receipt_email: email,
+    automatic_payment_methods: {
+      enabled: true,
+      allow_redirects: "never",
+    },
   });
 };
 

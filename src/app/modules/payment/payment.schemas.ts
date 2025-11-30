@@ -1,6 +1,5 @@
 import z from "zod";
-
-export const paymentMethodEnum = ["CASH", "STRIPE", "CARD", "WALLET"] as const;
+import { paymentMethodEnum } from "../rider/rider.schemas";
 export const paymentStatusEnum = [
   "PENDING",
   "PROCESSING",
@@ -15,7 +14,7 @@ export const createPaymentSchema = z.object({
   driver: z.string().optional().nullable(),
   ride: z.string().min(1),
   amount: z.number().positive(),
-  method: paymentMethodEnum,
+  method: z.enum(paymentMethodEnum),
   metadata: z.record(z.string(), z.any()).optional(),
 });
 

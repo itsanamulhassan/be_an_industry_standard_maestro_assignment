@@ -7,6 +7,7 @@ import message from "../../utils/message";
 import { StatusCodes } from "http-status-codes";
 import { paymentServices } from "./payment.services";
 import { stripeServices } from "./stripe.services";
+import AppError from "../../helpers/error.helper";
 
 // Create generic payment record (usually for cash/wallet)
 const createPayment = safeAsync(async (req: Request, res: Response) => {
@@ -20,37 +21,33 @@ const createPayment = safeAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Create Stripe Payment Intent
-const createStripeIntent = safeAsync(async (req: Request, res: Response) => {
-  const dto = req.body;
-  const { payment, clientSecret, intentId } =
-    await paymentServices.createStripeIntent(dto);
-  resHandler(res, {
-    status: StatusCodes.CREATED,
-    success: true,
-    message: message("create", "payment_intent"),
-    data: { payment, clientSecret, intentId },
-  });
-});
-
-// Stripe webhook - raw body required (no JSON parser)
-const stripeWebhook = async (req: Request, res: Response) => {
+// Stripe webhook
+const stripeWebhook = safeAsync(async (req: Request, res: Response) => {
   // Express app should have a route that disables JSON bodyParser for this path, or use raw buffer middleware
-  const sig = req.headers["stripe-signature"] as string;
-  const raw = (req as any).rawBody as Buffer; // you must capture raw body in middleware
-  if (!raw || !sig)
-    return res.status(400).send("Missing webhook payload or signature");
-
-  try {
-    const event = stripeServices.constructEvent(raw, sig);
-    // process event
-    await paymentServices.handleStripeWebhookEvent(event);
-    return res.status(200).send("ok");
-  } catch (err: any) {
-    console.error("Stripe webhook error:", err);
-    return res.status(400).send(`Webhook error: ${err.message}`);
+  const signature = req.headers["stripe-signature"] as string;
+  const payload = (req as any).rawBody as Buffer;
+  console.log({ signature, payload });
+  if (!payload) {
+    throw new AppError(
+      message("notFound", "webhook payload"),
+      StatusCodes.NOT_FOUND
+    );
   }
-};
+  if (!signature) {
+    throw new AppError(
+      message("notFound", "webhook signature"),
+      StatusCodes.NOT_FOUND
+    );
+  }
+  const event = stripeServices.constructEvent(payload, signature);
+  if (!event) {
+    throw new AppError(
+      message("notFound", "webhook event"),
+      StatusCodes.NOT_FOUND
+    );
+  }
+  await paymentServices.handleStripeWebhookEvent(event);
+});
 
 // GET payments
 const listPayments = safeAsync(async (req: Request, res: Response) => {
@@ -101,7 +98,6 @@ const deletePayment = safeAsync(async (req: Request, res: Response) => {
 
 export const paymentControllers = {
   createPayment,
-  createStripeIntent,
   stripeWebhook,
   listPayments,
   getPayment,

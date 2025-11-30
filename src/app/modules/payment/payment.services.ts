@@ -25,7 +25,7 @@ const createStripeIntent = async ({
   ride,
   rider,
   email,
-  savePaymentMethod,
+  method,
 }: CreateStripeIntentProps) => {
   // Create intent
   const intent = await stripeServices.createPaymentIntent({
@@ -39,7 +39,7 @@ const createStripeIntent = async ({
     driver,
     ride,
     amount,
-    method: "STRIPE",
+    method,
     stripePaymentIntentId: intent.id,
     stripeClientSecret: intent.client_secret ?? null,
     gateway: { name: "stripe", rawResponse: intent },

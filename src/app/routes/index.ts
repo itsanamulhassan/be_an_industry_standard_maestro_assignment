@@ -6,6 +6,7 @@ import riderRouter from "../modules/rider/rider.routers";
 import driverRouter from "../modules/driver/driver.routers";
 import reportRouter from "../modules/report/report.routers";
 import rideRouter from "../modules/ride/ride.routers";
+import paymentRouter from "../modules/payment/payment.routers";
 
 const appRouter = Router();
 
@@ -41,6 +42,10 @@ const routes: RouteProps[] = [
   {
     path: "/reports",
     router: reportRouter,
+  },
+  {
+    path: "/payments",
+    router: paymentRouter,
   },
 ];
 

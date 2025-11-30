@@ -7,12 +7,13 @@ export const rideStatusEnum = [
   "IN_TRANSIT",
   "COMPLETED",
   "CANCELED",
+  "PAYMENT_PENDING",
 ] as const;
 
 export const rideStatusByDriver = [
   "PICKED_UP",
   "IN_TRANSIT",
-  "COMPLETED",
+  "PAYMENT_PENDING",
 ] as const;
 
 const rideLocation = z.clone(favoriteLocationSchema).omit({ name: true });

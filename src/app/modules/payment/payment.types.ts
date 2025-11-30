@@ -16,6 +16,6 @@ export interface CreateStripeIntentProps {
   driver: string;
   ride: string;
   amount: number;
-  savePaymentMethod: boolean;
   email: string;
+  method: "CASH" | "CARD" | "WALLET";
 }

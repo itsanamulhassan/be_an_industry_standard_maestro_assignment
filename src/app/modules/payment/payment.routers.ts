@@ -14,21 +14,6 @@ paymentRouter.post(
   paymentControllers.createPayment
 );
 
-// ✅ Create Stripe payment intent (RIDER)
-paymentRouter.post(
-  "/intent",
-  validator.role("RIDER"),
-  validator.schema(paymentSchemas.createStripeIntent),
-  paymentControllers.createStripeIntent
-);
-
-// Stripe webhook - raw body (no auth)
-paymentRouter.post(
-  "/webhook",
-  // raw body handling should be configured in app; do not use JSON body parser for this route
-  paymentControllers.stripeWebhook
-);
-
 // Admin list
 paymentRouter.get(
   "/",

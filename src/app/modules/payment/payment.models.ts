@@ -1,6 +1,5 @@
 import { Schema, model, InferSchemaType, HydratedDocument } from "mongoose";
-
-export const paymentMethodEnum = ["CASH", "STRIPE", "CARD", "WALLET"] as const;
+import { paymentMethodEnum } from "../rider/rider.schemas";
 export const paymentStatusEnum = [
   "PENDING",
   "PROCESSING",
