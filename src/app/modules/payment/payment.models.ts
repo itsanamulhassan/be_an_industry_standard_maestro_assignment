@@ -1,12 +1,6 @@
 import { Schema, model, InferSchemaType, HydratedDocument } from "mongoose";
 import { paymentMethodEnum } from "../rider/rider.schemas";
-export const paymentStatusEnum = [
-  "PENDING",
-  "PROCESSING",
-  "SUCCESS",
-  "FAILED",
-  "REFUNDED",
-] as const;
+import { paymentStatusEnum } from "./payment.schemas";
 
 const gatewaySchema = new Schema(
   {
