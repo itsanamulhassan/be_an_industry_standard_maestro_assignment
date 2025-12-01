@@ -8,8 +8,36 @@ import invalidRoute from "./app/middlewares/route.middleware";
 import globalErrorHandler from "./app/middlewares/error.middleware";
 import appRouter from "./app/routes";
 import "./app/modules/authentication/authentication.strategies";
+import bodyParser from "body-parser";
+import Stripe from "stripe";
+import { paymentServices } from "./app/modules/payment/payment.services";
 
 const app = express();
+app.post(
+  "/api/v1/payments/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  (req, res) => {
+    const signature = req.headers["stripe-signature"] as string;
+
+    let event;
+
+    try {
+      event = Stripe.webhooks.constructEvent(
+        req.body,
+        signature,
+        environments.stripe.webhook_secret
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(400).send(`Webhook Error: ${error.message}`);
+      }
+    }
+
+    paymentServices.handleStripeWebhookEvent(event);
+
+    res.status(200).send("received");
+  }
+);
 
 app.use(
   expressSession({

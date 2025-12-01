@@ -9,7 +9,7 @@ export const cardBrandEnum = [
   "DISCOVER",
   "JCB",
   "DINERS",
-];
+] as const;
 
 export const paymentMethodSchema = z
   .object({
