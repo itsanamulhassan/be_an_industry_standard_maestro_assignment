@@ -69,6 +69,10 @@ const paymentSchema = new Schema(
     gateway: { type: gatewaySchema, default: {} },
 
     metadata: { type: Schema.Types.Mixed, default: {} },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

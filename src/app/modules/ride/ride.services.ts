@@ -16,13 +16,8 @@ import { validateDriver } from "../driver/driver.helpers/validateDriver";
 import { withTransaction } from "../../database/transaction";
 import { Types } from "mongoose";
 import { Reports } from "../report/report.models";
-import {
-  CreatePaymentIntentProps,
-  CreateStripeIntentProps,
-} from "../payment/payment.types";
+import { CreateStripeIntentProps } from "../payment/payment.types";
 import { User } from "../user/user.models";
-import { stripeServices } from "../payment/stripe.services";
-import { Payments } from "../payment/payment.models";
 import { paymentServices } from "../payment/payment.services";
 
 // ✅ Create ride
@@ -314,6 +309,7 @@ const updateStatus = async (req: Request) => {
         path: "user",
         select: "email",
       });
+
       const defaultPaymentMethod = rider?.paymentMethods.find(
         (method: PaymentMethod) => method.isDefault
       ) as PaymentMethod;
@@ -326,9 +322,10 @@ const updateStatus = async (req: Request) => {
         rider: ride.rider.toString(),
         method: defaultPaymentMethod.type,
       } as CreateStripeIntentProps;
+
       const intent = await paymentServices.createStripeIntent(intentPayload);
       ride.payment = intent.payment._id;
-      // ride.status = "PAYMENT_PENDING";
+      ride.status = "PAYMENT_PENDING";
     }
     if (payload.status === "PICKED_UP") ride.pickedUpAt = new Date();
 
@@ -354,22 +351,22 @@ const getHistories = async (req: Request) => {
         from: lookupCollection,
         localField: localField,
         foreignField: "_id",
-        as: "driverInfo",
+        as: "userInfo",
       },
     },
 
     // // STAGE 2: Deconstruct the array created by $lookup
-    { $unwind: "$driverInfo" },
+    { $unwind: "$userInfo" },
 
     // // STAGE 3: Filter the rides where the joined Driver/Rider
     {
       $match: {
-        "driverInfo.user": new Types.ObjectId(userId),
+        "userInfo.user": new Types.ObjectId(userId),
       },
     },
 
     // // STAGE 4: Clean up the result by removing the joined driverInfo object
-    { $project: { driverInfo: 0 } },
+    { $project: { userInfo: 0 } },
   ]);
 
   return rides;

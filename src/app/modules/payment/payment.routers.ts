@@ -1,35 +1,38 @@
 import { Router } from "express";
 import { validator } from "../../middlewares/validator.middleware";
-import { userRoleEnum } from "../user/user.schemas";
 import { paymentSchemas } from "./payment.schemas";
 import { paymentControllers } from "./payment.controllers";
 
 const paymentRouter = Router();
 
-// ✅ Create a generic payment record (cash/wallet) (RIDER)
-paymentRouter.post(
-  "/",
-  validator.role("RIDER"),
-  validator.schema(paymentSchemas.createPayment),
-  paymentControllers.createPayment
-);
-
-// Admin list
+// ✅ List payments for (ADMIN, SUPERADMIN)
 paymentRouter.get(
   "/",
   validator.role("ADMIN", "SUPERADMIN"),
   paymentControllers.listPayments
 );
 
-// Rider/Driver see their payments (you can implement query filter in controller or service)
+// Payment list for (RIDER, DRIVER)
+paymentRouter.get(
+  "/history",
+  validator.role("RIDER", "DRIVER"),
+  paymentControllers.listHistories
+);
 // Get single payment
 paymentRouter.get(
   "/:paymentId",
-  validator.role(...userRoleEnum),
+  validator.role("ADMIN", "SUPERADMIN"),
   paymentControllers.getPayment
 );
 
-// Update payment (ADMIN)
+// Payment single history for (RIDER, DRIVER)
+paymentRouter.get(
+  "/:paymentId/history",
+  validator.role("RIDER", "DRIVER"),
+  paymentControllers.getHistory
+);
+
+// Update payment (ADMIN, SUPERADMIN)
 paymentRouter.patch(
   "/:paymentId",
   validator.role("ADMIN", "SUPERADMIN"),
@@ -37,10 +40,10 @@ paymentRouter.patch(
   paymentControllers.updatePayment
 );
 
-// Delete payment (SUPERADMIN)
+// Delete payment (ADMIN, SUPERADMIN)
 paymentRouter.delete(
   "/:paymentId",
-  validator.role("SUPERADMIN"),
+  validator.role("ADMIN", "SUPERADMIN"),
   paymentControllers.deletePayment
 );
 
