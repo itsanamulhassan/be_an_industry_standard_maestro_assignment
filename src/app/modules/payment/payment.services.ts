@@ -11,8 +11,8 @@ import { Types } from "mongoose";
 import { withTransaction } from "../../database/transaction";
 import { Rides } from "../ride/ride.models";
 import { Drivers } from "../driver/driver.models";
-import { Wallet } from "../wallet/wallet.models";
 import { geo } from "../../utils/geo";
+import { WalletTransactions } from "../wallet/wallet.models";
 
 const createPaymentRecord = async (payload: any) => {
   // payload validated by zod upstream
@@ -85,7 +85,7 @@ const handleStripeWebhookEvent = async (event: any) => {
       const { driverNetEarning } = geo.calculateEarnings(intent.amount);
 
       // Create a transaction for storing the driver earning
-      await Wallet.create(
+      await WalletTransactions.create(
         [
           {
             amount: driverNetEarning,
