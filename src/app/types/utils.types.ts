@@ -43,7 +43,7 @@ export interface CalculateEtaMinutesProps {
   speed?: number;
 }
 
-export interface CalculateFareProps {
+export interface FareCalculationProps {
   distanceKm: number;
   durationMin: number;
   baseFare?: number;
@@ -51,4 +51,19 @@ export interface CalculateFareProps {
   perMinuteRate?: number;
   minFare?: number;
   surgeMultiplier?: number;
+  commissionRate?: number;
+  taxRate?: number;
+}
+
+export interface EarningCalculationProps {
+  riderTotalFare: number;
+  commissionRate?: number;
+  taxRate?: number;
+}
+
+export interface EarningCalculationReturnProps {
+  driverGrossEarning: number;
+  platformCommission: number;
+  taxAmount: number;
+  driverNetEarning: number;
 }
