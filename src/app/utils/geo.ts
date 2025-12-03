@@ -2,7 +2,9 @@ import environments from "../configurations/environments";
 import {
   CalculateDistanceKmProps,
   CalculateEtaMinutesProps,
-  CalculateFareProps,
+  EarningCalculationProps,
+  EarningCalculationReturnProps,
+  FareCalculationProps,
 } from "../types/utils.types";
 import axios from "axios";
 
@@ -69,24 +71,47 @@ const calculateDistanceDuration = async ({
   }
 };
 
-const calculateFare = (options: CalculateFareProps): number => {
-  const {
-    distanceKm,
-    durationMin,
-    baseFare = 2, // £2 base fare
-    perKmRate = 1.5, // £1.5 per km
-    perMinuteRate = 0.25, // £0.25 per min
-    minFare = 5, // minimum fare $5
-    surgeMultiplier = 1,
-  } = options;
+export const calculateFare = ({
+  distanceKm,
+  durationMin,
+  baseFare = 2,
+  perKmRate = 1.5,
+  perMinuteRate = 0.25,
+  minFare = 5,
+  surgeMultiplier = 1,
+}: FareCalculationProps): number => {
+  // Step 1: Base fare calculation
+  let fare = baseFare + distanceKm * perKmRate + durationMin * perMinuteRate;
 
-  const fare = baseFare + distanceKm * perKmRate + durationMin * perMinuteRate;
-  return Math.max(fare, minFare) * surgeMultiplier;
+  // Step 2: Apply minimum fare
+  fare = Math.max(fare, minFare);
+
+  // Step 3: Apply surge and total payable fare for rider
+  const riderTotalFare = fare * surgeMultiplier;
+  return riderTotalFare;
 };
 
+const calculateEarnings = ({
+  riderTotalFare,
+  commissionRate = 0.2, // 20% default
+  taxRate = 0.1, // 10% default
+}: EarningCalculationProps): EarningCalculationReturnProps => {
+  // Step 4: Earnings breakdown
+  const driverGrossEarning = riderTotalFare; // driver earns full fare before fees
+  const platformCommission = driverGrossEarning * commissionRate;
+  const taxAmount = driverGrossEarning * taxRate;
+  const driverNetEarning = driverGrossEarning - platformCommission - taxAmount;
+  return {
+    platformCommission,
+    taxAmount,
+    driverNetEarning,
+    driverGrossEarning,
+  };
+};
 export const geo = {
   calculateDistanceKm,
   calculateEtaMinutes,
   calculateDistanceDuration,
   calculateFare,
+  calculateEarnings,
 };

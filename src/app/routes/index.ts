@@ -7,6 +7,7 @@ import driverRouter from "../modules/driver/driver.routers";
 import reportRouter from "../modules/report/report.routers";
 import rideRouter from "../modules/ride/ride.routers";
 import paymentRouter from "../modules/payment/payment.routers";
+import walletTransactionRouter from "../modules/wallet/wallet.routers";
 
 const appRouter = Router();
 
@@ -46,6 +47,10 @@ const routes: RouteProps[] = [
   {
     path: "/payments",
     router: paymentRouter,
+  },
+  {
+    path: "/wallet-transactions",
+    router: walletTransactionRouter,
   },
 ];
 

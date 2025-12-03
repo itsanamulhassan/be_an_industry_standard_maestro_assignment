@@ -11,6 +11,8 @@ import { Types } from "mongoose";
 import { withTransaction } from "../../database/transaction";
 import { Rides } from "../ride/ride.models";
 import { Drivers } from "../driver/driver.models";
+import { geo } from "../../utils/geo";
+import { WalletTransactions } from "../wallet/wallet.models";
 
 const createPaymentRecord = async (payload: any) => {
   // payload validated by zod upstream
@@ -61,7 +63,6 @@ const createStripeIntent = async ({
 
 const handleStripeWebhookEvent = async (event: any) => {
   return withTransaction(async (session) => {
-    // event is Stripe event object
     const type = event.type;
     const intent = event.data.object;
 
@@ -78,6 +79,22 @@ const handleStripeWebhookEvent = async (event: any) => {
           gateway: { name: "stripe", rawResponse: intent },
         },
         { session, runValidators: true }
+      );
+
+      // Calculate driver net earning amount
+      const { driverNetEarning } = geo.calculateEarnings(intent.amount);
+
+      // Create a transaction for storing the driver earning
+      await WalletTransactions.create(
+        [
+          {
+            amount: driverNetEarning,
+            driver: intent.metadata.driver,
+            type: "EARNING",
+            ride: intent.metadata.ride,
+          },
+        ],
+        { session }
       );
     } else if (type === "payment_intent.payment_failed") {
       await Payments.findOneAndUpdate(
