@@ -92,6 +92,7 @@ const handleStripeWebhookEvent = async (event: any) => {
             driver: intent.metadata.driver,
             type: "EARNING",
             ride: intent.metadata.ride,
+            status: "SUCCESS",
           },
         ],
         { session }

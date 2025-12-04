@@ -1,8 +1,21 @@
 import { Router } from "express";
 import { validator } from "../../middlewares/validator.middleware";
 import { walletTransactionControllers } from "./wallet.controllers";
+import { walletTransactionSchemas } from "./wallet.schemas";
 
 const walletTransactionRouter = Router();
+walletTransactionRouter.post(
+  "/",
+  validator.role("ADMIN", "SUPERADMIN"),
+  validator.schema(walletTransactionSchemas.create),
+  walletTransactionControllers.createWalletTransaction
+);
+walletTransactionRouter.post(
+  ":/walletTransactionId",
+  validator.role("ADMIN", "SUPERADMIN"),
+  validator.schema(walletTransactionSchemas.update),
+  walletTransactionControllers.updateWalletTransaction
+);
 
 walletTransactionRouter.get(
   "/",

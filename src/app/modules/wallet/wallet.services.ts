@@ -5,6 +5,10 @@ import message from "../../utils/message";
 import { StatusCodes } from "http-status-codes";
 import { JWTCredentialProps } from "../../types/utils.types";
 import { Types } from "mongoose";
+import {
+  CreateWalletTransactionDTO,
+  UpdateWalletTransactionDTO,
+} from "./wallet.types";
 
 const getDriverBalance = async (
   driverId: string,
@@ -103,6 +107,48 @@ const getHistory = async (req: Request) => {
   ]);
   return walletTransaction;
 };
+const createWalletTransaction = async (req: Request) => {
+  const payload = req.body as CreateWalletTransactionDTO;
+  const walletTransaction = await WalletTransactions.create(payload);
+  return walletTransaction;
+};
+
+const updateWalletTransaction = async (req: Request) => {
+  const walletTransactionId = req.params.walletTransactionId;
+  const payload = req.body as UpdateWalletTransactionDTO;
+  const walletTransaction = await WalletTransactions.findById(
+    walletTransactionId
+  );
+
+  if (!walletTransaction) {
+    throw new AppError(
+      message("notFound", "wallet transaction"),
+      StatusCodes.NOT_FOUND
+    );
+  }
+
+  if (walletTransaction.type === "EARNING") {
+    throw new AppError(
+      message(
+        "badRequest",
+        "wallet transaction",
+        "You cannot update this transaction."
+      ),
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  const latestWalletTransaction = await WalletTransactions.findByIdAndUpdate(
+    walletTransactionId,
+    payload,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  return latestWalletTransaction;
+};
 
 export const walletTransactionServices = {
   listWalletTransactions,
@@ -110,4 +156,6 @@ export const walletTransactionServices = {
   listHistories,
   getHistory,
   getDriverBalance,
+  createWalletTransaction,
+  updateWalletTransaction,
 };
