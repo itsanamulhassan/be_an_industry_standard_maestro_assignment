@@ -63,7 +63,7 @@ const listHistories = async (req: Request) => {
       },
     },
     {
-      $unwind: "driverInfo",
+      $unwind: "$driverInfo",
     },
     {
       $match: {
@@ -74,6 +74,7 @@ const listHistories = async (req: Request) => {
       $project: { driverInfo: 0 },
     },
   ]);
+
   return walletTransactions;
 };
 const getHistory = async (req: Request) => {
@@ -94,7 +95,7 @@ const getHistory = async (req: Request) => {
       },
     },
     {
-      $unwind: "driverInfo",
+      $unwind: "$driverInfo",
     },
     {
       $match: {
@@ -105,7 +106,7 @@ const getHistory = async (req: Request) => {
       $project: { driverInfo: 0 },
     },
   ]);
-  return walletTransaction;
+  return walletTransaction[0];
 };
 const createWalletTransaction = async (req: Request) => {
   const payload = req.body as CreateWalletTransactionDTO;

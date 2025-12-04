@@ -13,10 +13,7 @@ const create = z.object({
     .min(1, { error: "Driver ID is required." }),
   type: z.enum(["DEDUCTION", "BONUS", "ADJUSTMENT"]),
   status: z.enum(["SUCCESS"]).default("SUCCESS"),
-  amount: z
-    .number({ error: "Amount must be a number" })
-    .min(1, { error: "Amount is required." })
-    .negative(),
+  amount: z.number({ error: "Amount must be a number" }),
   description: z.string({ error: "Description must be a string." }).optional(),
 });
 

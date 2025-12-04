@@ -10,17 +10,17 @@ walletTransactionRouter.post(
   validator.schema(walletTransactionSchemas.create),
   walletTransactionControllers.createWalletTransaction
 );
-walletTransactionRouter.post(
-  ":/walletTransactionId",
-  validator.role("ADMIN", "SUPERADMIN"),
-  validator.schema(walletTransactionSchemas.update),
-  walletTransactionControllers.updateWalletTransaction
-);
 
 walletTransactionRouter.get(
   "/",
   validator.role("ADMIN", "SUPERADMIN"),
   walletTransactionControllers.listWalletTransactions
+);
+
+walletTransactionRouter.get(
+  "/history",
+  validator.role("DRIVER"),
+  walletTransactionControllers.listHistories
 );
 walletTransactionRouter.get(
   "/:walletTransactionId",
@@ -28,14 +28,14 @@ walletTransactionRouter.get(
   walletTransactionControllers.getWalletTransaction
 );
 walletTransactionRouter.get(
-  "/history",
-  validator.role("DRIVER"),
-  walletTransactionControllers.listHistories
-);
-walletTransactionRouter.get(
   "/:walletTransactionId/history",
   validator.role("DRIVER"),
   walletTransactionControllers.getHistory
 );
-
+walletTransactionRouter.patch(
+  "/:walletTransactionId",
+  validator.role("ADMIN", "SUPERADMIN"),
+  validator.schema(walletTransactionSchemas.update),
+  walletTransactionControllers.updateWalletTransaction
+);
 export default walletTransactionRouter;

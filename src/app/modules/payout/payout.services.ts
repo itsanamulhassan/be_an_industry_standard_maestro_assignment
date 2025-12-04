@@ -1,5 +1,4 @@
 import { Request } from "express";
-
 import { Payouts } from "./payout.models";
 import AppError from "../../helpers/error.helper";
 import message from "../../utils/message";

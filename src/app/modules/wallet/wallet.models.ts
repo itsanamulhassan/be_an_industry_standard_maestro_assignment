@@ -11,7 +11,8 @@ const WalletTransactionSchema = new Schema(
     ride: {
       type: Schema.Types.ObjectId,
       ref: "Rides",
-      required: [true, "Ride ID is required."],
+      default: null,
+      unique: [true, "Ride ID must be unique."],
     },
     type: {
       type: String,
