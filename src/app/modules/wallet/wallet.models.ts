@@ -18,13 +18,16 @@ const WalletTransactionSchema = new Schema(
       enum: WalletTransactionTypeEnum,
       required: true,
     },
-
+    status: {
+      type: String,
+      enum: ["SUCCESS", "CANCELED"],
+    },
     amount: {
       type: Number,
       required: [true, "Amount is required."],
     },
 
-    payoutBatchId: {
+    payout: {
       type: Schema.Types.ObjectId,
       ref: "Payouts",
       default: null,

@@ -6,6 +6,29 @@ import { StatusCodes } from "http-status-codes";
 import { JWTCredentialProps } from "../../types/utils.types";
 import { Types } from "mongoose";
 
+const getDriverBalance = async (
+  driverId: string,
+  type: "PAID" | "UNPAID" = "UNPAID"
+) => {
+  const result = await WalletTransactions.aggregate([
+    {
+      $match: {
+        driver: new Types.ObjectId(driverId),
+        ...(type === "UNPAID" && { payout: null }),
+        status: "SUCCESS",
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalBalance: { $sum: "$amount" },
+      },
+    },
+  ]);
+
+  return result.length ? result[0].totalBalance : 0;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const listWalletTransactions = async (_req: Request) => {
   const walletTransactions = await WalletTransactions.find();
@@ -86,4 +109,5 @@ export const walletTransactionServices = {
   getWalletTransaction,
   listHistories,
   getHistory,
+  getDriverBalance,
 };
