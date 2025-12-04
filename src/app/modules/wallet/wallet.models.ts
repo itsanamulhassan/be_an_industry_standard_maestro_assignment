@@ -1,5 +1,5 @@
 import { HydratedDocument, InferSchemaType, model, Schema } from "mongoose";
-import { WalletTransactionTypeEnum } from "./wallet.types";
+import { WalletTransactionTypeEnum } from "./wallet.schemas";
 
 const WalletTransactionSchema = new Schema(
   {
@@ -11,20 +11,25 @@ const WalletTransactionSchema = new Schema(
     ride: {
       type: Schema.Types.ObjectId,
       ref: "Rides",
-      required: [true, "Ride ID is required."],
+      default: null,
+      unique: [true, "Ride ID must be unique."],
     },
     type: {
       type: String,
       enum: WalletTransactionTypeEnum,
       required: true,
     },
-
+    status: {
+      type: String,
+      enum: ["SUCCESS", "CANCELED"],
+      default: null,
+    },
     amount: {
       type: Number,
       required: [true, "Amount is required."],
     },
 
-    payoutBatchId: {
+    payout: {
       type: Schema.Types.ObjectId,
       ref: "Payouts",
       default: null,

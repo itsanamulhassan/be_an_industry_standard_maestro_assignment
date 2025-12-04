@@ -5,6 +5,33 @@ import message from "../../utils/message";
 import { StatusCodes } from "http-status-codes";
 import { JWTCredentialProps } from "../../types/utils.types";
 import { Types } from "mongoose";
+import {
+  CreateWalletTransactionDTO,
+  UpdateWalletTransactionDTO,
+} from "./wallet.types";
+
+const getDriverBalance = async (
+  driverId: string,
+  type: "PAID" | "UNPAID" = "UNPAID"
+) => {
+  const result = await WalletTransactions.aggregate([
+    {
+      $match: {
+        driver: new Types.ObjectId(driverId),
+        ...(type === "UNPAID" && { payout: null }),
+        status: "SUCCESS",
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalBalance: { $sum: "$amount" },
+      },
+    },
+  ]);
+
+  return result.length ? result[0].totalBalance : 0;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const listWalletTransactions = async (_req: Request) => {
@@ -36,7 +63,7 @@ const listHistories = async (req: Request) => {
       },
     },
     {
-      $unwind: "driverInfo",
+      $unwind: "$driverInfo",
     },
     {
       $match: {
@@ -47,6 +74,7 @@ const listHistories = async (req: Request) => {
       $project: { driverInfo: 0 },
     },
   ]);
+
   return walletTransactions;
 };
 const getHistory = async (req: Request) => {
@@ -67,7 +95,7 @@ const getHistory = async (req: Request) => {
       },
     },
     {
-      $unwind: "driverInfo",
+      $unwind: "$driverInfo",
     },
     {
       $match: {
@@ -78,7 +106,49 @@ const getHistory = async (req: Request) => {
       $project: { driverInfo: 0 },
     },
   ]);
+  return walletTransaction[0];
+};
+const createWalletTransaction = async (req: Request) => {
+  const payload = req.body as CreateWalletTransactionDTO;
+  const walletTransaction = await WalletTransactions.create(payload);
   return walletTransaction;
+};
+
+const updateWalletTransaction = async (req: Request) => {
+  const walletTransactionId = req.params.walletTransactionId;
+  const payload = req.body as UpdateWalletTransactionDTO;
+  const walletTransaction = await WalletTransactions.findById(
+    walletTransactionId
+  );
+
+  if (!walletTransaction) {
+    throw new AppError(
+      message("notFound", "wallet transaction"),
+      StatusCodes.NOT_FOUND
+    );
+  }
+
+  if (walletTransaction.type === "EARNING") {
+    throw new AppError(
+      message(
+        "badRequest",
+        "wallet transaction",
+        "You cannot update this transaction."
+      ),
+      StatusCodes.BAD_REQUEST
+    );
+  }
+
+  const latestWalletTransaction = await WalletTransactions.findByIdAndUpdate(
+    walletTransactionId,
+    payload,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  return latestWalletTransaction;
 };
 
 export const walletTransactionServices = {
@@ -86,4 +156,7 @@ export const walletTransactionServices = {
   getWalletTransaction,
   listHistories,
   getHistory,
+  getDriverBalance,
+  createWalletTransaction,
+  updateWalletTransaction,
 };

@@ -45,10 +45,36 @@ const getHistory = safeAsync(async (req: Request, res: Response) => {
     success: true,
   });
 });
+const createWalletTransaction = safeAsync(
+  async (req: Request, res: Response) => {
+    const walletTransaction =
+      await walletTransactionServices.createWalletTransaction(req);
+    resHandler(res, {
+      status: StatusCodes.CREATED,
+      success: true,
+      data: walletTransaction,
+      message: message("create", "wallet transaction"),
+    });
+  }
+);
+const updateWalletTransaction = safeAsync(
+  async (req: Request, res: Response) => {
+    const walletTransaction =
+      await walletTransactionServices.updateWalletTransaction(req);
+    resHandler(res, {
+      status: StatusCodes.OK,
+      success: true,
+      data: walletTransaction,
+      message: message("update", "wallet transaction"),
+    });
+  }
+);
 
 export const walletTransactionControllers = {
   listWalletTransactions,
   getWalletTransaction,
   listHistories,
   getHistory,
+  createWalletTransaction,
+  updateWalletTransaction,
 };
