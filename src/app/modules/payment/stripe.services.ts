@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import environments from "../../configurations/environments";
 import { CreateCustomerProps, CreatePaymentIntentProps } from "./payment.types";
 
-const stripe = new Stripe(environments.stripe.secret_key, {
+export const stripe = new Stripe(environments.stripe.secret_key, {
   apiVersion: environments.stripe.api_version,
 });
 

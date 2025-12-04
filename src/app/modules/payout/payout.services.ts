@@ -1,16 +1,16 @@
 import { Request } from "express";
-import { JWTCredentialProps } from "../../types/utils.types";
+
 import { Payouts } from "./payout.models";
 import AppError from "../../helpers/error.helper";
 import message from "../../utils/message";
 import { StatusCodes } from "http-status-codes";
 
 const createPayout = async (req: Request) => {
-  const { credentialId } = req.user as JWTCredentialProps;
   const payload = req.body;
   const payout = await Payouts.create(payload);
   return payout;
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const listPayouts = async (_req: Request) => {
   const payouts = await Payouts.find();
   return payouts;
@@ -24,7 +24,7 @@ const getPayout = async (req: Request) => {
 };
 
 const listHistories = async (req: Request) => {
-  const { credentialId } = req.user as JWTCredentialProps;
+  // const { credentialId } = req.user as JWTCredentialProps;
 };
 
 const getHistory = async () => {

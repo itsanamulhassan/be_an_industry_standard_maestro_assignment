@@ -56,6 +56,10 @@ const driverSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    stripeConnectId: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true, versionKey: false }
 );

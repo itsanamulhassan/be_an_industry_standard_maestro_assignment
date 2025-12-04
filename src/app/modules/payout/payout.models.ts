@@ -12,11 +12,18 @@ const payoutSchema = new Schema(
       type: Number,
       required: [true, "Total amount is required."],
     },
-    weekRange: {},
     payment: {
       type: Schema.Types.ObjectId,
       ref: "Payments",
       required: [true, "Payment ID is required."],
+    },
+    stripeTransferId: {
+      type: String,
+      default: null,
+    },
+    failureReason: {
+      type: String,
+      default: null,
     },
     status: {
       type: String,
