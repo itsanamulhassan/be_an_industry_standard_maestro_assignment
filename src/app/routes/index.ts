@@ -8,6 +8,7 @@ import reportRouter from "../modules/report/report.routers";
 import rideRouter from "../modules/ride/ride.routers";
 import paymentRouter from "../modules/payment/payment.routers";
 import walletTransactionRouter from "../modules/wallet/wallet.routers";
+import statisticRouter from "../modules/statistic/statistic.routers";
 
 const appRouter = Router();
 
@@ -51,6 +52,10 @@ const routes: RouteProps[] = [
   {
     path: "/wallet-transactions",
     router: walletTransactionRouter,
+  },
+  {
+    path: "/statistics",
+    router: statisticRouter,
   },
 ];
 
