@@ -19,7 +19,7 @@ notificationRouter.get(
   notificationControllers.listNotifications
 );
 notificationRouter.patch(
-  "/:id/read",
+  "/:notificationId/read",
   validator.role(...userRoleEnum),
   notificationControllers.markAsRead
 );
@@ -29,7 +29,7 @@ notificationRouter.patch(
   notificationControllers.markAllRead
 );
 notificationRouter.delete(
-  "/:id",
+  "/:notificationId",
   validator.role(...userRoleEnum),
   notificationControllers.deleteNotification
 );
