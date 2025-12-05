@@ -25,14 +25,14 @@ userRouter.get(
 );
 // ✅ Update user by ID
 userRouter.patch(
-  "/update/:userId",
+  "/:userId",
   validator.schema(userSchemas.update),
   validator.role(...userRoleEnum),
   userControllers.updateUser
 );
 // ✅ Delete user by ID
 userRouter.delete(
-  "/delete/:userId",
+  "/:userId",
   validator.schema(userSchemas.deleted),
   validator.role(...userRoleEnum),
   userControllers.deleteUser
