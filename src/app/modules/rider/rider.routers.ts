@@ -6,7 +6,7 @@ import { riderControllers } from "./rider.controllers";
 const riderRouter = Router();
 
 riderRouter.patch(
-  "/update/:id", // here, id is representing the user id
+  "/:userId",
   validator.schema(riderSchemas.update),
   validator.role("RIDER"),
   riderControllers.updateRider

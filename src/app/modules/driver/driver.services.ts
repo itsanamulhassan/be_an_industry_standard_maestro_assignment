@@ -17,9 +17,9 @@ import { JWTCredentialProps } from "../../types/utils.types";
 
 const createDriver = async (req: Request) => {
   const payload = req.body as CreateDriverDTO;
-  const id = req.params.id;
+  const userId = req.params.userId;
 
-  const user = (await Users.findById(id)) as User;
+  const user = (await Users.findById(userId)) as User;
 
   if ((req.user as JWTCredentialProps).role === "RIDER") {
     if (["ADMIN", "SUPERADMIN"].includes(user.role)) {
@@ -37,7 +37,7 @@ const createDriver = async (req: Request) => {
   }
   validateUser(user);
 
-  const driver = await Drivers.findOne({ user: id });
+  const driver = await Drivers.findOne({ user: userId });
   if (driver) {
     throw new AppError(
       message("alreadyExists", "driver"),
@@ -46,7 +46,7 @@ const createDriver = async (req: Request) => {
   }
 
   const latestDriver = await Drivers.create({
-    user: id,
+    user: userId,
     ...payload,
   });
   return latestDriver;
@@ -54,21 +54,21 @@ const createDriver = async (req: Request) => {
 
 const updateDriver = async (req: Request) => {
   const payload = req.body as UpdateDriverDTO;
-  const id = req.params.id; // id is representing the user id
+  const userId = req.params.userId;
 
   // Find user profile
-  const user = (await Users.findById(id)) as User;
+  const user = (await Users.findById(userId)) as User;
 
   // Check valid user
   validateUser(user);
 
   // Find driver profile
-  const driver = await Drivers.findOne({ user: id });
+  const driver = await Drivers.findOne({ user: userId });
 
   // Check is DRIVER user ID & requested ID is same for DRIVER role
   if (
     (req.user as JWTCredentialProps).role === "DRIVER" &&
-    (req.user as JWTCredentialProps).credentialId !== id
+    (req.user as JWTCredentialProps).credentialId !== userId
   ) {
     throw new AppError(
       message("unauthorized", "user"),
@@ -91,7 +91,7 @@ const updateDriver = async (req: Request) => {
 
   if (vehicleChanged || licenseChanged) {
     return await Drivers.findOneAndUpdate(
-      { user: id },
+      { user: userId },
       {
         isActivated: false,
         isApproved: false,
@@ -105,15 +105,19 @@ const updateDriver = async (req: Request) => {
 };
 const updateOnline = async (req: Request) => {
   const payload = req.body as UpdateDriverOnlineDTO;
-  const id = req.params.id;
+  const userId = req.params.userId;
 
   // Find user profile
-  const user = (await Users.findById(id)) as User;
+  const user = (await Users.findById(userId)) as User;
   validateUser(user);
 
   // Find driver profile
-  const driver = await Drivers.findOne({ user: id });
+  const driver = await Drivers.findOne({ user: userId });
 
+  // Check is driver exist
+  if (!driver) {
+    throw new AppError(message("notFound", "driver"), StatusCodes.NOT_FOUND);
+  }
   // Avoid redundant updates
   if (driver?.isOnline === payload.isOnline) {
     throw new AppError(
@@ -121,15 +125,11 @@ const updateOnline = async (req: Request) => {
       StatusCodes.BAD_REQUEST
     );
   }
-  // Check is driver exist
-  if (!driver) {
-    throw new AppError(message("notFound", "driver"), StatusCodes.NOT_FOUND);
-  }
 
   // Check is DRIVER user ID & requested ID is same for DRIVER role
   if (
     (req.user as JWTCredentialProps).role === "DRIVER" &&
-    (req.user as JWTCredentialProps).credentialId !== id
+    (req.user as JWTCredentialProps).credentialId !== userId
   ) {
     throw new AppError(
       message("unauthorized", "user"),
@@ -143,7 +143,7 @@ const updateOnline = async (req: Request) => {
     );
   }
   return await Drivers.findOneAndUpdate(
-    { user: id },
+    { user: userId },
     {
       isOnline: payload.isOnline,
       isAvailable: payload.isOnline,
@@ -153,14 +153,14 @@ const updateOnline = async (req: Request) => {
 };
 const updateActivation = async (req: Request) => {
   const payload = req.body as UpdateDriverActivationDTO;
-  const id = req.params.id;
+  const userId = req.params.userId;
 
   // Find user profile
-  const user = (await Users.findById(id)) as User;
+  const user = (await Users.findById(userId)) as User;
   validateUser(user);
 
   // Find driver profile
-  const driver = await Drivers.findOne({ user: id });
+  const driver = await Drivers.findOne({ user: userId });
 
   // Check is driver exist
   if (!driver) {
@@ -192,7 +192,7 @@ const updateActivation = async (req: Request) => {
   }
 
   return await Drivers.findOneAndUpdate(
-    { user: id },
+    { user: userId },
     {
       isActivated: payload.isActivated,
     },
@@ -203,12 +203,13 @@ const updateActivation = async (req: Request) => {
 const updateApproval = async (req: Request) => {
   return withTransaction(async (session) => {
     const payload = req.body as UpdateDriverApprovalDTO;
-    const userId = req.params.id;
+    const userId = req.params.userId;
 
     const user = (await Users.findById(userId)) as User;
     validateUser(user);
 
     const driver = await Drivers.findOne({ user: userId });
+
     if (!driver) {
       throw new AppError(message("notFound", "driver"), StatusCodes.NOT_FOUND);
     }
