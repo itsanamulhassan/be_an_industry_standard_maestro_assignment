@@ -9,6 +9,7 @@ import rideRouter from "../modules/ride/ride.routers";
 import paymentRouter from "../modules/payment/payment.routers";
 import walletTransactionRouter from "../modules/wallet/wallet.routers";
 import statisticRouter from "../modules/statistic/statistic.routers";
+import notificationRouter from "../modules/notification/notification.routers";
 
 const appRouter = Router();
 
@@ -56,6 +57,10 @@ const routes: RouteProps[] = [
   {
     path: "/statistics",
     router: statisticRouter,
+  },
+  {
+    path: "/notifications",
+    router: notificationRouter,
   },
 ];
 
