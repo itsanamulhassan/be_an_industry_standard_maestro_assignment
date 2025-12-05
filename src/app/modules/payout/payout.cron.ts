@@ -8,7 +8,7 @@ cron.schedule("0 0 * * 1", async () => {
   const drivers = await Drivers.find({ balance: { $gt: 0 } });
 
   for (const driver of drivers) {
-    if (!driver?.stripeConnectId) continue;
+    if (!driver?.stripeConnectId || !driver.isPayoutEnabled) continue;
 
     // Find all unpaid EARNING transactions
     const transactions = await WalletTransactions.find({

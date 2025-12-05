@@ -6,31 +6,31 @@ import { driverControllers } from "./driver.controllers";
 const driverRouter = Router();
 
 driverRouter.post(
-  "/create/:id",
+  "/:userId",
   validator.schema(driverSchemas.create),
   validator.role("RIDER", "ADMIN", "SUPERADMIN"),
   driverControllers.createDriver
 );
 driverRouter.patch(
-  "/update/approve/:id",
+  "/:userId/approve",
   validator.schema(driverSchemas.updateApproval),
   validator.role("ADMIN", "SUPERADMIN"),
   driverControllers.updateApproval
 );
 driverRouter.patch(
-  "/update/online/:id",
+  "/:userId/online",
   validator.schema(driverSchemas.updateOnline),
   validator.role("DRIVER", "ADMIN", "SUPERADMIN"),
   driverControllers.updateOnline
 );
 driverRouter.patch(
-  "/update/activation/:id",
+  "/:userId/activation",
   validator.schema(driverSchemas.updateActivation),
   validator.role("ADMIN", "SUPERADMIN"),
   driverControllers.updateActivation
 );
 driverRouter.patch(
-  "/update/:id",
+  "/:userId",
   validator.schema(driverSchemas.update),
   validator.role("DRIVER", "ADMIN", "SUPERADMIN"),
   driverControllers.updateDriver

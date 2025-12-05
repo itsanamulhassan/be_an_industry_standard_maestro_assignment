@@ -60,6 +60,7 @@ const driverSchema = new Schema(
       type: String,
       default: null,
     },
+    isPayoutEnabled: { type: Boolean, default: false },
   },
   { timestamps: true, versionKey: false }
 );
