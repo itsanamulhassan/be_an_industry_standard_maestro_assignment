@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= title %></title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7f7f7;
+        margin: 0;
+        padding: 30px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      .header {
+        text-align: center;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+      }
+      .title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+      }
+      .body-text {
+        font-size: 15px;
+        color: #555;
+        margin-top: 20px;
+        line-height: 1.6;
+      }
+      .data-box {
+        background: #fafafa;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #eee;
+        margin-top: 20px;
+      }
+      .data-item {
+        font-size: 14px;
+        margin-bottom: 4px;
+        color: #444;
+      }
+      .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #999;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="title"><%= title %></div>
+      </div>
+
+      <div class="body-text"><%= body %></div>
+
+      <% if (data && Object.keys(data).length > 0) { %>
+      <div class="data-box">
+        <% Object.keys(data).forEach(key => { %>
+        <div class="data-item">
+          <strong><%= key %>: </strong> <%= data[key] %>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+
+      <div class="footer">
+        This is an automated message from Maestro Ride Platform.<br />
+        Please do not reply to this email.
+      </div>
+    </div>
+  </body>
+</html>
