@@ -47,6 +47,7 @@ reportRouter.get(
 reportRouter.patch(
   "/:reportId",
   validator.role("RIDER", "DRIVER"),
+  multerUpload("report_screenshots").array("files"),
   validator.schema(reportSchemas.update),
   reportControllers.updateReport
 );

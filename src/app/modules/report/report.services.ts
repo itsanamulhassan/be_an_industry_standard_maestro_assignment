@@ -12,6 +12,7 @@ import { JWTCredentialProps } from "../../types/utils.types";
 import { Users } from "../user/user.models";
 import { Rides } from "../ride/ride.models";
 import { FileProps } from "../../types/global.types";
+import { deleteCloudinaryFile } from "../../configurations/cloudinary";
 
 //✅ Create report
 const createReport = async (req: Request) => {
@@ -99,6 +100,14 @@ const getReport = async (req: Request) => {
 const updateReport = async (req: Request) => {
   const reportId = req.params.reportId;
   const payload = req.body as UpdateReportDTO;
+  const newScreenshots = (
+    Array.isArray(req.files)
+      ? req.files.map((file: Express.Multer.File) => ({
+          url: file.path,
+          publicId: file.filename,
+        }))
+      : []
+  ) as FileProps[];
 
   const report = (await Reports.findById(reportId)) as Report;
   if (!report) {
@@ -132,10 +141,42 @@ const updateReport = async (req: Request) => {
     );
   }
 
+  let screenshots = [...report.screenshots, ...newScreenshots];
+
+  const selectedScreenshots = payload.deletedScreenshots?.length
+    ? new Set(payload.deletedScreenshots.map(String))
+    : new Set<string>();
+
+  if (selectedScreenshots.size) {
+    const results = await Promise.all(
+      screenshots.map(async (screenshot): Promise<FileProps | undefined> => {
+        if (selectedScreenshots.has(screenshot.publicId)) {
+          try {
+            await deleteCloudinaryFile(screenshot.publicId);
+          } catch (error) {
+            if (error instanceof Error) {
+              throw new AppError(
+                message("fail", "cloudinary delete", error.message),
+                StatusCodes.BAD_REQUEST
+              );
+            }
+          }
+          return undefined;
+        }
+        return screenshot;
+      })
+    );
+
+    screenshots = results.filter(
+      (screenshot): screenshot is FileProps => screenshot !== undefined
+    );
+  }
+
   const updatedReport = await Reports.findByIdAndUpdate(
     reportId,
     {
       ...payload,
+      screenshots,
     },
     { runValidators: true, new: true }
   );

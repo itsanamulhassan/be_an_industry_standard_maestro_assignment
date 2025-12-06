@@ -38,7 +38,9 @@ const resolve = z.object({
   resolutionNotes: z.string().max(1000).optional().nullable(),
 });
 
-const update = z.clone(create);
+const update = z.clone(create).extend({
+  deletedScreenshots: z.array(z.string()).optional(),
+});
 
 export const reportSchemas = {
   create,
