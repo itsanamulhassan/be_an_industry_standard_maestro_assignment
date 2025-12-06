@@ -51,10 +51,41 @@ const updateApproval = safeAsync(async (req: Request, res: Response) => {
   });
 });
 
+const listDrivers = safeAsync(async (req: Request, res: Response) => {
+  const driver = await driverServices.listDrivers(req);
+  resHandler(res, {
+    status: StatusCodes.OK,
+    success: true,
+    message: message("get", "drivers"),
+    data: driver,
+  });
+});
+const getDriver = safeAsync(async (req: Request, res: Response) => {
+  const driver = await driverServices.getDriver(req);
+  resHandler(res, {
+    status: StatusCodes.OK,
+    success: true,
+    message: message("get", "driver"),
+    data: driver,
+  });
+});
+
+const deleteDriver = safeAsync(async (req: Request, res: Response) => {
+  const driver = await driverServices.deleteDriver(req);
+  resHandler(res, {
+    status: StatusCodes.OK,
+    success: true,
+    message: message("delete", "driver"),
+    data: driver,
+  });
+});
 export const driverControllers = {
   createDriver,
   updateDriver,
   updateOnline,
   updateActivation,
   updateApproval,
+  listDrivers,
+  getDriver,
+  deleteDriver,
 };

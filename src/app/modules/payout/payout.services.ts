@@ -3,6 +3,8 @@ import { Payouts } from "./payout.models";
 import AppError from "../../helpers/error.helper";
 import message from "../../utils/message";
 import { StatusCodes } from "http-status-codes";
+import { JWTCredentialProps } from "../../types/utils.types";
+import { Types } from "mongoose";
 
 const createPayout = async (req: Request) => {
   const payload = req.body;
@@ -23,21 +25,67 @@ const getPayout = async (req: Request) => {
 };
 
 const listHistories = async (req: Request) => {
-  // const { credentialId } = req.user as JWTCredentialProps;
+  const { credentialId, role } = req.user as JWTCredentialProps;
+
+  const localField = role === "RIDER" ? "rider" : "driver";
+  const lookupCollection = role === "RIDER" ? "riders" : "drivers";
+
+  const payouts = Payouts.aggregate([
+    {
+      $lookup: {
+        from: lookupCollection,
+        localField: localField,
+        foreignField: "_id",
+        as: "userInfo",
+      },
+    },
+    {
+      $unwind: "$userInfo",
+    },
+    {
+      $match: { "userInfo.user": new Types.ObjectId(credentialId) },
+    },
+    {
+      $project: {
+        userInfo: 0,
+      },
+    },
+  ]);
+  return payouts;
 };
 
-const getHistory = async () => {
-  return Payouts.find().populate("driver payment");
-};
-
-const updatePayoutStatus = async (req: Request) => {
+const getHistory = async (req: Request) => {
+  const { credentialId, role } = req.user as JWTCredentialProps;
   const payoutId = req.params.payoutId;
-  const payout = await Payouts.findById(payoutId);
-  if (!payout) {
-    throw new AppError(message("notFound", "payout"), StatusCodes.NOT_FOUND);
-  }
-  await payout.save();
-  return payout;
+
+  const localField = role === "RIDER" ? "rider" : "driver";
+  const lookupCollection = role === "RIDER" ? "riders" : "drivers";
+
+  const payouts = Payouts.aggregate([
+    {
+      $match: { _id: new Types.ObjectId(payoutId) },
+    },
+    {
+      $lookup: {
+        from: lookupCollection,
+        localField: localField,
+        foreignField: "_id",
+        as: "userInfo",
+      },
+    },
+    {
+      $unwind: "$userInfo",
+    },
+    {
+      $match: { "userInfo.user": new Types.ObjectId(credentialId) },
+    },
+    {
+      $project: {
+        userInfo: 0,
+      },
+    },
+  ]);
+  return payouts;
 };
 
 const deletePayout = async (req: Request) => {
@@ -57,6 +105,5 @@ export const payoutServices = {
   deletePayout,
   getHistory,
   listPayouts,
-  updatePayoutStatus,
   listHistories,
 };

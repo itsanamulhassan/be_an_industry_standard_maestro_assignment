@@ -337,7 +337,7 @@ const updateStatus = async (req: Request) => {
 };
 
 // ✅ Get histories (RIDER, DRIVER)
-const getHistories = async (req: Request) => {
+const listHistories = async (req: Request) => {
   const { role, credentialId: userId } = req.user as JWTCredentialProps;
 
   const lookupCollection = role === "DRIVER" ? "drivers" : "riders";
@@ -371,6 +371,45 @@ const getHistories = async (req: Request) => {
 
   return rides;
 };
+// ✅ Get histories (RIDER, DRIVER)
+const getHistory = async (req: Request) => {
+  const { role, credentialId: userId } = req.user as JWTCredentialProps;
+  const rideId = req.params.rideId;
+
+  const lookupCollection = role === "DRIVER" ? "drivers" : "riders";
+  const localField = role === "DRIVER" ? "driver" : "rider";
+
+  // 2. Perform a single database aggregation operation
+  const ride = await Rides.aggregate([
+    {
+      $match: { _id: new Types.ObjectId(rideId) },
+    },
+    // STAGE 1: Join 'Rides' with the appropriate 'drivers' or 'riders' collection
+    {
+      $lookup: {
+        from: lookupCollection,
+        localField: localField,
+        foreignField: "_id",
+        as: "userInfo",
+      },
+    },
+
+    // // STAGE 2: Deconstruct the array created by $lookup
+    { $unwind: "$userInfo" },
+
+    // // STAGE 3: Filter the rides where the joined Driver/Rider
+    {
+      $match: {
+        "userInfo.user": new Types.ObjectId(userId),
+      },
+    },
+
+    // // STAGE 4: Clean up the result by removing the joined driverInfo object
+    { $project: { userInfo: 0 } },
+  ]);
+
+  return ride;
+};
 
 // ✅ List rides (ADMIN, SUPERADMIN)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -394,7 +433,8 @@ export const rideServices = {
   updateCancel,
   createRide,
   updateStatus,
-  getHistories,
+  listHistories,
   listRides,
   getRide,
+  getHistory,
 };

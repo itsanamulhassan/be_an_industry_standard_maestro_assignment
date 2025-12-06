@@ -35,12 +35,21 @@ const listPayouts = safeAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updatePayoutStatus = safeAsync(async (req: Request, res: Response) => {
-  const payout = await payoutServices.updatePayoutStatus(req);
+const listHistories = safeAsync(async (req: Request, res: Response) => {
+  const payouts = await payoutServices.listHistories(req);
   resHandler(res, {
-    status: StatusCodes.OK,
     success: true,
-    message: message("update", "payout"),
+    message: message("get", "payouts"),
+    status: StatusCodes.OK,
+    data: payouts,
+  });
+});
+const getHistory = safeAsync(async (req: Request, res: Response) => {
+  const payout = await payoutServices.getHistory(req);
+  resHandler(res, {
+    success: true,
+    message: message("get", "payout"),
+    status: StatusCodes.OK,
     data: payout,
   });
 });
@@ -57,7 +66,8 @@ const deletePayout = safeAsync(async (req: Request, res: Response) => {
 export const payoutControllers = {
   deletePayout,
   createPayout,
-  updatePayoutStatus,
   listPayouts,
   getPayout,
+  listHistories,
+  getHistory,
 };

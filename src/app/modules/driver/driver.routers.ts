@@ -5,6 +5,17 @@ import { driverControllers } from "./driver.controllers";
 
 const driverRouter = Router();
 
+driverRouter.get(
+  "/",
+  validator.role("ADMIN", "SUPERADMIN"),
+  driverControllers.listDrivers
+);
+driverRouter.get(
+  "/:driverId",
+  validator.role("ADMIN", "SUPERADMIN"),
+  driverControllers.getDriver
+);
+
 driverRouter.post(
   "/:userId",
   validator.schema(driverSchemas.create),
@@ -34,6 +45,12 @@ driverRouter.patch(
   validator.schema(driverSchemas.update),
   validator.role("DRIVER", "ADMIN", "SUPERADMIN"),
   driverControllers.updateDriver
+);
+
+driverRouter.delete(
+  "/:driverId",
+  validator.role("ADMIN", "SUPERADMIN"),
+  driverControllers.deleteDriver
 );
 
 export default driverRouter;

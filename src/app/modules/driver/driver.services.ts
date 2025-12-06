@@ -286,10 +286,45 @@ const updateApproval = async (req: Request) => {
   });
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const listDrivers = async (_req: Request) => {
+  // const credential = req.user as JWTCredentialProps;
+
+  const drivers = await Drivers.find();
+  return drivers;
+};
+
+const getDriver = async (req: Request) => {
+  const driverId = req.params.driverId;
+
+  const driver = await Drivers.findById(driverId);
+
+  if (!driver) {
+    throw new AppError(message("notFound", "driver"), StatusCodes.NOT_FOUND);
+  }
+  return driver;
+};
+const deleteDriver = async (req: Request) => {
+  const driverId = req.params.driverId;
+
+  const driver = await Drivers.findById(driverId);
+
+  if (!driver) {
+    throw new AppError(message("notFound", "driver"), StatusCodes.NOT_FOUND);
+  }
+
+  await Users.findByIdAndUpdate(driver.user, {
+    isDeleted: true,
+  });
+  return driver;
+};
 export const driverServices = {
   createDriver,
   updateDriver,
   updateOnline,
   updateApproval,
   updateActivation,
+  listDrivers,
+  getDriver,
+  deleteDriver,
 };

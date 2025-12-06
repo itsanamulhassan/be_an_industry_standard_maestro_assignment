@@ -25,6 +25,25 @@ const listReports = safeAsync(async (req: Request, res: Response) => {
   });
 });
 
+const listHistories = safeAsync(async (req: Request, res: Response) => {
+  const reports = await reportServices.listHistories(req);
+  resHandler(res, {
+    status: StatusCodes.OK,
+    success: true,
+    message: message("get", "reports"),
+    data: reports,
+  });
+});
+const getHistory = safeAsync(async (req: Request, res: Response) => {
+  const report = await reportServices.getHistory(req);
+  resHandler(res, {
+    status: StatusCodes.OK,
+    success: true,
+    message: message("get", "report"),
+    data: report,
+  });
+});
+
 const getReport = safeAsync(async (req: Request, res: Response) => {
   const report = await reportServices.getReport(req);
   resHandler(res, {
@@ -71,4 +90,6 @@ export const reportControllers = {
   updateReport,
   resolveReport,
   deleteReport,
+  listHistories,
+  getHistory,
 };

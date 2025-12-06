@@ -43,13 +43,22 @@ const updateStatus = safeAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getHistories = safeAsync(async (req: Request, res: Response) => {
-  const rides = await rideServices.getHistories(req);
+const listHistories = safeAsync(async (req: Request, res: Response) => {
+  const rides = await rideServices.listHistories(req);
   resHandler(res, {
-    message: message("get", "ride history"),
+    message: message("get", "rides"),
     status: StatusCodes.OK,
     success: true,
     data: rides,
+  });
+});
+const getHistory = safeAsync(async (req: Request, res: Response) => {
+  const ride = await rideServices.getHistory(req);
+  resHandler(res, {
+    message: message("get", "ride"),
+    status: StatusCodes.OK,
+    success: true,
+    data: ride,
   });
 });
 
@@ -77,7 +86,8 @@ export const rideControllers = {
   updateCancel,
   createRide,
   updateStatus,
-  getHistories,
+  listHistories,
   listRides,
   getRide,
+  getHistory,
 };

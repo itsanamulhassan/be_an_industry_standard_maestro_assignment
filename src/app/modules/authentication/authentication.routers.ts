@@ -16,31 +16,31 @@ authenticationRouter.post(
 );
 authenticationRouter.post("/signout", authenticationControllers.signOut);
 authenticationRouter.post(
-  "/reset_password",
+  "/reset-password",
   validator.schema(passwordSchemas.reset),
   validator.role(...userRoleEnum),
   authenticationControllers.resetPassword
 );
 authenticationRouter.post(
-  "/change_password",
+  "/change-password",
   validator.schema(passwordSchemas.change),
   validator.role(...userRoleEnum),
   authenticationControllers.changePassword
 );
 authenticationRouter.post(
-  "/set_password",
+  "/set-password",
   validator.schema(passwordSchemas.set),
   validator.role(...userRoleEnum),
   authenticationControllers.setPassword
 );
 authenticationRouter.post(
-  "/forget_password",
+  "/forget-password",
   validator.schema(passwordSchemas.forget),
   authenticationControllers.forgetPassword
 );
 
 authenticationRouter.post(
-  "/refresh_access_token",
+  "/refresh-access-token",
   authenticationControllers.retrieveLatestAccessToken
 );
 

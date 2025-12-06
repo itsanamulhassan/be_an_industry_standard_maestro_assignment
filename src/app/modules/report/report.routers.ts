@@ -17,8 +17,20 @@ reportRouter.post(
 reportRouter.get(
   "/",
   validator.role("ADMIN", "SUPERADMIN"),
-  //   validator.schema(reportSchemas.listReportsSchema),
   reportControllers.listReports
+);
+
+// ✅ List of all reports for DRIVER, RIDER
+reportRouter.get(
+  "/history",
+  validator.role("DRIVER", "RIDER"),
+  reportControllers.listHistories
+);
+// ✅ List of single report by Id for DRIVER, RIDER
+reportRouter.get(
+  "/:reports/history",
+  validator.role("DRIVER", "RIDER"),
+  reportControllers.getHistory
 );
 
 //✅ Get single report

@@ -30,7 +30,7 @@ notificationRouter.patch(
 );
 notificationRouter.delete(
   "/:notificationId",
-  validator.role(...userRoleEnum),
+  validator.role("ADMIN", "SUPERADMIN"),
   notificationControllers.deleteNotification
 );
 

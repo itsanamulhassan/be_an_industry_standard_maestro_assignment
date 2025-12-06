@@ -56,6 +56,28 @@ const listReports = async (_req: Request) => {
 
   return reports;
 };
+const listHistories = async (req: Request) => {
+  const { credentialId } = req.user as JWTCredentialProps;
+
+  const reports = await Reports.find({ listHistories: credentialId });
+
+  return reports;
+};
+const getHistory = async (req: Request) => {
+  const { credentialId } = req.user as JWTCredentialProps;
+  const reportId = req.params.reportId;
+
+  const report = await Reports.findOne({
+    listHistories: credentialId,
+    _id: reportId,
+  });
+
+  if (!report) {
+    throw new AppError(message("notFound", "report"), StatusCodes.NOT_FOUND);
+  }
+
+  return report;
+};
 
 // ✅ Report by ID for ADMIN, SUPERADMIN
 const getReport = async (req: Request) => {
@@ -157,4 +179,6 @@ export const reportServices = {
   updateReport,
   resolveReport,
   deleteReport,
+  listHistories,
+  getHistory,
 };

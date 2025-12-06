@@ -22,6 +22,7 @@ walletTransactionRouter.get(
   validator.role("DRIVER"),
   walletTransactionControllers.listHistories
 );
+
 walletTransactionRouter.get(
   "/:walletTransactionId",
   validator.role("ADMIN", "SUPERADMIN"),

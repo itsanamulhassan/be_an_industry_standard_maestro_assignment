@@ -32,7 +32,12 @@ rideRouter.patch(
 rideRouter.get(
   "/history",
   validator.role("DRIVER", "RIDER"),
-  rideControllers.getHistories
+  rideControllers.listHistories
+);
+rideRouter.get(
+  "/:rideId/history",
+  validator.role("DRIVER", "RIDER"),
+  rideControllers.getHistory
 );
 
 rideRouter.get(
