@@ -17,6 +17,12 @@ interface LoadEnvVariableProps {
     webhook_secret: string;
     api_version: "2025-11-17.clover";
   };
+  cloudinary: {
+    url: string;
+    api_secret: string;
+    api_key: string;
+    cloud_name: string;
+  };
   jwt: {
     access_secret: string;
     access_secret_expires_in: string;
@@ -93,6 +99,11 @@ const loadEnvVariables = (): LoadEnvVariableProps => {
     "STRIPE_DEFAULT_CURRENCY",
     "STRIPE_WEBHOOK_SECRET",
     "STRIPE_API_VERSION",
+
+    "CLOUDINARY_URL",
+    "CLOUDINARY_API_SECRET",
+    "CLOUDINARY_API_KEY",
+    "CLOUDINARY_CLOUD_NAME",
   ];
   requiredEnvVariables.forEach((key: string) => {
     if (!process.env[key]) {
@@ -106,7 +117,12 @@ const loadEnvVariables = (): LoadEnvVariableProps => {
     bcrypt_salt_round: Number(process.env.BCRYPT_SALT_ROUND) as number,
     express_session_secret: process.env.EXPRESS_SESSION_SECRET as string,
     frontend_base_url: process.env.FRONTEND_BASE_URL as string,
-
+    cloudinary: {
+      api_key: process.env.CLOUDINARY_API_KEY as string,
+      api_secret: process.env.CLOUDINARY_API_SECRET as string,
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME as string,
+      url: process.env.CLOUDINARY_URL as string,
+    },
     jwt: {
       access_secret: process.env.JWT_ACCESS_SECRET as string,
       access_secret_expires_in: process.env

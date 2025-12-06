@@ -3,6 +3,16 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { User, Users } from "../user/user.models";
 import message, { MessageType } from "../../utils/message";
 import bcrypt from "bcryptjs";
+import {
+  Strategy as GoogleStrategy,
+  Profile,
+  VerifyCallback,
+} from "passport-google-oauth20";
+import environments from "../../configurations/environments";
+
+const {
+  google_authentication: { client_id, client_secret, callback_url },
+} = environments;
 
 passport.use(
   new LocalStrategy(
@@ -61,6 +71,64 @@ passport.use(
         return done(null, user);
       } catch (error) {
         done(error);
+      }
+    }
+  )
+);
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: client_id,
+      clientSecret: client_secret,
+      callbackURL: callback_url,
+    },
+    async (
+      _accessToken: string,
+      _refreshToken: string,
+      profile: Profile,
+      done: VerifyCallback
+    ) => {
+      try {
+        const email = profile?.emails?.[0].value;
+
+        if (!email) {
+          return done(null, false, { message: message("notFound", "email") });
+        }
+        let user = (await Users.findOne({ email })) as User;
+
+        if (["BLOCKED", "INACTIVE"].includes(user.status)) {
+          return done(null, false, {
+            message: message(user.status?.toLowerCase() as MessageType, email),
+          });
+        }
+        if (user.isDeleted) {
+          return done(null, false, {
+            message:
+              "This account has been deleted. Please create a new account or try again later.",
+          });
+        }
+        if (!user.isVerified) {
+          return done(null, false, {
+            message:
+              "This account has not been verified. Please verify your account or request a new verification link.",
+          });
+        }
+        if (!user) {
+          user = await Users.create({
+            email,
+            name: profile.displayName,
+            avatar: profile.photos?.[0].value,
+            role: "RIDER",
+            isVerified: true,
+            auths: [{ provider: "GOOGLE", providerId: profile.id }],
+          });
+        }
+        return done(null, user);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log("Google strategy error, ", error);
+        return done(error);
       }
     }
   )

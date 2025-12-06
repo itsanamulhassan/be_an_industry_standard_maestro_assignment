@@ -11,10 +11,19 @@ import {
 import { JWTCredentialProps } from "../../types/utils.types";
 import { Users } from "../user/user.models";
 import { Rides } from "../ride/ride.models";
+import { FileProps } from "../../types/global.types";
 
 //✅ Create report
 const createReport = async (req: Request) => {
   const payload = req.body as CreateReportDTO;
+  const screenshots = (
+    Array.isArray(req.files)
+      ? req.files.map((file: Express.Multer.File) => ({
+          url: file.path,
+          publicId: file.filename,
+        }))
+      : []
+  ) as FileProps[];
   const { credentialId } = req.user as JWTCredentialProps;
 
   if (!payload.reportedFor && !payload.rideId) {
@@ -43,7 +52,7 @@ const createReport = async (req: Request) => {
     reportedFor: payload.reportedFor ? payload.reportedFor : null,
     reason: payload.reason,
     details: payload.details,
-    // screenshots: payload.screenshots || [],
+    ...(screenshots && { screenshots }),
   });
 
   return report;

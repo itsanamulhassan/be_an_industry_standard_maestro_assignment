@@ -16,12 +16,17 @@ import { JWTCredentialProps } from "../../types/utils.types";
 import { withTransaction } from "../../database/transaction";
 import { Riders } from "../rider/rider.models";
 import { Drivers } from "../driver/driver.models";
+import { FileProps } from "../../types/global.types";
 
 // ✅ Create new user
-const createUser = async (payload: CreateUserDTO) => {
+const createUser = async (req: Request) => {
   return withTransaction(async (session) => {
-    const { email, password, ...rest } = payload as CreateUserDTO;
+    const { email, password, ...rest } = req.body as CreateUserDTO;
 
+    const avatar = {
+      url: req.file?.path,
+      publicId: req.file?.filename,
+    } as FileProps;
     // Find user profile
     const user = await Users.findOne({ email });
     if (user) {
@@ -49,6 +54,7 @@ const createUser = async (payload: CreateUserDTO) => {
           ...rest,
           auths: [authProvider],
           password: hashPassword,
+          ...(req.file?.path && { avatar }),
         },
       ],
       { session }

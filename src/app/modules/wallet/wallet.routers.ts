@@ -39,4 +39,5 @@ walletTransactionRouter.patch(
   validator.schema(walletTransactionSchemas.update),
   walletTransactionControllers.updateWalletTransaction
 );
+
 export default walletTransactionRouter;

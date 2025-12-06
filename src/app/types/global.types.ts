@@ -1,6 +1,6 @@
 export interface FileProps {
   url: string;
-  public_id: string;
+  publicId: string;
 }
 
-export type ChildFolderProps = "avatars";
+export type ChildFolderProps = "avatars" | "report_screenshots";

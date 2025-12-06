@@ -2,6 +2,7 @@ import { Router } from "express";
 import { userRoleEnum, userSchemas } from "./user.schemas";
 import userControllers from "./user.controllers";
 import { validator } from "../../middlewares/validator.middleware";
+import { multerUpload } from "../../configurations/multer";
 
 const userRouter = Router();
 
@@ -9,6 +10,7 @@ const userRouter = Router();
 userRouter.post(
   "/register",
   validator.schema(userSchemas.create),
+  multerUpload("avatars").single("file"),
   userControllers.createUser
 );
 // ✅ Get all the users

@@ -5,6 +5,9 @@ import { cookies } from "../../utils/cookies";
 import resHandler from "../../utils/resHandler";
 import message from "../../utils/message";
 import { StatusCodes } from "http-status-codes";
+import { UserDocument } from "../user/user.models";
+import { token } from "../../utils/token";
+import environments from "../../configurations/environments";
 
 const signIn = safeAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -70,6 +73,29 @@ const retrieveLatestAccessToken = safeAsync(
     });
   }
 );
+const googleStrategyCallback = safeAsync(
+  async (req: Request, res: Response) => {
+    // EXCEPTION: In this project, req.user usually contains only the JWT payload.
+    // However, Google strategy attaches the full User document to req.user.
+    // This is the ONLY case where req.user holds the entire user object.
+    const user = req.user as unknown as UserDocument;
+    let redirect = (req.query.state || "") as string;
+    if (redirect.startsWith("/")) {
+      redirect = redirect.slice(1);
+    }
+
+    const payload = {
+      credentialId: user?._id.toString(),
+      email: user.email,
+      role: user.role,
+    };
+    const { accessToken, refreshToken } =
+      token.createAccessRefreshToken(payload);
+    cookies.setCookies(res, { accessToken, refreshToken });
+
+    res.redirect(environments.frontend_base_url + "/" + redirect);
+  }
+);
 export const authenticationControllers = {
   signIn,
   signOut,
@@ -78,4 +104,5 @@ export const authenticationControllers = {
   setPassword,
   changePassword,
   retrieveLatestAccessToken,
+  googleStrategyCallback,
 };

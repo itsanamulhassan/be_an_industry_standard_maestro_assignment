@@ -7,7 +7,7 @@ import userServices from "./user.services";
 
 // ✅ Create a new user
 const createUser = safeAsync(async (req: Request, res: Response) => {
-  const user = await userServices.createUser(req.body);
+  const user = await userServices.createUser(req);
   resHandler(res, {
     status: StatusCodes.CREATED,
     success: true,

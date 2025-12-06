@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { validator } from "../../middlewares/validator.middleware";
 import {
   authenticationSchemas,
@@ -6,6 +6,8 @@ import {
 } from "./authentication.schemas";
 import { authenticationControllers } from "./authentication.controllers";
 import { userRoleEnum } from "../user/user.schemas";
+import passport from "passport";
+import environments from "../../configurations/environments";
 
 const authenticationRouter = Router();
 
@@ -44,4 +46,22 @@ authenticationRouter.post(
   authenticationControllers.retrieveLatestAccessToken
 );
 
+authenticationRouter.get(
+  "/google",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const redirect = (req.query.redirect || "/") as string;
+
+    passport.authenticate("google", {
+      scope: ["profile", "email"],
+      state: redirect,
+    })(req, res, next);
+  }
+);
+authenticationRouter.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: `${environments.frontend_base_url}/signin?error=There is some issues with your account. Please contact with out support team!`,
+  }),
+  authenticationControllers.googleStrategyCallback
+);
 export default authenticationRouter;

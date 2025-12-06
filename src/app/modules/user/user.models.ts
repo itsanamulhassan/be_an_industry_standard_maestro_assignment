@@ -5,7 +5,7 @@ import { FileProps } from "../../types/global.types";
 export const fileSchema = (required = false) =>
   new Schema<FileProps>(
     {
-      public_id: {
+      publicId: {
         type: String,
         unique: [true, "File ID must be unique."],
         required,

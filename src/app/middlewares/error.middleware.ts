@@ -3,13 +3,32 @@ import { errorFormatter } from "../utils/errorFormatter";
 import environments from "../configurations/environments";
 import { ErrorSourceProps } from "../types/middleware.types";
 import AppError from "../helpers/error.helper";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
+import { deleteCloudinaryFile } from "../configurations/cloudinary";
+
+const globalErrorHandler: ErrorRequestHandler = async (
+  error,
+  req,
+  res,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next
+) => {
   const isDev = environments.node_env === "development";
 
   let statusCode = 500;
   let message = "Something went wrong! 🐞";
   let errorSource: ErrorSourceProps[] = [];
+
+  if (req.file || req.files?.length) {
+    if (req.file) {
+      await deleteCloudinaryFile(req.file.filename);
+    } else {
+      await Promise.all(
+        (req.files as Express.Multer.File[])?.map((file) =>
+          deleteCloudinaryFile(file.filename)
+        )
+      );
+    }
+  }
 
   if (error?.name === "ZodError") {
     ({ statusCode, message, errorSource } =

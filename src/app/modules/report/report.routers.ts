@@ -2,6 +2,7 @@ import { Router } from "express";
 import { reportSchemas } from "./report.schemas";
 import { validator } from "../../middlewares/validator.middleware";
 import { reportControllers } from "./report.controllers";
+import { multerUpload } from "../../configurations/multer";
 
 const reportRouter = Router();
 
@@ -9,6 +10,7 @@ const reportRouter = Router();
 reportRouter.post(
   "/",
   validator.role("RIDER", "DRIVER"),
+  multerUpload("report_screenshots").array("files"),
   validator.schema(reportSchemas.create),
   reportControllers.createReport
 );
