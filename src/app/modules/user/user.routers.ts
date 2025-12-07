@@ -19,6 +19,12 @@ userRouter.get(
   validator.role("ADMIN", "SUPERADMIN"),
   userControllers.retrieveUsers
 );
+// ✅  User information by Access Token
+userRouter.get(
+  "/me",
+  validator.role(...userRoleEnum),
+  userControllers.retrieveMe
+);
 // ✅ Get single user
 userRouter.get(
   "/:userId",
@@ -38,12 +44,6 @@ userRouter.delete(
   validator.schema(userSchemas.deleted),
   validator.role(...userRoleEnum),
   userControllers.deleteUser
-);
-// ✅  User information by Access Token
-userRouter.get(
-  "/me",
-  validator.role(...userRoleEnum),
-  userControllers.retrieveMe
 );
 
 export default userRouter;

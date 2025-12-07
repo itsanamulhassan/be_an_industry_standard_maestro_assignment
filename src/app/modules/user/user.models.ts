@@ -91,8 +91,8 @@ const userSchema = new Schema(
       default: null,
     },
     deletedBy: {
-      type: String,
-      enum: userRoleEnum,
+      type: Schema.Types.ObjectId,
+      ref: "Users",
       default: null,
     },
     deletedAt: {

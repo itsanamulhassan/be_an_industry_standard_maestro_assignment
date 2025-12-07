@@ -60,7 +60,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: [environments.frontend_base_url],
-    credentials: true,
+    // credentials: true,
   })
 );
 

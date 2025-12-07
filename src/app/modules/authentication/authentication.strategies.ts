@@ -97,28 +97,30 @@ passport.use(
         }
         let user = (await Users.findOne({ email })) as User;
 
-        if (["BLOCKED", "INACTIVE"].includes(user.status)) {
+        if (["BLOCKED", "INACTIVATED"].includes(user?.status)) {
           return done(null, false, {
             message: message(user.status?.toLowerCase() as MessageType, email),
           });
         }
-        if (user.isDeleted) {
+
+        if (user?.isDeleted) {
           return done(null, false, {
             message:
               "This account has been deleted. Please create a new account or try again later.",
           });
         }
-        if (!user.isVerified) {
+        if (user && !user?.isVerified) {
           return done(null, false, {
             message:
               "This account has not been verified. Please verify your account or request a new verification link.",
           });
         }
+
         if (!user) {
           user = await Users.create({
             email,
             name: profile.displayName,
-            avatar: profile.photos?.[0].value,
+            avatar: { url: profile.photos?.[0].value, publicId: null },
             role: "RIDER",
             isVerified: true,
             auths: [{ provider: "GOOGLE", providerId: profile.id }],
@@ -133,3 +135,18 @@ passport.use(
     }
   )
 );
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+passport.serializeUser((user: any, done: (err: any, id?: unknown) => void) => {
+  done(null, user._id);
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+passport.deserializeUser(async (id: string, done: any) => {
+  try {
+    const user = await Users.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
+});

@@ -57,13 +57,12 @@ const retrieveMe = safeAsync(async (req: Request, res: Response) => {
 });
 // ✅ Delete user by ID
 const deleteUser = safeAsync(async (req: Request, res: Response) => {
-  const deletedUser = await userServices.deleteUser(req);
+  await userServices.deleteUser(req);
 
   resHandler(res, {
     status: StatusCodes.OK,
     success: true,
     message: message("delete", "user"),
-    data: deletedUser,
   });
 });
 

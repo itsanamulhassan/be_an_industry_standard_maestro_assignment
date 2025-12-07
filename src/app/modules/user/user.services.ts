@@ -169,6 +169,13 @@ const deleteUser = async (req: Request) => {
 
     // Only require password if deleting own account
     if (credentialId === userId) {
+      if (!payload.confirmPassword) {
+        throw new AppError(
+          message("notFound", "confirm password"),
+          StatusCodes.NOT_FOUND
+        );
+      }
+
       const credential = await Users.findById(credentialId).select("+password");
 
       const hasCredentialAuth = credential?.auths.find(
@@ -230,7 +237,7 @@ const deleteUser = async (req: Request) => {
       {
         isDeleted: true,
         deletedAt: new Date(),
-        deletedBy: role,
+        deletedBy: credentialId,
         deletedReason: payload.deletedReason,
       },
       {

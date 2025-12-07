@@ -106,6 +106,7 @@ const updateDriver = async (req: Request) => {
 const updateOnline = async (req: Request) => {
   const payload = req.body as UpdateDriverOnlineDTO;
   const userId = req.params.userId;
+  const { role, credentialId } = req.user as JWTCredentialProps;
 
   // Find user profile
   const user = (await Users.findById(userId)) as User;
@@ -127,10 +128,7 @@ const updateOnline = async (req: Request) => {
   }
 
   // Check is DRIVER user ID & requested ID is same for DRIVER role
-  if (
-    (req.user as JWTCredentialProps).role === "DRIVER" &&
-    (req.user as JWTCredentialProps).credentialId !== userId
-  ) {
+  if (role === "DRIVER" && credentialId !== userId) {
     throw new AppError(
       message("unauthorized", "user"),
       StatusCodes.UNAUTHORIZED
@@ -142,6 +140,7 @@ const updateOnline = async (req: Request) => {
       StatusCodes.UNAUTHORIZED
     );
   }
+
   return await Drivers.findOneAndUpdate(
     { user: userId },
     {
@@ -260,6 +259,7 @@ const updateApproval = async (req: Request) => {
         { user: userId },
         {
           isApproved: payload.isApproved,
+          isActivated: payload.isApproved,
           pendingReview: false,
           pendingChanges: null,
 
@@ -279,6 +279,7 @@ const updateApproval = async (req: Request) => {
       { user: userId },
       {
         isApproved: payload.isApproved,
+        isActivated: payload.isApproved,
         pendingReview: false,
       },
       { session, new: true, runValidators: true }
