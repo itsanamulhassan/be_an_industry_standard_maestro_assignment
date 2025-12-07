@@ -60,7 +60,7 @@ const paymentSchema = new Schema(
     },
     stripeClientSecret: { type: String, default: null },
 
-    gateway: { type: gatewaySchema, default: {} },
+    gateway: { type: gatewaySchema, default: {}, select: false },
 
     metadata: { type: Schema.Types.Mixed, default: {} },
     isDeleted: {

@@ -15,6 +15,7 @@ const schema = <T>(schema: ZodType<T>) =>
     if (req.body?.data) {
       req.body = JSON.parse(req.body?.data);
     }
+    // console.log(req.body);
     req.body = await schema.parseAsync(req.body);
     next();
   });

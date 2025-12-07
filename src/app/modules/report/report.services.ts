@@ -69,7 +69,7 @@ const listReports = async (_req: Request) => {
 const listHistories = async (req: Request) => {
   const { credentialId } = req.user as JWTCredentialProps;
 
-  const reports = await Reports.find({ listHistories: credentialId });
+  const reports = await Reports.find({ reportedBy: credentialId });
 
   return reports;
 };
@@ -78,7 +78,7 @@ const getHistory = async (req: Request) => {
   const reportId = req.params.reportId;
 
   const report = await Reports.findOne({
-    listHistories: credentialId,
+    reportedBy: credentialId,
     _id: reportId,
   });
 
@@ -93,6 +93,9 @@ const getHistory = async (req: Request) => {
 const getReport = async (req: Request) => {
   const reportId = req.params.reportId;
   const report = await Reports.findById(reportId);
+  if (!report) {
+    throw new AppError(message("notFound", "report"), StatusCodes.NOT_FOUND);
+  }
   return report;
 };
 

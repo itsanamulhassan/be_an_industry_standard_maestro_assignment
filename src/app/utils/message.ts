@@ -28,7 +28,7 @@ const message = (
   note = "" as string
 ): string => {
   const entityCapitalized =
-    entity.charAt(0).toUpperCase() + entity.slice(1).toLowerCase();
+    entity?.charAt(0)?.toUpperCase() + entity?.slice(1)?.toLowerCase();
 
   const messages: Record<MessageType, string> = {
     create: `${entityCapitalized} was successfully created and is now available.`,

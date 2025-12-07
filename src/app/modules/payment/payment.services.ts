@@ -62,14 +62,22 @@ const createStripeIntent = async ({
 };
 
 const handleStripeWebhookEvent = async (event: any) => {
-  return withTransaction(async (session) => {
-    const type = event.type;
-    const intent = event.data.object;
+  const type = event.type;
+  const intent = event.data.object;
 
-    if (!intent || !intent.id) return;
+  if (!intent?.id) return;
+
+  // HANDLE PAYMENT STATE (transaction safe)
+
+  await withTransaction(async (session) => {
+    const payment = await Payments.findOne({
+      stripePaymentIntentId: intent.id,
+    }).session(session);
+
+    // Idempotency: if already processed, skip safely
+    if (payment && payment.status === "SUCCESS") return;
 
     if (type === "payment_intent.succeeded") {
-      // Update payment status to SUCCESS
       await Payments.findOneAndUpdate(
         { stripePaymentIntentId: intent.id },
         {
@@ -80,68 +88,64 @@ const handleStripeWebhookEvent = async (event: any) => {
         },
         { session, runValidators: true }
       );
+    }
 
-      // Calculate driver net earning amount
-      const { driverNetEarning } = geo.calculateEarnings(intent.amount);
-
-      // Create a transaction for storing the driver earning
-      await WalletTransactions.create(
-        [
-          {
-            amount: driverNetEarning,
-            driver: intent.metadata.driver,
-            type: "EARNING",
-            ride: intent.metadata.ride,
-            status: "SUCCESS",
-          },
-        ],
-        { session }
-      );
-    } else if (type === "payment_intent.payment_failed") {
+    if (
+      type === "payment_intent.payment_failed" ||
+      type === "payment_intent.canceled"
+    ) {
       await Payments.findOneAndUpdate(
         { stripePaymentIntentId: intent.id },
         {
           status: "FAILED",
           gateway: { name: "stripe", rawResponse: intent },
-        },
-        {
-          session,
-          runValidators: true,
-        }
-      );
-    } else if (type === "payment_intent.canceled") {
-      await Payments.findOneAndUpdate(
-        { stripePaymentIntentId: intent.id },
-        {
-          status: "FAILED",
-          gateway: { name: "stripe", rawResponse: intent },
-        }
-      );
-    }
-
-    if (intent.metadata?.ride) {
-      // Update ride status to COMPLETE
-      await Rides.findByIdAndUpdate(
-        intent.metadata.ride,
-        {
-          status: "COMPLETED",
-          completedAt: new Date(),
-        },
-        { session, runValidators: true }
-      );
-    }
-
-    if (intent.metadata?.driver) {
-      // Driver is now available
-      await Drivers.findByIdAndUpdate(
-        intent.metadata.driver,
-        {
-          isAvailable: true,
         },
         { session, runValidators: true }
       );
     }
   });
+
+  // POST PAYMENT SIDE EFFECTS (NO TRANSACTION — no conflicts)
+  // These should NEVER block the payment state update.
+  // If they fail, payment still remains correct.
+
+  try {
+    const rideId = intent?.metadata?.ride;
+    const driverId = intent?.metadata?.driver;
+
+    // If payment succeeded, process earnings
+    if (type === "payment_intent.succeeded") {
+      const { driverNetEarning } = geo.calculateEarnings({
+        riderTotalFare: intent?.amount,
+      });
+
+      await WalletTransactions.create({
+        amount: driverNetEarning,
+        driver: driverId,
+        type: "EARNING",
+        ride: rideId,
+        status: "SUCCESS",
+      });
+    }
+
+    // Update ride status
+    if (rideId) {
+      await Rides.findByIdAndUpdate(rideId, {
+        status: "COMPLETED",
+        completedAt: new Date(),
+      });
+    }
+
+    // Mark driver available
+    if (driverId) {
+      await Drivers.findByIdAndUpdate(driverId, {
+        isAvailable: true,
+      });
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("⚠️ Post-payment side-effect failed:", error); // We DO NOT throw — payment is already committed safely.
+  }
 };
 
 const getPayments = async () => {
@@ -250,7 +254,8 @@ const updatePayment = async (id: string, payload: any) => {
     new: true,
     runValidators: true,
   });
-  if (!updated) throw new AppError("Payment not found", StatusCodes.NOT_FOUND);
+  if (!updated)
+    throw new AppError(message("notFound", "payment"), StatusCodes.NOT_FOUND);
   return updated;
 };
 

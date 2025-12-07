@@ -30,7 +30,7 @@ reportRouter.get(
 );
 // ✅ List of single report by Id for DRIVER, RIDER
 reportRouter.get(
-  "/:reports/history",
+  "/:reportId/history",
   validator.role("DRIVER", "RIDER"),
   reportControllers.getHistory
 );

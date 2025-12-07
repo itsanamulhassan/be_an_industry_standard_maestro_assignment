@@ -31,6 +31,13 @@ const createRide = async (req: Request) => {
     throw new AppError(message("notFound", "rider"), StatusCodes.NOT_FOUND);
   }
 
+  if (!rider.paymentMethods.length) {
+    throw new AppError(
+      message("notFound", "payment method"),
+      StatusCodes.NOT_FOUND
+    );
+  }
+
   // Block if the rider has an active ride
   const activeRide = await Rides.findOne({
     rider: userId,
@@ -320,12 +327,14 @@ const updateStatus = async (req: Request) => {
         driver: ride.driver._id.toString(),
         ride: ride._id.toString(),
         rider: ride.rider.toString(),
-        method: defaultPaymentMethod.type,
+        method: defaultPaymentMethod?.type,
       } as CreateStripeIntentProps;
 
       const intent = await paymentServices.createStripeIntent(intentPayload);
       ride.payment = intent.payment._id;
       ride.status = "PAYMENT_PENDING";
+    } else {
+      ride.status = payload.status;
     }
     if (payload.status === "PICKED_UP") ride.pickedUpAt = new Date();
 
@@ -408,7 +417,7 @@ const getHistory = async (req: Request) => {
     { $project: { userInfo: 0 } },
   ]);
 
-  return ride;
+  return ride[0];
 };
 
 // ✅ List rides (ADMIN, SUPERADMIN)

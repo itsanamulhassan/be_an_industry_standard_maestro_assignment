@@ -108,6 +108,7 @@ const calculateEarnings = ({
     driverGrossEarning,
   };
 };
+
 export const geo = {
   calculateDistanceKm,
   calculateEtaMinutes,
