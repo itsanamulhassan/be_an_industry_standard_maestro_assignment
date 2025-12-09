@@ -5,35 +5,35 @@ import { Server } from "http";
 import initializeDefaultUser from "./app/utils/initializeDefaultUser";
 import environments from "./app/configurations/environments";
 import { client } from "./app/configurations/redis";
-import { Server as SocketIOServer } from "socket.io";
-import { createServer } from "http";
+// import { Server as SocketIOServer } from "socket.io";
+// import { createServer } from "http";
 
 let server: Server;
-export let io: SocketIOServer;
+// export let io: SocketIOServer;
 
 const main = async () => {
   try {
     await mongoose.connect(environments.db_url);
     console.log("✅ Server has been connected successfully with Database");
 
-    const httpServer = createServer(app);
+    // const httpServer = createServer(app);
 
-    io = new SocketIOServer(httpServer, {
-      cors: {
-        origin: environments.frontend_base_url,
-        credentials: true,
-      },
-    });
+    // io = new SocketIOServer(httpServer, {
+    //   cors: {
+    //     origin: environments.frontend_base_url,
+    //     credentials: true,
+    //   },
+    // });
 
-    io.on("connection", (socket) => {
-      console.log("🔥 Socket connected:", socket.id);
+    // io.on("connection", (socket) => {
+    //   console.log("🔥 Socket connected:", socket.id);
 
-      socket.on("disconnect", () => {
-        console.log("❌ Socket disconnected:", socket.id);
-      });
-    });
+    //   socket.on("disconnect", () => {
+    //     console.log("❌ Socket disconnected:", socket.id);
+    //   });
+    // });
 
-    server = httpServer.listen(environments.port, () =>
+    server = app.listen(environments.port, () =>
       console.log(
         "Server has been connected with the port of ",
         environments.port

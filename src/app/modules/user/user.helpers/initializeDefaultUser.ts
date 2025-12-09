@@ -8,8 +8,7 @@ import AppError from "../../../helpers/error.helper";
 const initializeDefaultUser = async () => {
   try {
     const {
-      super_admin_email: email,
-      super_admin_password: password,
+      super_admin: { email, password },
       bcrypt_salt_round,
     } = environments;
     const defaultUser = await Users.findOne({ email });
@@ -18,7 +17,7 @@ const initializeDefaultUser = async () => {
       const hashPassword = await bcrypt.hash(password, bcrypt_salt_round);
 
       await Users.create({
-        name: "Super Admin",
+        name: "Super-admin",
         email,
         role: "SUPERADMIN",
         password: hashPassword,

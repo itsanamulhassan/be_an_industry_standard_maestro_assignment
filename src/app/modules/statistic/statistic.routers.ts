@@ -13,6 +13,7 @@ statisticRouter.get(
   validator.role("RIDER", "ADMIN", "SUPERADMIN"),
   statisticControllers.getRiderStatistic
 );
+
 statisticRouter.get(
   "/",
   validator.role("ADMIN", "SUPERADMIN"),

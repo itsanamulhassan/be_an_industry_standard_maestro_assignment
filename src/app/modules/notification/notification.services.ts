@@ -4,7 +4,7 @@ import { JWTCredentialProps } from "../../types/utils.types";
 import { Notifications } from "./notification.models";
 import { CreateNotificationDTO } from "./notification.types";
 import { Users } from "../user/user.models";
-import { io } from "../../../server";
+// import { io } from "../../../server";
 import AppError from "../../helpers/error.helper";
 import { StatusCodes } from "http-status-codes";
 import mailSender from "../../utils/mailSender";
@@ -16,14 +16,14 @@ const createNotification = async (req: Request) => {
 
   try {
     if (payload.channels && payload.channels.includes("SOCKET")) {
-      io.to(`user:${payload.user}`).emit("notification", {
-        id: notification._id,
-        title: payload.title,
-        body: payload.body,
-        type: payload.type,
-        data: payload.data,
-        createdAt: notification.createdAt,
-      });
+      // io.to(`user:${payload.user}`).emit("notification", {
+      //   id: notification._id,
+      //   title: payload.title,
+      //   body: payload.body,
+      //   type: payload.type,
+      //   data: payload.data,
+      //   createdAt: notification.createdAt,
+      // });
     }
   } catch (error) {
     if (error instanceof Error) {

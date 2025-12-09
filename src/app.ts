@@ -13,6 +13,19 @@ import Stripe from "stripe";
 import { paymentServices } from "./app/modules/payment/payment.services";
 
 const app = express();
+
+app.use(
+  expressSession({
+    secret: environments.express_session_secret,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(cookieParser());
+
 app.post(
   "/api/v1/payments/webhook",
   bodyParser.raw({ type: "application/json" }),
@@ -39,18 +52,6 @@ app.post(
   }
 );
 
-app.use(
-  expressSession({
-    secret: environments.express_session_secret,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(cookieParser());
-
 // Parse incoming JSON requests
 app.use(express.json());
 app.set("trust proxy", 1);
@@ -60,7 +61,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: [environments.frontend_base_url],
-    // credentials: true,
+    credentials: true,
   })
 );
 

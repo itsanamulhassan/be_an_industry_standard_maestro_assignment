@@ -9,8 +9,8 @@ const userRouter = Router();
 // ✅ Create a new user
 userRouter.post(
   "/register",
-  validator.schema(userSchemas.create),
   multerUpload("avatars").single("file"),
+  validator.schema(userSchemas.create),
   userControllers.createUser
 );
 // ✅ Get all the users
