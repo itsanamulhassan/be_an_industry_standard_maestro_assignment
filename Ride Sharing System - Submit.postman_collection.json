@@ -1,2064 +1,1639 @@
 {
-	"info": {
-		"_postman_id": "1ce42bfc-edbc-4495-bf2c-21039f49fbfa",
-		"name": "Ride Sharing System - Submit",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26356744"
-	},
-	"item": [
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "Register (Public) (File Supported)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2ODhmZmU1NjI3ZDI1MjdiNTcxYTYyYmUiLCJlbWFpbCI6InR1aGluY2xvdWQ2NjY1NTY2QGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzYwMjIzMjU2LCJleHAiOjE3NjAzMDk2NTZ9.9HHI1TmJJC5raX75BfolAlqYvOAKgEnQIwVTZHSJLnc",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "data",
-									"value": "{\n    \"name\": \"\",\n    \"email\": \"\",\n    \"password\": \"\"\n}",
-									"type": "text"
-								},
-								{
-									"key": "file",
-									"type": "file",
-									"src": []
-								}
-							]
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/users/register",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"register"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Users  (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/users",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Me (All Uesrs)",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/users/me",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Single User (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/users/6934c29c39c67899b90c296b",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"6934c29c39c67899b90c296b"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete User (All Users)",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"deletedReason\": \"Find better optionss\"\r\n    // \"confirmPassword\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/users/6934c29c39c67899b90c296b",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"6934c29c39c67899b90c296b"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "Sign In",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "\r\n// SUPERADMIN\r\n{\r\n    \"email\": \"itsanamulhassan@gmail.com\",\r\n    \"password\": \"2025Anamul@Super\"\r\n}\r\n// RIDER\r\n\r\n// {\r\n//     \"email\": \"tuhincloud665@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }\r\n\r\n// DRIVER\r\n// {\r\n//     \"email\": \"tuhinphotos0@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/signin",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"authentications",
-								"signin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Refresh Access Token",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/refresh-access-token",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"authentications",
-								"refresh-access-token"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Signout",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2ODg0YmQwZDhmZjNhNmJlMjI4NmZkMTUiLCJlbWFpbCI6InR1aGluY2xvdWQ2NjVAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTM5MDkyNTgsImV4cCI6MTc1MzkwOTI3M30.59zmLNx4_sZB79-T6vdhgrJvJK-x6mvKgLWEuQvZBvY",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"itsan2amul2ha2ss1a1@gmail.com\",\r\n    \"password\": \"Anamul2021!\"\r\n}"
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/signout",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"authentications",
-								"signout"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Change Password",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2OTM0YzI5YzM5YzY3ODk5YjkwYzI5NmIiLCJlbWFpbCI6InR1aGlucGhvdG9zMEBnbWFpbC5jb20iLCJyb2xlIjoiUklERVIiLCJpYXQiOjE3NjUwNjU3MjYsImV4cCI6MTc2NTE1MjEyNn0.HY9IhO2j1Ic70qHf1ULjGtCRK5cWLitl0lTxDs7HZ7A",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"previousPassword\": \"Tuhin2026!\",\r\n    \"latestPassword\": \"Tuhin2025!\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/change-password",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"authentications",
-								"change-password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Set Password",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2OGM5ZTUxM2IxYzRkMzlkODg0OWZhZGEiLCJlbWFpbCI6ImJsYW5rcGFkMjAyNXYyQGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4MDYxODQ0LCJleHAiOjE3NTgxNDgyNDR9.Yh3q294cRzpJBUiLOI-j2vm6h9wkJm8Vwl-eCCxkP5k",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"BlankPad2021!\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/set-password",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"authentications",
-								"set-password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Forget Password",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2OTFhMjZkMmE1YWI4NDE3ZjczZDcxZDIiLCJlbWFpbCI6InR1aGluY2xvdWQ2NjVAZ21haWwuY29tIiwicm9sZSI6IlJJREVSIiwiaWF0IjoxNzYzMzk4NTY4LCJleHAiOjE3NjM0ODQ5Njh9.4MslrsUP0hk1JKRZocv-ysiL7kOcgVfJUlOBPczJJT8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"tuhincloud665@gmail.com\"\r\n}\r\n// {\r\n//     \"email\": \"itsanamulhassan@gmail.com\"\r\n// }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/forget-password",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"authentications",
-								"forget-password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Reset Password",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2ODg0YmQwZDhmZjNhNmJlMjI4NmZkMTUiLCJlbWFpbCI6InR1aGluY2xvdWQ2NjVAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU4MzI4Mjk1LCJleHAiOjE3NTgzMjg4OTV9.nTm4po_K4l6edLrjqSzlu9JDnTeQyJ9CSwnPHeVPaVc",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"Tuhin2021!!\",\r\n    \"id\": \"6884bd0d8ff3a6be2286fd15\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/auths/reset_password",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auths",
-								"reset_password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Refresh Access Token",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2OTM0YmI0ZGViYWE5M2ZiNzgyMTU1YTYiLCJlbWFpbCI6Iml0c2FuYW11bGhhc3NhbkBnbWFpbC5jb20iLCJyb2xlIjoiU1VQRVJBRE1JTiIsImlhdCI6MTc2NTA2NjA4NCwiZXhwIjoxNzY3NjU4MDg0fQ.eOEovksSJ7U7wQJBtNXukzIDabq70KwuBDtqJqVDYFY",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/refresh-access-token",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"authentications",
-								"refresh-access-token"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "OTP",
-			"item": [
-				{
-					"name": "Send OTP (Public)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"tuhincloud665@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/otp/send",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"otp",
-								"send"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Verify OTP (Public)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"tuhincloud665@gmail.com\",\r\n    \"otp\": \"421345\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/otp/verify",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"otp",
-								"verify"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Rider",
-			"item": [
-				{
-					"name": "Update Rider (RIDER)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"favoriteLocation\": \r\n    [\r\n        {\r\n        \"name\": \"\",\r\n        \"address\": \"\",\r\n        \"lat\": 123.1234123,\r\n        \"lng\": 23123.123123\r\n        }\r\n    ], \"paymentMethods\" :\r\n    [\r\n        {\r\n        \"type\": \"CARD\",\r\n        \"brand\": \"VISA\",\r\n        \"last4\": \"1234\",\r\n        \"expiryMonth\": 12,\r\n        \"expiryYear\": 2025,\r\n        \"paymentMethodId\": \"\",\r\n        \"isDefault\": true\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/riders/6935c2863ced31cf6d7bde87",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"riders",
-								"6935c2863ced31cf6d7bde87"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Driver",
-			"item": [
-				{
-					"name": "Create Driver (RIDER, ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "\r\n{\r\n  \"vehicleInfo\": [\r\n    {\r\n      \"model\": \"Volkswagen Passat\",\r\n      \"color\": \"Black\",\r\n      \"capacity\": 4,\r\n      \"plateNumber\": \"ZG-7788-HR\"\r\n    },\r\n    {\r\n      \"model\": \"Skoda Octavia\",\r\n      \"color\": \"Blue\",\r\n      \"capacity\": 4,\r\n      \"plateNumber\": \"ZG-1122-AA\"\r\n    }\r\n  ],\r\n  \"licenseNumber\": \"HR987654321\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934c29c39c67899b90c296b",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"drivers",
-								"6934c29c39c67899b90c296b"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Approve Driver (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"isApproved\" : false \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934c29c39c67899b90c296b/approve",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"drivers",
-								"6934c29c39c67899b90c296b",
-								"approve"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Online Driver (DRIVER, ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"isOnline\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934c29c39c67899b90c296b/online",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"drivers",
-								"6934c29c39c67899b90c296b",
-								"online"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Activation Driver (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"isActivated\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934c29c39c67899b90c296b/activation",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"drivers",
-								"6934c29c39c67899b90c296b",
-								"activation"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Driver (DRIVER, ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"vehicleInfo\": [\r\n    {\r\n      \"capacity\": 4,\r\n      \"model\": \"Volkswagen Passat\",\r\n      \"plateNumber\": \"ZG-7788-HR\",\r\n      \"color\": \"Black\"\r\n    },\r\n    {\r\n      \"capacity\": 4,\r\n      \"model\": \"Skoda Octavia\",\r\n      \"plateNumber\": \"ZG-1122-AA\",\r\n      \"color\": \"Blue\"\r\n    }\r\n  ],\r\n  \"licenseNumber\": \"HR9876543213\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/691a26d2a5ab8417f73d71d2",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"drivers",
-								"691a26d2a5ab8417f73d71d2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Driver (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934d50423492098d8be3b2a",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"drivers",
-								"6934d50423492098d8be3b2a"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Drivers (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"drivers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Driver (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934d50423492098d8be3b2a",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"drivers",
-								"6934d50423492098d8be3b2a"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Ride",
-			"item": [
-				{
-					"name": "Request/ Create Ride (RIDER)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"pickup\": {\r\n    \"address\": \"221B Baker Street, London NW1\",\r\n    \"lat\": 51.523774,\r\n    \"lng\": -0.158538\r\n  },\r\n  \"destination\": {\r\n    \"address\": \"Heathrow Airport Terminal 3, London\",\r\n    \"lat\": 51.470020,\r\n    \"lng\": -0.454295\r\n  }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"rides"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Cancel Ride",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"cancelReason\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935c32f3ced31cf6d7bde92/cancel",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"rides",
-								"6935c32f3ced31cf6d7bde92",
-								"cancel"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Accept Ride (DRIVER)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935f65dbea4550454d338e0/accept",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"rides",
-								"6935f65dbea4550454d338e0",
-								"accept"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Status Ride (DRIVER)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"PAYMENT_PENDING\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935f65dbea4550454d338e0/status",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"rides",
-								"6935f65dbea4550454d338e0",
-								"status"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Ride Histories (RIDER/ DRIVER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935f26eb0b252d00e8adf32/history",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"rides",
-								"6935f26eb0b252d00e8adf32",
-								"history"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Ride History (RIDER/ DRIVER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/history",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"rides",
-								"history"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Rides (ADMIN/ SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"rides"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Ride (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "\r\n\r\n{\r\n    \"email\": \"itsanamulhassan@gmail.com\",\r\n    \"password\": \"2025Anamul@Super\"\r\n}\r\n// {\r\n//     \"email\": \"tuhincloud665@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }\r\n// {\r\n//     \"email\": \"tuhinphotos0@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }"
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935c32f3ced31cf6d7bde92",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"rides",
-								"6935c32f3ced31cf6d7bde92"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Report",
-			"item": [
-				{
-					"name": "Create Report (RIDER, DRIVER) (File Supported)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "data",
-									"value": "{\n    \"riedId\": \"\",\n    \"reportedFor\": \"\",\n    \"reason\": \"SAFETY\",\n    \"details\": \"Report details is required.\"\n}",
-									"type": "text"
-								},
-								{
-									"key": "files",
-									"type": "file",
-									"src": [
-										"/C:/Users/tuhin/Downloads/WhatsApp Image 2025-12-04 at 12.54.13 AM (1).jpeg",
-										"/C:/Users/tuhin/Downloads/WhatsApp Image 2025-12-04 at 12.54.13 AM.jpeg",
-										"/C:/Users/tuhin/Downloads/WhatsApp Image 2025-12-04 at 12.49.30 AM.jpeg"
-									]
-								}
-							]
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"reports"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Reports (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"reports"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Report Histories (RIDER, DRIVER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/history",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"reports",
-								"history"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Report History (RIDER, DRIVER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc/history",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"reports",
-								"693609c434b65c07fc839afc",
-								"history"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Report (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"reports",
-								"693609c434b65c07fc839afc"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Report (RIDER, DRIVER) (File Supported)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "data",
-									"value": "{\n    \"riedId\": \"\",\n    \"reportedFor\": \"\",\n    \"reason\": \"SAFETY\",\n    \"details\": \"Report details is required.rr\",\n    \"deletedScreenshots\": []\n}",
-									"type": "text"
-								},
-								{
-									"key": "files",
-									"type": "file",
-									"src": []
-								}
-							]
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"reports",
-								"693609c434b65c07fc839afc"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Resolve Report (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"IN_REVIEW\"\r\n    // \"resolutionNotes\": \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc/resolve",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"reports",
-								"693609c434b65c07fc839afc",
-								"resolve"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Report (SUPERADMIN)",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"reports",
-								"693609c434b65c07fc839afc"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Payment",
-			"item": [
-				{
-					"name": "List Payments (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"payments"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Payment (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/6935f2bab0b252d00e8adf4e",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"payments",
-								"6935f2bab0b252d00e8adf4e"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Histories (RIDER, DRIVER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/history",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"payments",
-								"history"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get History (RIDER, DRIVER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/6935f2bab0b252d00e8adf4e/history",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"payments",
-								"6935f2bab0b252d00e8adf4e",
-								"history"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Payment (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/6935f2bab0b252d00e8adf4e",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"payments",
-								"6935f2bab0b252d00e8adf4e"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Payment (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"SUCCESS\",\r\n    \"transactionId\": \"pi_3SbpaPDTtGg2je0t1HdIraHE\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/6935f2bab0b252d00e8adf4e",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"payments",
-								"6935f2bab0b252d00e8adf4e"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Wallet",
-			"item": [
-				{
-					"name": "List Wallet Transactions (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"wallet-transactions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Wallet Transaction (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions/",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"wallet-transactions",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Wallet Transaction Histories (DRIVER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions/history",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"wallet-transactions",
-								"history"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Wallet Transaction History (DRIVER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions/6931ac2cd43262f26b9e60b6/history",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"wallet-transactions",
-								"6931ac2cd43262f26b9e60b6",
-								"history"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Wallet Transaction (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"driver\": \"\",\r\n    \"type\": \"DEDUCTION\",\r\n    \"status\": \"SUCCESS\",\r\n    \"amount\": 10,\r\n    \"description\": \"Des\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"wallet-transactions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Wallet Transaction (ADMIN, SUPERADMIN)",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"driver\": \"\",\r\n    \"type\": \"DEDUCTION\",\r\n    \"status\": \"SUCCESS\",\r\n    \"amount\": -10,\r\n    \"description\": \"Des\",\r\n    \"ride\": \"692b4bd98d0baf27162a99c4\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions/693602d63626525c6acc4315",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"wallet-transactions",
-								"693602d63626525c6acc4315"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Statistic",
-			"item": [
-				{
-					"name": "Get Statistic (DRIVER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2OTM0YzI5YzM5YzY3ODk5YjkwYzI5NmIiLCJlbWFpbCI6InR1aGlucGhvdG9zMEBnbWFpbC5jb20iLCJyb2xlIjoiRFJJVkVSIiwiaWF0IjoxNzY1MTQ3Njc2LCJleHAiOjE3NjUyMzQwNzZ9.Mg9_eV7_E4hBf8i8tUU4qCQUrzV5SJFSNb3xINwxqzk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/statistics/driver",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"statistics",
-								"driver"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Statistic (RIDER)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2OTM1YzI4NjNjZWQzMWNmNmQ3YmRlODciLCJlbWFpbCI6InR1aGluY2xvdWQ2NjVAZ21haWwuY29tIiwicm9sZSI6IlJJREVSIiwiaWF0IjoxNzY1MTQ3NjEwLCJleHAiOjE3NjUyMzQwMTB9.vmqH2qzSZzf9GaeIX6iI3yTfdz8xhVlKQ0cb2yfWDhk",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/statistics/rider",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"statistics",
-								"rider"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Statistic (ADMIN, SUPERADMIN)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFsSWQiOiI2OTM0YmI0ZGViYWE5M2ZiNzgyMTU1YTYiLCJlbWFpbCI6Iml0c2FuYW11bGhhc3NhbkBnbWFpbC5jb20iLCJyb2xlIjoiU1VQRVJBRE1JTiIsImlhdCI6MTc2NTE0Nzc1MCwiZXhwIjoxNzY1MjM0MTUwfQ.LEpc27WXuEnhMApD-FLbYZz0UhO1Al1Xws4n4GppR6A",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://mestro-ride-management-system.vercel.app/api/v1/statistics",
-							"protocol": "https",
-							"host": [
-								"mestro-ride-management-system",
-								"vercel",
-								"app"
-							],
-							"path": [
-								"api",
-								"v1",
-								"statistics"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "1ce42bfc-edbc-4495-bf2c-21039f49fbfa",
+    "name": "Ride Sharing System - Submit",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26356744"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register (Public) (File Supported)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "{\n    \"name\": \"\",\n    \"email\": \"\",\n    \"password\": \"\"\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/users/register",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "users", "register"],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users  (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/users",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Me (All Uesrs)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/users/me",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "users", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single User (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/users/6934c29c39c67899b90c296b",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "users", "6934c29c39c67899b90c296b"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User (All Users)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"deletedReason\": \"Find better optionss\"\r\n    // \"confirmPassword\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/users/6934c29c39c67899b90c296b",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "users", "6934c29c39c67899b90c296b"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Sign In",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n// SUPERADMIN\r\n{\r\n    \"email\": \"itsanamulhassan@gmail.com\",\r\n    \"password\": \"2025Anamul@Super\"\r\n}\r\n// RIDER\r\n\r\n// {\r\n//     \"email\": \"tuhincloud665@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }\r\n\r\n// DRIVER\r\n// {\r\n//     \"email\": \"tuhinphotos0@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/signin",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "authentications", "signin"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Access Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/refresh-access-token",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "authentications", "refresh-access-token"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Signout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"itsan2amul2ha2ss1a1@gmail.com\",\r\n    \"password\": \"Anamul2021!\"\r\n}"
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/signout",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "authentications", "signout"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"previousPassword\": \"Tuhin2026!\",\r\n    \"latestPassword\": \"Tuhin2025!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/change-password",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "authentications", "change-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Set Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"password\": \"BlankPad2021!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/set-password",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "authentications", "set-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forget Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"tuhincloud665@gmail.com\"\r\n}\r\n// {\r\n//     \"email\": \"itsanamulhassan@gmail.com\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/forget-password",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "authentications", "forget-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"password\": \"Tuhin2021!!\",\r\n    \"id\": \"6884bd0d8ff3a6be2286fd15\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/auths/reset_password",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "auths", "reset_password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Access Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/refresh-access-token",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "authentications", "refresh-access-token"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "OTP",
+      "item": [
+        {
+          "name": "Send OTP (Public)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"tuhincloud665@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/otp/send",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "otp", "send"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify OTP (Public)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"tuhincloud665@gmail.com\",\r\n    \"otp\": \"421345\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/otp/verify",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "otp", "verify"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rider",
+      "item": [
+        {
+          "name": "Update Rider (RIDER)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"favoriteLocation\": \r\n    [\r\n        {\r\n        \"name\": \"\",\r\n        \"address\": \"\",\r\n        \"lat\": 123.1234123,\r\n        \"lng\": 23123.123123\r\n        }\r\n    ], \"paymentMethods\" :\r\n    [\r\n        {\r\n        \"type\": \"CARD\",\r\n        \"brand\": \"VISA\",\r\n        \"last4\": \"1234\",\r\n        \"expiryMonth\": 12,\r\n        \"expiryYear\": 2025,\r\n        \"paymentMethodId\": \"\",\r\n        \"isDefault\": true\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/riders/6935c2863ced31cf6d7bde87",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "riders", "6935c2863ced31cf6d7bde87"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Driver",
+      "item": [
+        {
+          "name": "Create Driver (RIDER, ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n{\r\n  \"vehicleInfo\": [\r\n    {\r\n      \"model\": \"Volkswagen Passat\",\r\n      \"color\": \"Black\",\r\n      \"capacity\": 4,\r\n      \"plateNumber\": \"ZG-7788-HR\"\r\n    },\r\n    {\r\n      \"model\": \"Skoda Octavia\",\r\n      \"color\": \"Blue\",\r\n      \"capacity\": 4,\r\n      \"plateNumber\": \"ZG-1122-AA\"\r\n    }\r\n  ],\r\n  \"licenseNumber\": \"HR987654321\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934c29c39c67899b90c296b",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "drivers", "6934c29c39c67899b90c296b"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Driver (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"isApproved\" : false \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934c29c39c67899b90c296b/approve",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "drivers",
+                "6934c29c39c67899b90c296b",
+                "approve"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Online Driver (DRIVER, ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"isOnline\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934c29c39c67899b90c296b/online",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "drivers",
+                "6934c29c39c67899b90c296b",
+                "online"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activation Driver (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"isActivated\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934c29c39c67899b90c296b/activation",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "drivers",
+                "6934c29c39c67899b90c296b",
+                "activation"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Driver (DRIVER, ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"vehicleInfo\": [\r\n    {\r\n      \"capacity\": 4,\r\n      \"model\": \"Volkswagen Passat\",\r\n      \"plateNumber\": \"ZG-7788-HR\",\r\n      \"color\": \"Black\"\r\n    },\r\n    {\r\n      \"capacity\": 4,\r\n      \"model\": \"Skoda Octavia\",\r\n      \"plateNumber\": \"ZG-1122-AA\",\r\n      \"color\": \"Blue\"\r\n    }\r\n  ],\r\n  \"licenseNumber\": \"HR9876543213\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/691a26d2a5ab8417f73d71d2",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "drivers", "691a26d2a5ab8417f73d71d2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Driver (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934d50423492098d8be3b2a",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "drivers", "6934d50423492098d8be3b2a"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Drivers (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "drivers"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Driver (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/drivers/6934d50423492098d8be3b2a",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "drivers", "6934d50423492098d8be3b2a"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Ride",
+      "item": [
+        {
+          "name": "Request/ Create Ride (RIDER)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"pickup\": {\r\n    \"address\": \"221B Baker Street, London NW1\",\r\n    \"lat\": 51.523774,\r\n    \"lng\": -0.158538\r\n  },\r\n  \"destination\": {\r\n    \"address\": \"Heathrow Airport Terminal 3, London\",\r\n    \"lat\": 51.470020,\r\n    \"lng\": -0.454295\r\n  }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "rides"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Ride",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"cancelReason\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935c32f3ced31cf6d7bde92/cancel",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "rides",
+                "6935c32f3ced31cf6d7bde92",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Accept Ride (DRIVER)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935f65dbea4550454d338e0/accept",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "rides",
+                "6935f65dbea4550454d338e0",
+                "accept"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Status Ride (DRIVER)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"PAYMENT_PENDING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935f65dbea4550454d338e0/status",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "rides",
+                "6935f65dbea4550454d338e0",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Ride Histories (RIDER/ DRIVER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935f26eb0b252d00e8adf32/history",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "rides",
+                "6935f26eb0b252d00e8adf32",
+                "history"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ride History (RIDER/ DRIVER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/history",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "rides", "history"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Rides (ADMIN/ SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "rides"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ride (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n\r\n{\r\n    \"email\": \"itsanamulhassan@gmail.com\",\r\n    \"password\": \"2025Anamul@Super\"\r\n}\r\n// {\r\n//     \"email\": \"tuhincloud665@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }\r\n// {\r\n//     \"email\": \"tuhinphotos0@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }"
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935c32f3ced31cf6d7bde92",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "rides", "6935c32f3ced31cf6d7bde92"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Report",
+      "item": [
+        {
+          "name": "Create Report (RIDER, DRIVER) (File Supported)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "{\n    \"riedId\": \"\",\n    \"reportedFor\": \"\",\n    \"reason\": \"SAFETY\",\n    \"details\": \"Report details is required.\"\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/tuhin/Downloads/WhatsApp Image 2025-12-04 at 12.54.13 AM (1).jpeg",
+                    "/C:/Users/tuhin/Downloads/WhatsApp Image 2025-12-04 at 12.54.13 AM.jpeg",
+                    "/C:/Users/tuhin/Downloads/WhatsApp Image 2025-12-04 at 12.49.30 AM.jpeg"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "reports"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Reports (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "reports"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Report Histories (RIDER, DRIVER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/history",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "reports", "history"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Report History (RIDER, DRIVER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc/history",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "693609c434b65c07fc839afc",
+                "history"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Report (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "reports", "693609c434b65c07fc839afc"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Report (RIDER, DRIVER) (File Supported)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "{\n    \"riedId\": \"\",\n    \"reportedFor\": \"\",\n    \"reason\": \"SAFETY\",\n    \"details\": \"Report details is required.rr\",\n    \"deletedScreenshots\": []\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "reports", "693609c434b65c07fc839afc"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resolve Report (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"IN_REVIEW\"\r\n    // \"resolutionNotes\": \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc/resolve",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "693609c434b65c07fc839afc",
+                "resolve"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Report (SUPERADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/reports/693609c434b65c07fc839afc",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "reports", "693609c434b65c07fc839afc"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "List Payments (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "payments"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/6935f2bab0b252d00e8adf4e",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "payments", "6935f2bab0b252d00e8adf4e"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Histories (RIDER, DRIVER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/history",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "payments", "history"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get History (RIDER, DRIVER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/6935f2bab0b252d00e8adf4e/history",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "6935f2bab0b252d00e8adf4e",
+                "history"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Payment (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/6935f2bab0b252d00e8adf4e",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "payments", "6935f2bab0b252d00e8adf4e"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Payment (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"SUCCESS\",\r\n    \"transactionId\": \"pi_3SbpaPDTtGg2je0t1HdIraHE\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/payments/6935f2bab0b252d00e8adf4e",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "payments", "6935f2bab0b252d00e8adf4e"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Wallet",
+      "item": [
+        {
+          "name": "List Wallet Transactions (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "wallet-transactions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Wallet Transaction (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions/",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "wallet-transactions", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Wallet Transaction Histories (DRIVER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions/history",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "wallet-transactions", "history"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Wallet Transaction History (DRIVER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions/6931ac2cd43262f26b9e60b6/history",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "wallet-transactions",
+                "6931ac2cd43262f26b9e60b6",
+                "history"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Wallet Transaction (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"driver\": \"\",\r\n    \"type\": \"DEDUCTION\",\r\n    \"status\": \"SUCCESS\",\r\n    \"amount\": 10,\r\n    \"description\": \"Des\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "wallet-transactions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Wallet Transaction (ADMIN, SUPERADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"driver\": \"\",\r\n    \"type\": \"DEDUCTION\",\r\n    \"status\": \"SUCCESS\",\r\n    \"amount\": -10,\r\n    \"description\": \"Des\",\r\n    \"ride\": \"692b4bd98d0baf27162a99c4\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/wallet-transactions/693602d63626525c6acc4315",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": [
+                "api",
+                "v1",
+                "wallet-transactions",
+                "693602d63626525c6acc4315"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Statistic",
+      "item": [
+        {
+          "name": "Get Statistic (DRIVER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/statistics/driver",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "statistics", "driver"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Statistic (RIDER)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/statistics/rider",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "statistics", "rider"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Statistic (ADMIN, SUPERADMIN)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://mestro-ride-management-system.vercel.app/api/v1/statistics",
+              "protocol": "https",
+              "host": ["mestro-ride-management-system", "vercel", "app"],
+              "path": ["api", "v1", "statistics"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
 }
