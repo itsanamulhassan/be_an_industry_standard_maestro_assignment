@@ -7,21 +7,35 @@ import AppError from "../../../helpers/error.helper";
 
 const initializeDefaultUser = async () => {
   try {
-    const {
-      super_admin: { email, password },
-      bcrypt_salt_round,
-    } = environments;
-    const defaultUser = await Users.findOne({ email });
+    const { super_admin, admin, bcrypt_salt_round } = environments;
+    const hasSuperadmin = await Users.findOne({ email: super_admin.email });
+    const hasAdmin = await Users.findOne({ email: admin.email });
 
-    if (!defaultUser) {
-      const hashPassword = await bcrypt.hash(password, bcrypt_salt_round);
-
+    if (!hasSuperadmin) {
+      const hashPasswordSuperAdmin = await bcrypt.hash(
+        super_admin.password,
+        bcrypt_salt_round
+      );
       await Users.create({
-        name: "Super-admin",
-        email,
+        name: "superadmin",
+        email: super_admin.email,
         role: "SUPERADMIN",
-        password: hashPassword,
-        auths: [{ provider: "CREDENTIAL", providerId: email }],
+        password: hashPasswordSuperAdmin,
+        auths: [{ provider: "CREDENTIAL", providerId: super_admin.email }],
+      });
+    }
+
+    if (!hasAdmin) {
+      const hashPasswordAdmin = await bcrypt.hash(
+        admin.password,
+        bcrypt_salt_round
+      );
+      await Users.create({
+        name: "admin",
+        email: admin.email,
+        role: "ADMIN",
+        password: hashPasswordAdmin,
+        auths: [{ provider: "CREDENTIAL", providerId: admin.email }],
       });
     }
   } catch (error) {

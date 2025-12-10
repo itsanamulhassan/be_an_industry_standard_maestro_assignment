@@ -33,6 +33,10 @@ interface LoadEnvVariableProps {
     email: string;
     password: string;
   };
+  admin: {
+    email: string;
+    password: string;
+  };
   google_authentication: {
     client_id: string;
     client_secret: string;
@@ -77,6 +81,9 @@ const loadEnvVariables = (): LoadEnvVariableProps => {
 
     "SUPER_ADMIN_EMAIL",
     "SUPER_ADMIN_PASSWORD",
+
+    "ADMIN_EMAIL",
+    "ADMIN_PASSWORD",
 
     "ACCESS_COOKIE_NAME",
     "REFRESH_COOKIE_NAME",
@@ -139,6 +146,10 @@ const loadEnvVariables = (): LoadEnvVariableProps => {
     super_admin: {
       email: process.env.SUPER_ADMIN_EMAIL as string,
       password: process.env.SUPER_ADMIN_PASSWORD as string,
+    },
+    admin: {
+      email: process.env.ADMIN_EMAIL as string,
+      password: process.env.ADMIN_PASSWORD as string,
     },
     cookie: {
       access: process.env.ACCESS_COOKIE_NAME as string,

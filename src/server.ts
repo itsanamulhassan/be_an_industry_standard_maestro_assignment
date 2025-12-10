@@ -2,9 +2,9 @@
 import mongoose from "mongoose";
 import app from "./app";
 import { Server } from "http";
-import initializeDefaultUser from "./app/utils/initializeDefaultUser";
 import environments from "./app/configurations/environments";
 import { client } from "./app/configurations/redis";
+import initializeDefaultUser from "./app/modules/user/user.helpers/initializeDefaultUser";
 // import { Server as SocketIOServer } from "socket.io";
 // import { createServer } from "http";
 
