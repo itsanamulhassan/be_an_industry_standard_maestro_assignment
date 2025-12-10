@@ -20,6 +20,7 @@ const initializeDefaultUser = async () => {
         name: "superadmin",
         email: super_admin.email,
         role: "SUPERADMIN",
+        isVerified: true,
         password: hashPasswordSuperAdmin,
         auths: [{ provider: "CREDENTIAL", providerId: super_admin.email }],
       });
@@ -34,6 +35,7 @@ const initializeDefaultUser = async () => {
         name: "admin",
         email: admin.email,
         role: "ADMIN",
+        isVerified: true,
         password: hashPasswordAdmin,
         auths: [{ provider: "CREDENTIAL", providerId: admin.email }],
       });

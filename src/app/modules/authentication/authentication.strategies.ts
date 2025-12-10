@@ -25,6 +25,7 @@ passport.use(
         const user = (await Users.findOne({ email }).select(
           "+password"
         )) as User;
+
         if (!user) {
           return done(null, false, { message: message("notFound", "user") });
         }

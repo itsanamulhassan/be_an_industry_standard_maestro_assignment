@@ -152,7 +152,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "\r\n// SUPERADMIN\r\n{\r\n    \"email\": \"itsanamulhassan@gmail.com\",\r\n    \"password\": \"2025Anamul@Super\"\r\n}\r\n// RIDER\r\n\r\n// {\r\n//     \"email\": \"tuhincloud665@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }\r\n\r\n// DRIVER\r\n// {\r\n//     \"email\": \"tuhinphotos0@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }",
+              "raw": "\r\n// SUPERADMIN\r\n{\r\n    \"email\": \"superadmin@mestro.com\",\r\n    \"password\": \"SuperAdmin123@\"\r\n}\r\n// ADMIN\r\n\r\n// {\r\n//     \"email\": \"admin@mestro.com\",\r\n//     \"password\": \"Admin123@\"\r\n// }\r\n\r\n// DRIVER\r\n// {\r\n//     \"email\": \"\",\r\n//     \"password\": \"\"\r\n// }",
               "options": {
                 "raw": {
                   "language": "json"
@@ -199,7 +199,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"itsan2amul2ha2ss1a1@gmail.com\",\r\n    \"password\": \"Anamul2021!\"\r\n}"
+              "raw": ""
             },
             "url": {
               "raw": "https://mestro-ride-management-system.vercel.app/api/v1/authentications/signout",
@@ -223,7 +223,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"previousPassword\": \"Tuhin2026!\",\r\n    \"latestPassword\": \"Tuhin2025!\"\r\n}",
+              "raw": "{\r\n    \"previousPassword\": \"\",\r\n    \"latestPassword\": \"\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -281,7 +281,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"tuhincloud665@gmail.com\"\r\n}\r\n// {\r\n//     \"email\": \"itsanamulhassan@gmail.com\"\r\n// }",
+              "raw": "{\r\n    \"email\": \"\"\r\n}\r\n// {\r\n//     \"email\": \"\"\r\n// }",
               "options": {
                 "raw": {
                   "language": "json"
@@ -310,7 +310,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"password\": \"Tuhin2021!!\",\r\n    \"id\": \"6884bd0d8ff3a6be2286fd15\"\r\n}",
+              "raw": "{\r\n    \"password\": \"\",\r\n    \"id\": \"6884bd0d8ff3a6be2286fd15\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -363,7 +363,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"tuhincloud665@gmail.com\"\r\n}",
+              "raw": "{\r\n    \"email\": \"\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -386,7 +386,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"tuhincloud665@gmail.com\",\r\n    \"otp\": \"421345\"\r\n}",
+              "raw": "{\r\n    \"email\": \"\",\r\n    \"otp\": \"421345\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -920,7 +920,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "\r\n\r\n{\r\n    \"email\": \"itsanamulhassan@gmail.com\",\r\n    \"password\": \"2025Anamul@Super\"\r\n}\r\n// {\r\n//     \"email\": \"tuhincloud665@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }\r\n// {\r\n//     \"email\": \"tuhinphotos0@gmail.com\",\r\n//     \"password\": \"Tuhin2025!\"\r\n// }"
+              "raw": ""
             },
             "url": {
               "raw": "https://mestro-ride-management-system.vercel.app/api/v1/rides/6935c32f3ced31cf6d7bde92",
@@ -958,11 +958,7 @@
                 {
                   "key": "files",
                   "type": "file",
-                  "src": [
-                    "/C:/Users/tuhin/Downloads/WhatsApp Image 2025-12-04 at 12.54.13 AM (1).jpeg",
-                    "/C:/Users/tuhin/Downloads/WhatsApp Image 2025-12-04 at 12.54.13 AM.jpeg",
-                    "/C:/Users/tuhin/Downloads/WhatsApp Image 2025-12-04 at 12.49.30 AM.jpeg"
-                  ]
+                  "src": []
                 }
               ]
             },
